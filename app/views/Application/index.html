@@ -1,4 +1,6 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-#{welcome /}
+Welcome ${user}!<br />
+Pagina Application.index<br />
+<a href="@{Secure.logout()}">Log out</a>

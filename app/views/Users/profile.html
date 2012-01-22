@@ -1,0 +1,69 @@
+#{extends 'main.html' /}
+#{set title:'User Profile' /}
+
+<div class="container-fluid">
+	<div class="sidebar">
+	  <div class="well">
+	    <h5>Options</h5>
+	    <ul>
+	      <li><a href="#">My Projects</a></li>
+	      <li><a href="#">My Open Tasks</a></li>
+	      <li><a href="#">Milestones</a></li>
+	      <li><a href="#">Reports</a></li>
+	    </ul>
+	  </div>
+	</div>
+    <div class="content">
+		<div class="well">
+		    <h1>${userInfo.fullName} [${userInfo.userName}]</h1>
+		</div>
+		<!-- columns -->
+		<div class="row">
+		  <div class="span16">
+		    <h2>User Information</h2>
+		    <form method="POST" action="">
+		        <div class="clearfix">
+                    <label for="email">E-Mail</label>
+                    <div class="input">
+                      <input class="input-large" id="userName" name="userName" size="40" type="text">
+                    </div>
+                </div>
+		        <div class="clearfix">
+		            <label for="fullname">Full Name</label>
+		            <div class="input">
+		              <input class="input-large" id="fullname" name="fullname" size="40" type="text">
+		            </div>
+		        </div>
+		        <div class="clearfix">
+		            <label for="password">Password</label>
+		            <div class="input">
+		                <div class="input-prepend">
+		                    <label class="add-on">
+		                        <input type="checkbox" id="chgpassword" name="chgpassword">
+		                    </label>
+		                    <input class="input-large" id="password" name="password" size="40" type="password">
+		                </div>
+		            </div>
+		        </div>
+		        <div class="clearfix">
+		            <label for="repassword">Re-Password</label>
+		            <div class="input">
+		              <input class="input-large" id="repassword" name="repassword" size="40" type="password">
+		            </div>
+		        </div>
+		        <div class="clearfix">
+		            <label for="rol">Is Admin?</label>
+		            <div class="input">
+		              <input type="checkbox" name="isAdmin" id="isAdmin" />
+		            </div>
+		        </div>
+		        <div class="actions">
+		            <input type="submit" class="btn primary" value="Save changes">
+		            &nbsp;
+		            <a href="@{Application.index()}" class="btn">Cancel</a>
+		        </div>
+		    </form>
+		  </div>
+	    </div>
+    </div>
+</div>

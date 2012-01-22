@@ -1,0 +1,53 @@
+#{extends 'main.html' /}
+#{set title:'Users List' /}
+
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+   <!-- Example row of columns -->
+    <div class="row">
+      <div class="span16">
+        <h2>Users List</h2>
+        <p class="pull-right">
+            <a href="#" class="btn primary">Add User</a>
+        </p>
+        <table class="bordered-table zebra-striped">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>E-Mail</th>
+                <th>Rol</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                #{list items:users, as:'user'}
+                    <tr>
+	                    <td>${user.userName}</td>
+	                    <td>${user.fullName}</td>
+	                    <td>${user.userName}</td>
+	                    <td>Admin</td>
+	                    <td>
+	                        <a href="@{Users.edit(user.userName)}" class="btn">Edit</a>
+	                        <a href="#" class="btn info">Deactivate</a>
+	                        <a href="@{Users.delete(user.userName)}" class="btn danger">Delete</a>
+	                    </td>
+                    </tr>
+                #{/list}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

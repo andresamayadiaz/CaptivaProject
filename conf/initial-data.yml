@@ -1,0 +1,11 @@
+User(admin):
+    userName: admin@email.com
+    password: 123
+    fullName: Administrador
+    isAdmin: true
+
+User(andres):
+    userName: andres@email.com
+    password: 123
+    fullName: Andres Amaya
+    isAdmin: false

@@ -12,7 +12,7 @@ import models.deadbolt.RoleHolder;
 import java.util.*;
 
 @Entity
-public class User extends Model implements RoleHolder {
+public class User extends Model {
     
 	@Required
 	public String userName;
@@ -21,25 +21,20 @@ public class User extends Model implements RoleHolder {
 	public String fullName;
 	
 	@Required
-	public String email;
-	
-	@Required
 	public String password;
 	
 	@Required
-	public String comments;
+    public boolean isAdmin;
 	
-	@Required
-    @ManyToOne
-    public ApplicationRole role;
-	
-	public User(String userName, String fullName, String email, String comments, ApplicationRole role)
+	public User(String userName, String fullName, boolean isAdmin)
 	{
 	    this.userName = userName;
 	    this.fullName = fullName;
-	    this.email = email;
-	    this.comments = comments;
-	    this.role = role;
+	    this.isAdmin = isAdmin;
+	}
+	
+	public static User connect(String userName, String password) {
+	    return find("byUserNameAndPassword", userName, password).first();
 	}
 	
 	public static User getByUserName(String userName)
@@ -51,11 +46,6 @@ public class User extends Model implements RoleHolder {
     public String toString()
     {
         return this.userName;
-    }
-    
-    public List<? extends Role> getRoles()
-    {
-        return Arrays.asList(role);
     }
 	
 }

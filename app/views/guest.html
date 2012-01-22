@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>#{get 'title' /}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+    <!--  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script> -->
+    <![endif]-->
+    
+    <!-- Le styles -->
+    <link href="@{'/public/stylesheets/bootstrap.css'}" rel="stylesheet">
+    #{get 'moreStyles' /}
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    
+    <script src="@{'/public/javascripts/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+    <script src="@{'/public/javascripts/bootstrap-dropdown.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+    #{get 'moreScripts' /}
+    
+    <!-- Le fav and touch icons -->
+    <!-- <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
+  </head>
+    
+  <body>
+    
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#">Captiva Project</a>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+          
+          #{secure.check 'admin'}
+            <li class="dropdown" data-dropdown="dropdown" >
+                <a href="#" class="dropdown-toggle">Admin</a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Users</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Another link</a></li>
+                </ul>
+              </li>
+          #{/secure.check}
+          </ul>
+          <div class="pull-right">
+          #{form @authenticate()}
+            <input class="input-medium" type="text" name="username" id="username" placeholder="email" />
+            <input class="input-medium" type="password" name="password" id="password" placeholder="password" />
+            <button class="btn" type="submit">Sign in</button>      
+          #{/form}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    #{if flash.error}
+            <div class="alert-message error">
+                <a class="close" href="#">×</a>
+                <p>
+                    &{flash.error}
+                </p>
+            </div>
+    #{/if}
+    
+    #{doLayout /}
+    
+    <div class="container-fluid">
+        <footer>
+            <p>&copy; Captiva Tecnologia 2012</p>
+        </footer>
+    </div>
+  </body>
+</html>
+
