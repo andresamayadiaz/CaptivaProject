@@ -14,22 +14,25 @@ import java.util.*;
 @Entity
 public class User extends Model {
     
-	@Required
+	@Required(message = "User Name is requiered")
+	@Column(unique=true)
+	@Email
 	public String userName;
 	
-	@Required
+	@Required(message = "Full Name is requiered")
 	public String fullName;
 	
-	@Required
+	@Required(message = "Password is requiered")
 	public String password;
 	
-	@Required
+	@Required(message = "is Admin is requiered")
     public boolean isAdmin;
 	
-	public User(String userName, String fullName, boolean isAdmin)
+	public User(String userName, String fullName, String password, boolean isAdmin)
 	{
 	    this.userName = userName;
 	    this.fullName = fullName;
+	    this.password = password;
 	    this.isAdmin = isAdmin;
 	}
 	

@@ -18,7 +18,7 @@ public class BaseController extends Controller {
         }
 		if(Security.isConnected()) {
             User user = User.find("byUserName", Security.connected()).first();
-            renderArgs.put("user", user.userName);
+            renderArgs.put("username", user.userName);
         }
     }
 

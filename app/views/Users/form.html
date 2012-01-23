@@ -1,0 +1,83 @@
+#{extends 'main.html' /}
+#{set title:'User Add' /}
+
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="well">
+            <h1>New User</h1>
+        </div>
+        <!-- columns -->
+        <div class="row">
+          <div class="span16">
+            <h2>User Information</h2>
+            #{form @save()}
+                <div class="clearfix">
+                    #{ifErrors}
+				        <p class="alert-message error">
+				            Please correct these errors.
+				        </p>
+				    #{/ifErrors}
+                </div>
+                <div class="clearfix">
+                    #{field 'userName'}
+                    <label for="${field.name}">E-Mail</label>
+                    <div class="input">
+                      <input class="input-large" id="userName" name="${field.name}" value="${user?.userName}" size="40" type="text"> 
+                      <span class="help-inline error">#{error 'user.userName' /}</span>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    #{field 'fullName'}
+                    <label for="${field.name}">Full Name</label>
+                    <div class="input">
+                      <input class="input-large" id="fullname" name="${field.name}" value="${user?.fullName}" size="40" type="text">
+                      <span class="help-inline error">#{error 'user.fullName' /}</span>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    #{field 'password'}
+                    <label for="${field.name}">Password</label>
+                    <div class="input">
+                        <input class="input-large" id="password" name="${field.name}" size="40" type="password">
+                        <span class="help-inline error">#{error 'user.password' /}</span>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    <label for="repassword">Re-Password</label>
+                    <div class="input">
+                      <input class="input-large" id="repassword" name="repassword" size="40" type="password">
+                      <span class="help-inline error">#{error 'user.repassword' /}</span>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    #{field 'isAdmin'}
+                    <label for="${field.name}">Is Admin?</label>
+                    <div class="input">
+                      <input type="checkbox" name="${field.name}" id="isAdmin" value="true" ${user?.isAdmin ? 'checked' : ''} />
+                    </div>
+                    #{/field}
+                </div>
+                <div class="actions">
+                    <input type="submit" class="btn primary" value="Save User">
+                    &nbsp;
+                    <a href="@{Application.index()}" class="btn">Cancel</a>
+                </div>
+            #{/form}
+          </div>
+        </div>
+    </div>
+</div>
