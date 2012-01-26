@@ -1,0 +1,25 @@
+#{extends 'main.html' /}
+#{set title:'User Add' /}
+
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="well">
+            <h1>Edit User</h1>
+        </div>
+        <!-- columns -->
+        #{form @Users.update(), id:'updateForm'}
+        	#{include 'Users/_formedit.html' /}
+        #{/form}
+    </div>
+</div>

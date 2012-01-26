@@ -5,14 +5,34 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import models.Milestone;
 import models.User;
 import play.Logger;
+import play.data.validation.Valid;
+import play.i18n.Messages;
 import play.mvc.*;
+import play.mvc.Http.Request;
 
 public class Users extends BaseController {
 	
     public static void index() {
-        render();
+    	List<User> entities = User.all().fetch();
+        render(entities);
+    }
+    
+    public static void create(User entity) {
+        render(entity);
+    }
+    
+    public static void show(java.lang.Long id) {
+        User entity = User.findById(id);
+        render(entity);
+    }
+    
+    public static void edit(java.lang.Long id) {
+        User entity = User.findById(id);
+        render(entity);
+        
     }
     
     public static void profile(){
@@ -20,7 +40,7 @@ public class Users extends BaseController {
     	render(userInfo);
     }
     
-    @Check("admin")
+   /* @Check("admin")
     public static void list(){
     	List<User> users = User.findAll();
     	render(users);
@@ -28,24 +48,39 @@ public class Users extends BaseController {
     
     @Check("admin")
     public static void edit(String userName){
-    	render();
-    }
-    
-    @Check("admin")
-    public static void delete(String userName){
-    	render();
-    }
-    
-    public static void form(String userName){
     	if(userName != null) {
-            User user = User.find("byUserName", userName).first();
-            render(user);
+            User userInfo = User.find("byUserName", userName).first();
+            render(userInfo);
         }
-    	render();
+    	
+    	// Error, userName null
+    	index();
+    }*/
+    
+    @Check("admin")
+    public static void delete(java.lang.Long id) {
+        User entity = User.findById(id);
+        entity.delete();
+        index();
     }
     
     @Check("admin")
-    public static void save(String userName, String fullName, String password, String repassword, boolean isAdmin){
+    public static void save(@Valid User entity, String repassword) {
+    	
+    	if(!entity.password.equals(repassword)){
+    		validation.addError("repassword", "Password does not match!");
+        	render("@create", entity);
+    	}
+    	
+        if (validation.hasErrors()) {
+            //flash.error(Messages.get("scaffold.validation"));
+            render("@create", entity);
+        }
+        entity.save();
+        flash.success(Messages.get("scaffold.created", "User"));
+        index();
+    }
+    /*public static void save(String userName, String fullName, String password, String repassword, boolean isAdmin){
     	User user = new User(userName, fullName, password, isAdmin);
     	Logger.info("isAdmin: "+isAdmin);
     	
@@ -65,7 +100,41 @@ public class Users extends BaseController {
     	
     	// Save
     	user.save();
-    	list();
+    	index();
+    }*/
+    
+    public static void update(User entity, String repassword, boolean chgPassword) {
+        // Validate Password Change
+    	Logger.info("chgPassword = %s / repassword = %s", chgPassword, repassword);
+    	if(chgPassword){
+    		
+    		if(!entity.password.equals(repassword)){
+    			validation.addError("repassword", "Password does not match!");
+            	render("@edit", entity);
+    		}
+    		
+    		if(entity.password.equals("")){
+    			validation.addError("repassword", "Password cannot be empty!");
+            	render("@edit", entity);
+    		}
+    		
+    	}else {
+    		User usr = User.findById(entity.id);
+        	Logger.info("ID: [%s] - Set same password = %s", entity.id, usr.password);
+        	entity.password = usr.password;
+    	}
+        
+        validation.valid(entity);
+        if (validation.hasErrors()) {
+            //flash.error(Messages.get("scaffold.validation"));
+            render("@edit", entity);
+        }
+        
+        	entity = entity.merge();
+        
+        entity.save();
+        flash.success(Messages.get("scaffold.updated", "User"));
+        index();
     }
     
 }
