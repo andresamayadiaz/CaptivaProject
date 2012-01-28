@@ -1,0 +1,55 @@
+ <div class="row">
+  <div class="label">Name</div>
+  <div class="field">
+      <input type="text" name="entity.Name" value="${entity?.Name}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.Name')}</span>
+</div>
+ <div class="row">
+  <div class="label">Description</div>
+  <div class="field">
+      <input type="text" name="entity.Description" value="${entity?.Description}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.Description')}</span>
+</div>
+ <div class="row">
+  <div class="label">Due Date</div>
+  <div class="field">
+      <script type="text/javascript">
+        $(function() {
+          $("#DueDate").datepicker({ dateFormat: 'yy-mm-dd' } );
+        });
+      </script>
+      <!-- TODO: date format needs to come from application.conf -->
+      <input id="DueDate" type="text" name="entity.DueDate" 
+        value="${entity?.DueDate?.format('yyyy-MM-dd')}"
+        size="10" />
+  </div>
+  <span class="error">${errors.forKey('entity.DueDate')}</span>
+</div>
+ <div class="row">
+  <div class="label">Owner</div>
+  <div class="field">
+        <select name="entity.Owner.id">
+                      <option value="">(None)</option>              
+        %{ models.User.all().fetch().sort{ it.toString() }.each() { }%
+          %{
+            selected = false;
+            if (entity?.Owner?.id == it.id) {
+              selected = true
+            }
+          }%
+          <option value="${it?.id}" ${selected ? 'selected'.raw() : ''}>${it}</option>
+        %{ } }%
+        </select>
+  </div>
+  <span class="error">${errors.forKey('entity.Owner')}</span>
+</div>
+ <div class="row">
+  <div class="label"></div>
+  <div class="field">
+      <input type="hidden" name="entity.id" value="${entity?.id}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.id')}</span>
+</div>
+

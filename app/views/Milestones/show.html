@@ -1,0 +1,46 @@
+#{extends 'main.html' /}
+<h2>View Milestone</h2>
+<div class="entity">
+	<div class="row">
+		<span class="elem">
+			Name:
+		</span>
+		<span class="value">
+      ${entity.Name}
+		</span>
+	</div>
+	<div class="row">
+		<span class="elem">
+			Description:
+		</span>
+		<span class="value">
+      ${entity.Description}
+		</span>
+	</div>
+	<div class="row">
+		<span class="elem">
+			DueDate:
+		</span>
+		<span class="value">
+      ${entity.DueDate}
+		</span>
+	</div>
+	<div class="row">
+		<span class="elem">
+			Owner:
+		</span>
+		<span class="value">
+      ${entity.Owner}
+		</span>
+	</div>
+	<div class="row">
+		<span class="elem">
+			id:
+		</span>
+		<span class="value">
+      ${entity.id}
+		</span>
+	</div>
+</div>
+<a href="@{Milestones.index}">Back</a>
+
