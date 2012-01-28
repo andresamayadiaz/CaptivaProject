@@ -8,36 +8,44 @@ import com.google.gson.JsonObject;
 import models.Milestone;
 import models.User;
 import play.Logger;
+import play.data.binding.As;
 import play.data.validation.Valid;
 import play.i18n.Messages;
+import play.libs.Codec;
 import play.mvc.*;
 import play.mvc.Http.Request;
 
+@With(Security.class)
 public class Users extends BaseController {
 	
+	@Check("admin")
     public static void index() {
     	List<User> entities = User.all().fetch();
         render(entities);
     }
     
+	@Check("admin")
     public static void create(User entity) {
         render(entity);
     }
     
+	@Check("admin")
     public static void show(java.lang.Long id) {
         User entity = User.findById(id);
         render(entity);
     }
     
+	@Check("admin")
     public static void edit(java.lang.Long id) {
         User entity = User.findById(id);
         render(entity);
         
     }
     
+	@Check("any")
     public static void profile(){
-    	User userInfo = User.find("byUserName", Security.connected()).first();
-    	render(userInfo);
+    	User entity = User.find("byUserName", Security.connected()).first();
+    	render(entity);
     }
     
    /* @Check("admin")
@@ -76,33 +84,14 @@ public class Users extends BaseController {
             //flash.error(Messages.get("scaffold.validation"));
             render("@create", entity);
         }
+        
+        entity.password = Codec.hexSHA1(entity.password);
         entity.save();
         flash.success(Messages.get("scaffold.created", "User"));
         index();
     }
-    /*public static void save(String userName, String fullName, String password, String repassword, boolean isAdmin){
-    	User user = new User(userName, fullName, password, isAdmin);
-    	Logger.info("isAdmin: "+isAdmin);
-    	
-    	// Validate
-    	validation.valid(user);
-    	if(validation.hasErrors()){	
-    		render("@form", user);
-    	}
-    	if(User.count("byUserName", userName) > 0){
-    		validation.addError("user.userName", "User Name is already taken");
-    		render("@form", user);
-    	}
-    	if(!password.equals(repassword)){
-    		validation.addError("user.repassword", "Password Does not match!!");
-    		render("@form", user);
-    	}
-    	
-    	// Save
-    	user.save();
-    	index();
-    }*/
     
+    @Check("admin")
     public static void update(User entity, String repassword, boolean chgPassword) {
     	
         // Validate Password Change
@@ -118,6 +107,7 @@ public class Users extends BaseController {
             	render("@edit", entity);
     		}
     		
+    		entity.password = Codec.hexSHA1(entity.password);
     	}
         
         validation.valid(entity);
@@ -130,6 +120,35 @@ public class Users extends BaseController {
         entity.save();
         flash.success(Messages.get("scaffold.updated", "User"));
         index();
+    }
+    
+    @Check("any")
+    public static void updateProfile(@As("updateProfile") User entity, String repassword, boolean chgPassword){
+    	// Validate Password Change
+    	if(chgPassword){
+    		
+    		if(!entity.password.equals(repassword)){
+    			validation.addError("repassword", "Password does not match!");
+            	render("@profile", entity);
+    		}
+    		
+    		if(entity.password.equals("")){
+    			validation.addError("entity.password", "Password cannot be empty!");
+            	render("@profile", entity);
+    		}
+    		
+    	}
+        
+        validation.valid(entity);
+        if (validation.hasErrors()) {
+            render("@profile", entity);
+        }
+        
+        	entity = entity.merge();
+        
+        entity.save();
+        flash.success(Messages.get("scaffold.updated", "User"));
+        Application.home();
     }
     
 }

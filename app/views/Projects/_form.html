@@ -1,0 +1,62 @@
+<div class="row">
+  <div class="span16">
+    <h2>${entity?.Name}</h2>
+        <div class="clearfix">
+            #{ifErrors}
+                <p class="alert-message error">
+                    Please correct these errors.
+                </p>
+            #{/ifErrors}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Name'}
+            <label for="${field.name}">Name</label>
+            <div class="input">
+              <input class="input-xlarge" id="Name" name="${field.name}" value="${entity?.Name}" type="text"> 
+              <span class="help-inline error">#{error 'entity.Name' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Description'}
+            <label for="${field.name}">Description</label>
+            <div class="input">
+              <textarea class="input-xlarge" name="${field.name}" type="text">${entity?.Description}</textarea>
+              <span class="help-inline error">#{error 'entity.Description' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.DueDate'}
+            <label for="${field.name}">Due Date</label>
+            <div class="input">
+                <input class="input-large" id="text" name="${field.name}" value="${entity?.DueDate?.format('yyyy-MM-dd')}" type="text">
+                <span class="help-inline error">#{error 'entity.DueDate' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Owner.id'}
+            <label for="${field.name}">Owner</label>
+            <div class="input">
+                #{select 'entity.Owner', items:owners, valueProperty:'userName', labelProperty:'fullName', class:"normalSelect", id:'owner' /}
+                <span class="help-inline error">#{error 'entity.Owner' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.isOpen'}
+                <input type="hidden" name="${field.name}" value="true" />
+                <span class="help-inline error">#{error 'entity.isOpen' /}</span>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            <input type="hidden" name="entity.id" value="${entity?.id}"/>
+        </div>
+        <div class="actions">
+            <input type="submit" class="btn primary" value="Save Project">
+            &nbsp;
+            <a href="@{Projects.index()}" class="btn">Cancel</a>
+        </div>
+  </div>
+</div>

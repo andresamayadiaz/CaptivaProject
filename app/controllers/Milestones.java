@@ -3,16 +3,20 @@ package controllers;
 import java.util.List;
 import models.Milestone;
 import play.mvc.Controller;
+import play.mvc.With;
 import play.i18n.Messages;
 import play.data.validation.Validation;
 import play.data.validation.Valid;
 
-public class Milestones extends Controller {
+@With(Security.class)
+@Check("any")
+public class Milestones extends BaseController {
+	
     public static void index() {
         List<Milestone> entities = models.Milestone.all().fetch();
         render(entities);
     }
-
+    
     public static void create(Milestone entity) {
         render(entity);
     }

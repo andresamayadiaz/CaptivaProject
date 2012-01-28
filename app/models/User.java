@@ -2,7 +2,9 @@ package models;
 
 import play.*;
 import play.data.validation.*;
+import play.data.binding.*;
 import play.db.jpa.*;
+import play.libs.Codec;
 
 import javax.persistence.*;
 
@@ -23,6 +25,7 @@ public class User extends Model {
 	public String password;
 	
 	@Required(message = "is Admin is requiered")
+	@NoBinding("updateProfile")
     public boolean isAdmin;
 	
 	public User(String userName, String fullName, String password, boolean isAdmin)
@@ -34,7 +37,7 @@ public class User extends Model {
 	}
 	
 	public static User connect(String userName, String password) {
-	    return find("byUserNameAndPassword", userName, password).first();
+	    return find("byUserNameAndPassword", userName, Codec.hexSHA1(password)).first();
 	}
 	
 	public static User getByUserName(String userName)
@@ -47,5 +50,15 @@ public class User extends Model {
     {
         return this.userName;
     }
+    
+    /*@Override
+    public User save(){
+    	Logger.info("Save Password: %s", password);
+    	if(!password.isEmpty()){
+    		password = Codec.hexSHA1(password);
+    	}
+    	
+    	return super.save();
+    }*/
 	
 }

@@ -1,0 +1,66 @@
+<div class="row">
+          <div class="span16">
+            <h2>My Profile</h2>
+                <div class="clearfix">
+                    #{ifErrors}
+                        <p class="alert-message error">
+                            Please correct these errors.
+                        </p>
+                    #{/ifErrors}
+                </div>
+                <div class="clearfix">
+                    #{field 'entity.userName'}
+                    <label for="${field.name}">E-Mail</label>
+                    <div class="input">
+                      <!-- <input class="input-large" id="userName" name="${field.name}" value="${entity?.userName}" type="text"> -->
+                      <p>${entity?.userName}</p>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    #{field 'entity.fullName'}
+                    <label for="${field.name}">Full Name</label>
+                    <div class="input">
+                      <input class="input-large" id="fullname" name="${field.name}" value="${entity?.fullName}" type="text">
+                      <span class="help-inline error">#{error 'entity.fullName' /}</span>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    #{field 'entity.password'}
+                    <label for="${field.name}">Password</label>
+                    <div class="input">
+                        <div class="input-prepend">
+                            <label class="add-on"><input type="checkbox" id="chgPassword" name="chgPassword" alt="Change Password?" title="Change Password?" value="true" /></label>
+                            <input class="input-large" id="password" name="${field.name}" type="password" disabled />
+                            <span class="help-inline error">#{error 'entity.password' /}</span>
+                        </div>
+                    </div>
+                    #{/field}
+                </div>
+                <div class="clearfix">
+                    <label for="repassword">Re-Password</label>
+                    <div class="input">
+                      <input class="input-large" id="repassword" name="repassword" type="password">
+                      <span class="help-inline error">#{error 'repassword' /}</span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <input type="hidden" name="entity.id" value="${entity?.id}"/>
+                    <input type="submit" class="btn primary" value="Update User">
+                    &nbsp;
+                    <a href="@{Application.home()}" class="btn">Cancel</a>
+                </div>
+          </div>
+        </div>
+        <script type="text/javascript">
+        $('#chgPassword').change(function(){
+            //alert('hola');
+            if($(this).is(':checked')){
+                $('#password').attr('disabled', false);
+            }else {
+                $('#password').attr('disabled', true);
+            }
+            
+        });
+        </script>

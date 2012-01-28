@@ -13,6 +13,10 @@ public class Security extends Secure.Security {
 	    if("admin".equals(profile)) {
 	        return User.find("byUserName", connected()).<User>first().isAdmin;
 	    }
+	    if("any".equals(profile)){
+	    	//return (User.find("byUserName", connected()).<User>first().count()==1);
+	    	return isConnected();
+	    }
 	    return false;
 	}
 	

@@ -22,10 +22,13 @@ public class Milestone extends Model {
 	@ManyToOne
 	public User Owner;
 	
+	@Required(message = "Status is required")
+	public boolean isOpen = true;
+	
 	public String toStrign(){
 		return Name;
 	}
-
+	
 	@Required(message = "Name is required")
 	public String name;
 	
