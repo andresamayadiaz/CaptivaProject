@@ -6,9 +6,6 @@ import play.db.jpa.*;
 
 import javax.persistence.*;
 
-import models.deadbolt.Role;
-import models.deadbolt.RoleHolder;
-
 import java.util.*;
 
 @Entity

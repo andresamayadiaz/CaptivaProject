@@ -1,0 +1,48 @@
+#{extends 'main.html' /}
+#{set title:'User Show' /}
+
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="well">
+            <h1>${entity.fullName} [${entity.userName}]</h1>
+        </div>
+        <!-- columns -->
+        <div class="row">
+          <div class="span16">
+            <h2>User Information</h2>
+                <div class="clearfix">
+                    <label for="email">E-Mail</label>
+                    <div class="input">
+                      <input class="input-large" id="userName" name="email" value="${entity?.userName}" size="40" type="text"> 
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label for="fullname">Full Name</label>
+                    <div class="input">
+                      <input class="input-large" id="fullname" name="fullname" value="${entity?.fullName}" size="40" type="text">
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label for="isAdmin">Is Admin?</label>
+                    <div class="input">
+                      <input type="checkbox" name="isAdmin}" id="isAdmin" value="true" ${entity?.isAdmin ? 'checked' : ''} />
+                    </div>
+                </div>
+                <div class="actions">
+                    <a href="@{Users.index}" class="btn primary">Back</a>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>

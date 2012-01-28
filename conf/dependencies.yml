@@ -3,6 +3,4 @@
 require:
     - play
     - play -> secure
-    - play -> deadbolt 1.4.4
-    - play -> crud
     - play -> scaffold 0.1
