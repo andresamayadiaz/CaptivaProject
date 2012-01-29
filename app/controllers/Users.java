@@ -20,6 +20,14 @@ public class Users extends BaseController {
 	
 	@Check("admin")
     public static void index() {
+		
+		// check if nameFilter exists
+		if(params.get("nameFilter") != null){
+			List<User> entities = User.find("byFullNameLike", "%"+params.get("nameFilter")+"%").fetch();
+			renderArgs.put("nameFilter", params.get("nameFilter"));
+	        render(entities);
+		}
+		
     	List<User> entities = User.all().fetch();
         render(entities);
     }

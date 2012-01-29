@@ -33,9 +33,10 @@ public class Projects extends BaseController {
     
     public static void edit(java.lang.Long id) {
         Project entity = Project.findById(id);
-        render(entity);
+        List<User> owners = User.find("isAdmin", true).fetch();
+        render(entity, owners);
     }
-
+    
     public static void delete(java.lang.Long id) {
         Project entity = Project.findById(id);
         entity.delete();
@@ -43,8 +44,6 @@ public class Projects extends BaseController {
     }
     
     public static void save(@Valid Project entity) {
-    	Gson gson = new Gson();
-    	Logger.info("Project: %s", gson.toJson(entity));
         if (validation.hasErrors()) {
             //flash.error(Messages.get("scaffold.validation"));
             List<User> owners = User.find("isAdmin", true).fetch();

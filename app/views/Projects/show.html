@@ -1,62 +1,68 @@
 #{extends 'main.html' /}
-<h2>View Project</h2>
-<div class="entity">
-	<div class="row">
-		<span class="elem">
-			Name:
-		</span>
-		<span class="value">
-      ${entity.Name}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			Description:
-		</span>
-		<span class="value">
-      ${entity.Description}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			created:
-		</span>
-		<span class="value">
-      ${entity.created}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			updated:
-		</span>
-		<span class="value">
-      ${entity.updated}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			Owner:
-		</span>
-		<span class="value">
-      ${entity.Owner}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			isOpen:
-		</span>
-		<span class="value">
-      ${entity.isOpen}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			id:
-		</span>
-		<span class="value">
-      ${entity.id}
-		</span>
-	</div>
-</div>
-<a href="@{Projects.index}">Back</a>
+#{set title:'Project Show' /}
 
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="well">
+            <h1>${entity.Name}</h1>
+        </div>
+			<div class="row">
+			  <div class="span16">
+			        <div class="clearfix">
+			            #{field 'entity.Name'}
+			            <label for="${field.name}">Name</label>
+			            <div class="input">
+			              <input class="input-xlarge" id="Name" name="${field.name}" value="${entity?.Name}" type="text" disabled /> 
+			            </div>
+			            #{/field}
+			        </div>
+			        <div class="clearfix">
+			            #{field 'entity.Description'}
+			            <label for="${field.name}">Description</label>
+			            <div class="input">
+			              <textarea class="input-xlarge" name="${field.name}" type="text" disabled />${entity?.Description}</textarea>
+			            </div>
+			            #{/field}
+			        </div>
+			        <div class="clearfix">
+			            #{field 'entity.DueDate'}
+			            <label for="${field.name}">Due Date</label>
+			            <div class="input">
+			                <input class="input-large" id="text" name="${field.name}" value="${entity?.DueDate?.format('yyyy-MM-dd')}" type="text" disabled />
+			            </div>
+			            #{/field}
+			        </div>
+			        <div class="clearfix">
+			            #{field 'entity.Owner'}
+			            <label for="${field.name}">Owner</label>
+			            <div class="input">
+			                <input class="input-large" id="text" name="${field.name}" value="${entity?.Owner?.fullName}" type="text" disabled />
+			            </div>
+			            #{/field}
+			        </div>
+			        <div class="clearfix">
+			            #{field 'entity.isOpen'}
+			            <label for="${field.name}">Owner</label>
+                        <div class="input">
+			                <input type="checkbox" name="${field.name}" id="${field.name}" value="true" ${entity?.isOpen ? 'checked' : ''} />
+			            </div>
+			            #{/field}
+			        </div>
+			        <div class="actions">
+			            <a href="@{Projects.index}" class="btn primary">Back</a>
+			        </div>
+			  </div>
+			</div>
+    </div>
+</div>

@@ -9,3 +9,11 @@ User(andres):
     password: 40bd001563085fc35165329ea1ff5c5ecbdbbeef # 123
     fullName: Andres Amaya
     isAdmin: false
+
+Project(test):
+    Name: Test Project
+    Description: Descripcion Test project
+    DueDate: 2012-02-20
+    Owner: admin
+    isOpen: true
+    

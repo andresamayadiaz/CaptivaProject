@@ -36,7 +36,7 @@
                     <tr>
                         <td>${entity.Name}</td>
                         <td>${entity.Description}</td>
-                        <td>${entity.DueDate}</td>
+                        <td>${entity.DueDate.format('yyyy-MM-dd')}</td>
                         <td>
                            #{if entity.isOpen}
                                <span class="label success">Open</span>

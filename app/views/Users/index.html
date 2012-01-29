@@ -18,6 +18,18 @@
     <div class="row">
       <div class="span16">
         <h2>Users List</h2>
+        
+        <div class="row">
+            #{form @Users.index(), id:'filter'}
+            <div class="clearfix">
+                <label for="nameFilter">Name Filter:</label>
+                <div class="input">
+                  <input class="input-medium" id="nameFilter" name="nameFilter" value="${nameFilter}" type="text"> 
+                  <input type="submit" class="btn" value="Search" />
+                </div>
+            </div>
+            #{/form}
+        </div>
         <p class="pull-right">
             <a href="@{Users.create()}" class="btn primary">Add User</a>
         </p>
