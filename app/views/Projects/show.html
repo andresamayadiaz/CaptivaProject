@@ -14,55 +14,102 @@
       </div>
     </div>
     <div class="content">
-        <div class="well">
-            <h1>${entity.Name}</h1>
+        <div class="page-header">
+            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
         </div>
 			<div class="row">
-			  <div class="span16">
-			        <div class="clearfix">
-			            #{field 'entity.Name'}
-			            <label for="${field.name}">Name</label>
-			            <div class="input">
-			              <input class="input-xlarge" id="Name" name="${field.name}" value="${entity?.Name}" type="text" disabled /> 
-			            </div>
-			            #{/field}
-			        </div>
-			        <div class="clearfix">
-			            #{field 'entity.Description'}
-			            <label for="${field.name}">Description</label>
-			            <div class="input">
-			              <textarea class="input-xlarge" name="${field.name}" type="text" disabled />${entity?.Description}</textarea>
-			            </div>
-			            #{/field}
-			        </div>
-			        <div class="clearfix">
-			            #{field 'entity.DueDate'}
-			            <label for="${field.name}">Due Date</label>
-			            <div class="input">
-			                <input class="input-large" id="text" name="${field.name}" value="${entity?.DueDate?.format('yyyy-MM-dd')}" type="text" disabled />
-			            </div>
-			            #{/field}
-			        </div>
-			        <div class="clearfix">
-			            #{field 'entity.Owner'}
-			            <label for="${field.name}">Owner</label>
-			            <div class="input">
-			                <input class="input-large" id="text" name="${field.name}" value="${entity?.Owner?.fullName}" type="text" disabled />
-			            </div>
-			            #{/field}
-			        </div>
-			        <div class="clearfix">
-			            #{field 'entity.isOpen'}
-			            <label for="${field.name}">Open</label>
-                        <div class="input">
-			                <input type="checkbox" name="${field.name}" id="${field.name}" value="true" ${entity?.isOpen ? 'checked' : ''} />
-			            </div>
-			            #{/field}
-			        </div>
-			        <div class="actions">
-			            <a href="@{Projects.index}" class="btn primary">Back</a>
-			        </div>
-			  </div>
+				<div class="span4">
+					<h3>Due Date</h3>
+					<p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
+				</div>
+				<div class="span4">
+					<h3>Owner</h3>
+					<p>${entity?.Owner?.fullName}</p>
+				</div>
+				<div class="span4">
+					<h3>Status</h3>
+					#{if entity.isOpen}
+						<span class="label success">Open</span>
+					#{/if}
+					#{else}
+						 <span class="label error">Closed</span>
+					#{/else}
+				</div>
+				<div class="span4">
+					<h3>Issues</h3>
+					<span class="label warning">20</span>
+				</div>
+				<div class="span4">
+					<h3>Milestones</h3>
+					<span class="label success">2</span>
+				</div>
 			</div>
+		<div class="clearfix"></div>
+		<!-- END MAIN PROJECT INFO -->
+		<div class="page-header">
+            <h2>Open Milestones</h2>
+            <a href="#">New Milestone</a>
+        </div>
+        <!-- Milestone List -->
+        <table>
+        	<thead>
+        		<tr>
+        			<th>Due Date</th>
+        			<th>Name</th>
+        			<th>Description</th>
+        			<th>Tasks</th>
+        			<th>Open Tasks</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<td><span class="label notice">${openMilestones?.DueDate}2012-01-20</span></td>
+        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
+        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
+        			<td>12</td>
+        			<td>8</td>
+        		</tr>
+        		<tr>
+        			<td><span class="label notice">${openMilestones?.DueDate}2012-01-20</span></td>
+        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
+        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
+        			<td>12</td>
+        			<td>8</td>
+        		</tr>	
+        	</tbody>
+        </table>
+        <!-- End Milestone List -->
+        
+        <div class="page-header">
+            <h2>Closed Milestones</h2>
+        </div>
+        <table>
+        	<thead>
+        		<tr>
+        			<th>Due Date</th>
+        			<th>Name</th>
+        			<th>Description</th>
+        			<th>Tasks</th>
+        			<th>Open Tasks</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<td><span class="label important">${openMilestones?.DueDate}2012-01-20</span></td>
+        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
+        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
+        			<td>12</td>
+        			<td>8</td>
+        		</tr>
+        		<tr>
+        			<td><span class="label important">${openMilestones?.DueDate}2012-01-20</span></td>
+        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
+        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
+        			<td>12</td>
+        			<td>8</td>
+        		</tr>	
+        	</tbody>
+        </table>
+        <!-- END MILESTONES -->
     </div>
 </div>

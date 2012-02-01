@@ -17,32 +17,57 @@ public class Projects extends BaseController {
 	
 	@Check("any")
     public static void index() {
-        List<Project> entities = Project.find("isOpen = ?", true).fetch();
+		
+		// check if filter apply
+		if(params.get("statusFilter") != null){
+			
+			if(params.get("statusFilter").equals("true")){ // open
+				List<Project> entities = Project.find("isOpen", true).fetch();
+				renderArgs.put("statusFilter", "true");
+		        render(entities);
+			}else if(params.get("statusFilter").equals("false")){ // closed
+				List<Project> entities = Project.find("isOpen", false).fetch();
+				renderArgs.put("statusFilter", "false");
+		        render(entities);
+			}else { // all
+				List<Project> entities = Project.all().fetch();
+				renderArgs.put("statusFilter", "all");
+		        render(entities);
+			}
+
+		}
+		
+        List<Project> entities = Project.find("isOpen", true).fetch();
         render(entities);
     }
     
+	@Check("any")
     public static void create(Project entity) {
     	List<User> owners = User.find("isAdmin", true).fetch();
         render(entity, owners);
     }
     
+	@Check("any")
     public static void show(java.lang.Long id) {
         Project entity = Project.findById(id);
         render(entity);
     }
     
+	@Check("any")
     public static void edit(java.lang.Long id) {
         Project entity = Project.findById(id);
         List<User> owners = User.find("isAdmin", true).fetch();
         render(entity, owners);
     }
     
+	@Check("admin")
     public static void delete(java.lang.Long id) {
         Project entity = Project.findById(id);
         entity.delete();
         index();
     }
     
+	@Check("any")
     public static void save(@Valid Project entity) {
         if (validation.hasErrors()) {
             //flash.error(Messages.get("scaffold.validation"));
@@ -54,6 +79,7 @@ public class Projects extends BaseController {
         index();
     }
 
+	@Check("any")
     public static void update(@Valid Project entity) {
         if (validation.hasErrors()) {
             //flash.error(Messages.get("scaffold.validation"));
@@ -66,4 +92,25 @@ public class Projects extends BaseController {
         flash.success(Messages.get("scaffold.updated", "Project"));
         index();
     }
+    
+	@Check("any")
+    public static void close(java.lang.Long id){
+		Project entity = Project.findById(id);
+		notFoundIfNull(entity);
+		entity.isOpen = false;
+		entity.save();
+		flash.success(Messages.get("scaffold.updated", "Project"));
+		index();
+    }
+    
+	@Check("any")
+    public static void open(java.lang.Long id){
+		Project entity = Project.findById(id);
+		notFoundIfNull(entity);
+		entity.isOpen = true;
+		entity.save();
+		flash.success(Messages.get("scaffold.updated", "Project"));
+		index();
+    }
+    
 }
