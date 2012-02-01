@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 import models.Milestone;
+import models.Project;
+import models.User;
 import play.mvc.Controller;
 import play.mvc.With;
 import play.i18n.Messages;
@@ -18,17 +20,21 @@ public class Milestones extends BaseController {
     }
     
     public static void create(Milestone entity) {
-        render(entity);
+    	List<Project> projects = Project.find("isOpen", true).fetch();
+    	List<User> owners = User.all().fetch();
+        render(entity, projects, owners);
     }
-
+    
     public static void show(java.lang.Long id) {
         Milestone entity = Milestone.findById(id);
         render(entity);
     }
-
+    
     public static void edit(java.lang.Long id) {
         Milestone entity = Milestone.findById(id);
-        render(entity);
+        List<Project> projects = Project.find("isOpen", true).fetch();
+        List<User> owners = User.all().fetch();
+        render(entity, projects, owners);
     }
     
     public static void delete(java.lang.Long id) {

@@ -9,11 +9,11 @@ import java.util.*;
 @Entity
 public class Milestone extends Model {
     
-	@Required(message = "Name is requiered")
+	@Required(message = "Name is required")
 	@MaxSize(50)
 	public String Name;
 	
-	@Required(message = "Description is requiered")
+	@Required(message = "Description is required")
 	public String Description;
 	
 	public Date DueDate;
