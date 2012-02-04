@@ -1,53 +1,145 @@
 #{extends 'main.html' /}
-<h2>View Milestone</h2>
-<div class="entity">
-	<div class="row">
-		<span class="elem">
-<<<<<<< HEAD
-			Name:
-		</span>
-		<span class="value">
-      ${entity.Name}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			Description:
-		</span>
-		<span class="value">
-      ${entity.Description}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			DueDate:
-		</span>
-		<span class="value">
-      ${entity.DueDate}
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			Owner:
-		</span>
-		<span class="value">
-      ${entity.Owner}
-=======
-			name:
-		</span>
-		<span class="value">
-      ${entity.name}
->>>>>>> c537cffce1a2be2ceb1778112f9331b64e71e032
-		</span>
-	</div>
-	<div class="row">
-		<span class="elem">
-			id:
-		</span>
-		<span class="value">
-      ${entity.id}
-		</span>
-	</div>
-</div>
-<a href="@{Milestones.index}">Back</a>
+#{set title:'Milestone Show' /}
 
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="page-header">
+        	<ul class="breadcrumb">
+        		<li><a href="@{Projects.show(entity.Project?.id)}">${entity.Project?.Name}</a><span class="divider">/</span></li>
+        		<li>${entity.Name}</li>
+        	</ul>
+            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
+        </div>
+			<div class="row">
+				<div class="span4">
+					<h3>Due Date</h3>
+					<p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
+				</div>
+				<div class="span4">
+					<h3>Owner</h3>
+					<p>${entity?.Owner?.fullName}</p>
+				</div>
+				<div class="span4">
+					<h3>Status</h3>
+					#{if entity.isOpen}
+						<span class="label success">Open</span>
+					#{/if}
+					#{else}
+						 <span class="label error">Closed</span>
+					#{/else}
+				</div>
+				<div class="span4">
+					<h3>Issues</h3>
+					<span class="label warning">20</span>
+				</div>
+				<div class="span4">
+					<h3>Tasks</h3>
+					<span class="label success">${entity?.Tasks.size()}</span>
+				</div>
+			</div>
+		<div class="clearfix"></div>
+		<!-- END MAIN MILESTONE INFO -->
+		<div class="page-header">
+            <h2>Open Tasks</h2>
+            <a href="#" data-controls-modal="new-task-modal" data-backdrop="true">New Task</a>
+            <div id="new-task-modal" class="modal hide fade in" >
+            	<div class="modal-header">
+              		<a href="#" class="close">×</a>
+              		<h3>Add Task</h3>
+            	</div>
+            	#{form @Milestones.save(), id:'createForm'}
+            	<div class="modal-body">
+            		<p>
+            			#{include 'Milestones/_formModal.html' /}
+        			</p>
+            	</div>
+            	<div class="modal-footer">
+              		<input type="submit" class="btn primary" value="Save Task">
+            	</div>
+            	#{/form}
+            </div>
+        </div>
+        <!-- Task List -->
+        <table>
+        	<thead>
+        		<tr>
+        			<th>Due Date</th>
+        			<th>Name</th>
+        			<th>Description</th>
+        			<th>Owner</th>
+        			<th>Time (Est./Act.)</th>
+        			<th>Actions</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
+        	#{list items:entity?.Tasks, as:'task'}
+        		#{if task.isOpen}
+        		<tr>
+        			#{if task.DueDate > new Date()}
+        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+        			#{/if}
+        			#{else}
+        				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+        			#{/else}
+        			<td><a href="#">${task?.Name}</a></td>
+        			<td>${task?.Description}</td>
+        			<td>12</td>
+        			<td>8</td>
+        			<td><a href="#">Close</a></td>
+        		</tr>
+        		#{/if}
+        	#{/list}
+        	</tbody>
+        </table>
+        <!-- End Tasks List -->
+        
+        <div class="page-header">
+            <h2>Closed Tasks</h2>
+        </div>
+        <table>
+        	<thead>
+        		<tr>
+        			<th>Due Date</th>
+        			<th>Name</th>
+        			<th>Description</th>
+        			<th>Owner</th>
+        			<th>Time (Est./Act.)</th>
+        			<th>Actions</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
+        		#{list items:entity?.Tasks, as:'task'}
+        			#{if task.isOpen == false}
+	        		<tr>
+	        			#{if task.DueDate > new Date()}
+	        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+	        			#{/if}
+	        			#{else}
+	        				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+	        			#{/else}
+	        			<td><a href="#">${task?.Name}</a></td>
+	        			<td>${task?.Description}</td>
+	        			<td>12</td>
+	        			<td>8</td>
+	        			<td><a href="#">Close</a></td>
+	        		</tr>
+	        		#{/if}
+        		#{/list}
+        	</tbody>
+        </table>
+        <!-- END TASKS -->
+    </div>
+</div>

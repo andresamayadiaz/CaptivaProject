@@ -4,6 +4,7 @@ import play.*;
 import play.data.validation.*;
 import play.db.jpa.*;
 import javax.persistence.*;
+
 import java.util.*;
 
 @Entity
@@ -24,12 +25,23 @@ public class Milestone extends Model {
 	
 	@Required(message = "Project is required")
 	@ManyToOne
+	@JoinColumn (name="Project")
 	public Project Project;
+	
+	@OneToMany (mappedBy="Milestone")
+	public List<Task> Tasks;
 	
 	@Required(message = "Status is required")
 	public boolean isOpen = true;
 	
-	public String toStrign(){
+	public Date created;
+	
+	@PrePersist 
+    protected void onCreate() { 
+            created = new Date(); 
+    }
+	
+	public String toString(){
 		return Name;
 	}
 	

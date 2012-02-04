@@ -15,6 +15,9 @@
     </div>
     <div class="content">
         <div class="page-header">
+        	<ul class="breadcrumb">
+        		<li>${entity.Name}</li>
+        	</ul>
             <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
         </div>
 			<div class="row">
@@ -48,7 +51,23 @@
 		<!-- END MAIN PROJECT INFO -->
 		<div class="page-header">
             <h2>Open Milestones</h2>
-            <a href="#">New Milestone</a>
+            <a href="#" data-controls-modal="new-milestone-modal" data-backdrop="true">New Milestone</a>
+            <div id="new-milestone-modal" class="modal hide fade in" >
+            	<div class="modal-header">
+              		<a href="#" class="close">×</a>
+              		<h3>Add Milestone</h3>
+            	</div>
+            	#{form @Milestones.save(), id:'createForm'}
+            	<div class="modal-body">
+            		<p>
+            			#{include 'Milestones/_formModal.html' /}
+        			</p>
+            	</div>
+            	<div class="modal-footer">
+              		<input type="submit" class="btn primary" value="Save Milestone">
+            	</div>
+            	#{/form}
+            </div>
         </div>
         <!-- Milestone List -->
         <table>
@@ -59,23 +78,28 @@
         			<th>Description</th>
         			<th>Tasks</th>
         			<th>Open Tasks</th>
+        			<th>Actions</th>
         		</tr>
         	</thead>
         	<tbody>
+        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
+        	#{list items:entity?.Milestones, as:'milestone'}
+        		#{if milestone.isOpen}
         		<tr>
-        			<td><span class="label notice">${openMilestones?.DueDate}2012-01-20</span></td>
-        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
-        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
+        			#{if milestone.DueDate > new Date()}
+        				<td><span class="label notice">${milestone?.DueDate?.format('yyyy-MM-dd')}</span></td>
+        			#{/if}
+        			#{else}
+        				<td><span class="label important">${milestone?.DueDate?.format('yyyy-MM-dd')}</span></td>
+        			#{/else}
+        			<td><a href="@{Milestones.show(milestone.id)}">${milestone?.Name}</a></td>
+        			<td>${milestone?.Description}</td>
         			<td>12</td>
         			<td>8</td>
+        			<td><a href="@{Milestones.close(milestone.id)}">Close</a></td>
         		</tr>
-        		<tr>
-        			<td><span class="label notice">${openMilestones?.DueDate}2012-01-20</span></td>
-        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
-        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
-        			<td>12</td>
-        			<td>8</td>
-        		</tr>	
+        		#{/if}
+        	#{/list}
         	</tbody>
         </table>
         <!-- End Milestone List -->
@@ -91,23 +115,23 @@
         			<th>Description</th>
         			<th>Tasks</th>
         			<th>Open Tasks</th>
+        			<th>Actions</th>
         		</tr>
         	</thead>
         	<tbody>
-        		<tr>
-        			<td><span class="label important">${openMilestones?.DueDate}2012-01-20</span></td>
-        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
-        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
-        			<td>12</td>
-        			<td>8</td>
-        		</tr>
-        		<tr>
-        			<td><span class="label important">${openMilestones?.DueDate}2012-01-20</span></td>
-        			<td><a href="#">${openMilestones?.Name}Milestone Name</a></td>
-        			<td>${openMilestones?.Description}Descripcion del Milestone</td>
-        			<td>12</td>
-        			<td>8</td>
-        		</tr>	
+        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
+        		#{list items:entity?.Milestones, as:'milestone'}
+        			#{if milestone.isOpen == false}
+	        		<tr>
+	        			<td><span class="label">${milestone?.DueDate?.format('yyyy-MM-dd')}</span></td>
+	        			<td><a href="#">${milestone?.Name}</a></td>
+	        			<td>${milestone?.Description}</td>
+	        			<td>12</td>
+	        			<td>8</td>
+	        			<td><a href="@{Milestones.open(milestone.id)}">Open</a></td>
+	        		</tr>
+	        		#{/if}
+        		#{/list}
         	</tbody>
         </table>
         <!-- END MILESTONES -->

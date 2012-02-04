@@ -13,7 +13,14 @@ User(andres):
 Project(test):
     Name: Test Project
     Description: Descripcion Test project
-    DueDate: 2012-02-20
+    DueDate: 2012-02-29
     Owner: admin
     isOpen: true
     
+Milestone(mtest):
+    Name: Milestone de Prueba
+    Description: Milestone inicial para pruebas
+    DueDate: 2012-02-29
+    Owner: admin
+    Project: test
+    iOpen: true

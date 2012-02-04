@@ -33,6 +33,9 @@ public class Project extends Model {
 	@Required(message = "Status is requiered")
 	public boolean isOpen = true;
 	
+	@OneToMany (mappedBy="Project")
+	public List<Milestone> Milestones;
+	
 	@PrePersist 
     protected void onCreate() { 
             created = new Date(); 

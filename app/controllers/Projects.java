@@ -50,6 +50,7 @@ public class Projects extends BaseController {
 	@Check("any")
     public static void show(java.lang.Long id) {
         Project entity = Project.findById(id);
+        //Logger.info("Milestones Count: %s", entity.Milestones.size());
         render(entity);
     }
     

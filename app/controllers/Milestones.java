@@ -50,7 +50,7 @@ public class Milestones extends BaseController {
         }
         entity.save();
         flash.success(Messages.get("scaffold.created", "Milestone"));
-        index();
+        Projects.show(entity.Project.id);
     }
     
     public static void update(@Valid Milestone entity) {
@@ -64,5 +64,25 @@ public class Milestones extends BaseController {
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Milestone"));
         index();
+    }
+    
+    @Check("any")
+    public static void close(java.lang.Long id){
+		Milestone entity = Milestone.findById(id);
+		notFoundIfNull(entity);
+		entity.isOpen = false;
+		entity.save();
+		flash.success(Messages.get("scaffold.updated", "Milestone"));
+		Projects.show(entity.Project.id);
+    }
+    
+	@Check("any")
+    public static void open(java.lang.Long id){
+		Milestone entity = Milestone.findById(id);
+		notFoundIfNull(entity);
+		entity.isOpen = true;
+		entity.save();
+		flash.success(Messages.get("scaffold.updated", "Milestone"));
+		Projects.show(entity.Project.id);
     }
 }
