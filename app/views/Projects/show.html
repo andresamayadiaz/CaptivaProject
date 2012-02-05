@@ -29,7 +29,7 @@
 					<h3>Owner</h3>
 					<p>${entity?.Owner?.fullName}</p>
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Status</h3>
 					#{if entity.isOpen}
 						<span class="label success">Open</span>
@@ -38,13 +38,13 @@
 						 <span class="label error">Closed</span>
 					#{/else}
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Issues</h3>
 					<span class="label warning">20</span>
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Milestones</h3>
-					<span class="label success">2</span>
+					<span class="label success">${entity?.Milestones.size()}</span>
 				</div>
 			</div>
 		<div class="clearfix"></div>

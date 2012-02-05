@@ -23,12 +23,19 @@ public class Task extends Model {
 	public Date created;
 	
 	@Required
+	public Date DueDate;
+	
+	@Required(message = "Owner is requiered")
+	@ManyToOne
 	public User Owner;
 	
 	@Required(message = "Milestone is required")
 	@ManyToOne
 	@JoinColumn (name="Milestone")
 	public Milestone Milestone;
+	
+	@OneToMany (mappedBy="Task")
+	public List<Comment> Comments;
 	
 	@Required
 	public boolean isOpen = true;

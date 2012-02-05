@@ -30,7 +30,7 @@
 					<h3>Owner</h3>
 					<p>${entity?.Owner?.fullName}</p>
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Status</h3>
 					#{if entity.isOpen}
 						<span class="label success">Open</span>
@@ -39,11 +39,11 @@
 						 <span class="label error">Closed</span>
 					#{/else}
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Issues</h3>
 					<span class="label warning">20</span>
 				</div>
-				<div class="span4">
+				<div class="span2">
 					<h3>Tasks</h3>
 					<span class="label success">${entity?.Tasks.size()}</span>
 				</div>
@@ -58,10 +58,10 @@
               		<a href="#" class="close">×</a>
               		<h3>Add Task</h3>
             	</div>
-            	#{form @Milestones.save(), id:'createForm'}
+            	#{form @Tasks.save(), id:'createForm'}
             	<div class="modal-body">
             		<p>
-            			#{include 'Milestones/_formModal.html' /}
+            			#{include 'Tasks/_formModal.html' /}
         			</p>
             	</div>
             	<div class="modal-footer">
@@ -93,11 +93,14 @@
         			#{else}
         				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
         			#{/else}
-        			<td><a href="#">${task?.Name}</a></td>
+        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
         			<td>${task?.Description}</td>
-        			<td>12</td>
-        			<td>8</td>
-        			<td><a href="#">Close</a></td>
+        			<td>${task?.Owner.fullName}</td>
+        			<td>${task?.estimated} / 0.0</td>
+        			<td>
+        			 <a href="@{Tasks.close(task.id)}">Close</a>
+        			 <a href="#">Time</a>
+        			</td>
         		</tr>
         		#{/if}
         	#{/list}
@@ -124,17 +127,12 @@
         		#{list items:entity?.Tasks, as:'task'}
         			#{if task.isOpen == false}
 	        		<tr>
-	        			#{if task.DueDate > new Date()}
-	        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-	        			#{/if}
-	        			#{else}
-	        				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-	        			#{/else}
-	        			<td><a href="#">${task?.Name}</a></td>
+	        		    <td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+	        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
 	        			<td>${task?.Description}</td>
-	        			<td>12</td>
-	        			<td>8</td>
-	        			<td><a href="#">Close</a></td>
+	        			<td>${task?.Owner.fullName}</td>
+	        			<td>${task?.estimated} / 0.0</td>
+	        			<td><a href="@{Tasks.open(task.id)}">Open</a></td>
 	        		</tr>
 	        		#{/if}
         		#{/list}

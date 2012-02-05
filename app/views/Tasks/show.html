@@ -1,0 +1,172 @@
+#{extends 'main.html' /}
+#{set title:'Task Show' /}
+
+<div class="container-fluid">
+    <div class="sidebar">
+      <div class="well">
+        <h5>Options</h5>
+        <ul>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">My Open Tasks</a></li>
+          <li><a href="#">Milestones</a></li>
+          <li><a href="#">Reports</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="content">
+        <div class="page-header">
+            <ul class="breadcrumb">
+                <li><a href="@{Projects.show(entity.Milestone?.Project?.id)}">${entity.Milestone?.Project?.Name}</a><span class="divider">/</span></li>
+                <li><a href="@{Milestones.show(entity.Milestone?.id)}">${entity.Milestone?.Name}</a><span class="divider">/</span></li>
+                <li>${entity.Name}</li>
+            </ul>
+            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
+        </div>
+            <div class="row">
+                <div class="span4">
+                    <h3>Due Date</h3>
+                    <p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
+                </div>
+                <div class="span4">
+                    <h3>Owner</h3>
+                    <p>${entity?.Owner?.fullName}</p>
+                </div>
+                <div class="span2">
+                    <h3>Status</h3>
+                    #{if entity.isOpen}
+                        <span class="label success">Open</span>
+                    #{/if}
+                    #{else}
+                         <span class="label important">Closed</span>
+                    #{/else}
+                </div>
+                <div class="span2">
+                    <h3>Est. (hrs)</h3>
+                    <span class="label">${entity.estimated}</span>
+                </div>
+                <div class="span2">
+                    <h3>Actual (hrs)</h3>
+                    <span class="label">0</span>
+                </div>
+            </div>
+        <div class="clearfix"></div>
+        <!-- END MAIN TASK INFO -->
+        <div class="row">
+	        <!-- Task Comments -->
+	        <div class="span8 border">
+	           <h3>Comments</h3>
+	           <p class="pull-right"><a href="#" data-controls-modal="new-comment-modal" data-backdrop="true">Add Comment</a></p>
+		           <div id="new-comment-modal" class="modal hide fade in" >
+	                <div class="modal-header">
+	                    <a href="#" class="close">×</a>
+	                    <h3>New Comment</h3>
+	                </div>
+	                #{form @Comments.save(), id:'createForm'}
+	                <div class="modal-body">
+	                    <p>
+	                        #{include 'Comments/_formModal.html' /}
+	                    </p>
+	                </div>
+	                <div class="modal-footer">
+	                    <input type="submit" class="btn primary" value="Save Comment">
+	                </div>
+	                #{/form}
+	            </div>
+	           <table class="bordered-table zebra-striped">
+	               <thead>
+                       <tr>
+                           <th>User</th>
+                           <th>Date</th>
+                           <th>Comment</th>
+                       </tr>
+                   </thead>
+	               <tbody>
+	                   #{list items:entity?.Comments, as:'comment'}
+	                       <tr>
+	                           <td>
+	                               <p>${comment?.createdBy.fullName}</p>
+	                           </td>
+	                           <td>
+	                               <p>${comment?.created?.format('yyyy-MM-dd')}</p>
+	                           </td>
+	                           <td>
+	                               <p>${comment?.comment}</p>
+	                           </td>
+	                       </tr>
+	                   #{/list}
+	                   <tr>
+	                       <td>
+	                           <p>Juan Perez</p>
+	                       </td>
+	                       <td>
+                               <p>2012-01-18</p>
+                           </td>
+	                       <td>
+	                           <p>Texto del comentario ladj alk jdhqcmp kpoj pij ininnkjnkas kjnjkn jkwajk dnjk</p>
+	                       </td>
+	                   </tr>
+	                   <tr>
+                           <td>
+                               <p>Arnulfo Martinez</p>
+                           </td>
+                           <td>
+                               <p>2012-01-15</p>
+                           </td>
+                           <td>
+                               <p>Este es otro comentario de la tarea seleccionada que contiene mayor cantidad de texto con la finalidad de probar mucho texto.</p>
+                           </td>
+                       </tr>
+	               </tbody>
+	           </table>
+	        </div>
+	        <!-- End Task Comments -->
+	        <!-- Task Times -->
+	        <div class="span8">
+	           <h3>Time Registry</h3>
+	           <p class="pull-right"><a href="#">Add Time</a></p>
+	           <table class="zebra-striped condensed-table">
+	               <thead>
+	                   <tr>
+	                       <th>User</th>
+	                       <th>Date</th>
+	                       <th>Comment</th>
+	                       <th>Time</th>
+	                   </tr>
+	               </thead>
+                   <tbody>
+                       <tr>
+                           <td>
+                               <p>Juan Perez</p>
+                           </td>
+                           <td>
+                               <p>2012-01-30</p>
+                           </td>
+                           <td>
+                               <p>Correccion de tarea</p>
+                           </td>
+                           <td>
+                               <p>1.8</p>
+                           </td>
+                       </tr>
+                       <tr>
+                           <td>
+                               <p>Andres Amaya</p>
+                           </td>
+                           <td>
+                               <p>2012-01-30</p>
+                           </td>
+                           <td>
+                               <p>Apoyo con un BUG Fix</p>
+                           </td>
+                           <td>
+                               <p>0.5</p>
+                           </td>
+                       </tr>
+                   </tbody>
+               </table>
+            </div>
+	        <!-- End Task Times -->
+        </div>
+        <!-- END TASKS -->
+    </div>
+</div>

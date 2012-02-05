@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="span8">
+        <div class="clearfix">
+            #{ifErrors}
+                <p class="alert-message error">
+                    Please correct these errors.
+                </p>
+            #{/ifErrors}
+        </div>
+        <input type="hidden" name="entity.Milestone.id" value="${entity?.id}" />
+        <div class="clearfix">
+            #{field 'entity.Name'}
+            <label for="${field.name}">Name</label>
+            <div class="input">
+              <input class="input-xlarge" id="Name" name="${field.name}" type="text"> 
+              <span class="help-inline error">#{error 'entity.Name' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Description'}
+            <label for="${field.name}">Description</label>
+            <div class="input">
+              <textarea class="input-xlarge" name="${field.name}" type="text"></textarea>
+              <span class="help-inline error">#{error 'entity.Description' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.estimated'}
+            <label for="${field.name}">Estimated (hrs.)</label>
+            <div class="input">
+              <input class="input-small" name="${field.name}" type="text" />
+              <span class="help-inline error">#{error 'entity.estimated' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.DueDate'}
+            <label for="${field.name}">Due Date</label>
+            <div class="input">
+                <input class="input-large" id="DueDate" name="${field.name}" type="text">
+                <span class="help-inline error">#{error 'entity.DueDate' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Owner.id'}
+            <label for="${field.name}">Owner</label>
+            <div class="input">
+                #{select 'entity.Owner.id', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect", id:'owner' /}
+                <span class="help-inline error">#{error 'entity.Owner' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div>
+            #{field 'entity.isOpen'}
+                <input type="hidden" name="${field.name}" value="true" />
+            #{/field}
+        </div>
+  </div>
+</div>
+<script type="text/javascript">
+$( "#DueDate" ).datepicker({
+    dateFormat: 'yy-mm-dd',
+    minDate: new Date()
+});
+</script>

@@ -10,17 +10,31 @@ User(andres):
     fullName: Andres Amaya
     isAdmin: false
 
-Project(test):
+Project(project1):
     Name: Test Project
     Description: Descripcion Test project
     DueDate: 2012-02-29
     Owner: admin
     isOpen: true
     
-Milestone(mtest):
+Milestone(milestone1):
     Name: Milestone de Prueba
     Description: Milestone inicial para pruebas
     DueDate: 2012-02-29
     Owner: admin
-    Project: test
+    Project: project1
     iOpen: true
+    
+Task(task1):
+    Name: Tarea de Prueba
+    Description: Tarea inicial de prueba para el desarrollo
+    DueDate: 2012-02-29
+    estimated: 2.5
+    Owner: andres
+    Milestone: milestone1
+    isOpen: true
+    
+Comment(comment1):
+    comment: Esto es un comentario de la tarea de prueba
+    createdBy: andres
+    Task: task1
