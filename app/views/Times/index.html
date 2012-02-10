@@ -1,0 +1,34 @@
+#{extends 'main.html' /}
+<h2>Times</h2>
+<table class="entity Time">
+	<thead>
+		<tr>
+			<th><!-- actions --></th>
+				<th>Time</th>
+				<th>Comment</th>
+				<th>Created By</th>
+				<th>Created</th>
+				<th>Task</th>
+				<th>Id</th>
+		</tr>
+	</thead>
+	<tbody>
+	#{list items:entities, as:'entity'}
+		<tr>
+			<td>
+				<a href="@{Times.show(entity.id)}">Show</a>&nbsp;
+				<a href="@{Times.edit(entity.id)}">Edit</a>&nbsp;
+				<a href="@{Times.delete(entity.id)}" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+			</td>
+					<td>${entity.time}</td>
+					<td>${entity.comment}</td>
+					<td>${entity.createdBy}</td>
+					<td>${entity.created}</td>
+					<td>${entity.Task}</td>
+					<td>${entity.id}</td>
+		</tr>
+	#{/list}
+	</tbody>
+</table>
+<a href="@{Times.create}">Create</a>
+

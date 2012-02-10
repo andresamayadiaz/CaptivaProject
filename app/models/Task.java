@@ -37,6 +37,9 @@ public class Task extends Model {
 	@OneToMany (mappedBy="Task")
 	public List<Comment> Comments;
 	
+	@OneToMany (mappedBy="Task")
+	public List<Time> Times;
+	
 	@Required
 	public boolean isOpen = true;
 	

@@ -1,0 +1,85 @@
+<div class="row">
+  <div class="span8">
+        <div class="clearfix">
+            #{ifErrors}
+                <p class="alert-message error">
+                    Please correct these errors.
+                </p>
+            #{/ifErrors}
+        </div>
+        <input type="hidden" name="entity.Task.id" value="${entity?.id}" />
+        <div class="clearfix">
+        	#{field 'entity.time'}
+        		<label for="${field.time}">Time</label>
+        		<div class="input">
+        			<span id="txtHumanTime">0:0</span>&nbsp;&nbsp;<small>(mm:ss)</small>
+        			<input id="txtTime" type="hidden" class="small" name="entity.time" value="0" />
+        			<a id="btnStart" href="#" class="btn">Start</a>
+        			<a id="btnReset" href="#" class="btn danger">Reset</a>
+        			
+        		</div>
+        	#{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.comment'}
+            <label for="${field.comment}">Comment</label>
+            <div class="input">
+              <textarea class="input-xlarge required" name="${field.name}" type="text"></textarea>
+              <span class="help-inline error">#{error 'entity.comment' /}</span>
+            </div>
+            #{/field}
+        </div>
+  </div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		
+		var totalTime = 90;
+		
+		var timer = $.timer(function() {
+                // do timer functionality
+                totalTime++;
+                $("#txtHumanTime").html(HumanTime(totalTime));
+                $("#txtTime").val(Math.round(totalTime/60*1000)/1000);
+        });
+        
+        timer.set({ time : 1000, autostart : false });
+		
+		$("#btnStart").click(function(){
+		
+			if(timer.active){
+				
+				$("#btnStart").removeClass("info");
+				$("#btnStart").html("Start");
+				timer.pause();
+			
+			}else {
+			
+				$("#btnStart").addClass("info");
+				$("#btnStart").html("Pause");
+				timer.play(false);
+			
+			}
+			
+		});
+		
+		$("#btnReset").click(function(){
+			
+			totalTime = 0;
+			$("#btnStart").removeClass("info");
+			$("#btnStart").html("Start");
+			timer.stop();
+			$("#txtTime").val("0:0");
+			
+		});
+		
+		function HumanTime(secs){
+			
+			var Minutes = Math.floor(secs/60);
+			var Seconds = secs%60;
+			return Minutes + ":" + Seconds;
+			
+		}
+		
+	});
+</script>

@@ -1,0 +1,62 @@
+ <div class="row">
+  <div class="label">Time</div>
+  <div class="field">
+      <input type="text" name="entity.time" value="${entity?.time}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.time')}</span>
+</div>
+ <div class="row">
+  <div class="label">Comment</div>
+  <div class="field">
+      <input type="text" name="entity.comment" value="${entity?.comment}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.comment')}</span>
+</div>
+ <div class="row">
+  <div class="label">Created By</div>
+  <div class="field">
+      <input type="text" name="entity.createdBy" value="${entity?.createdBy}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.createdBy')}</span>
+</div>
+ <div class="row">
+  <div class="label">Created</div>
+  <div class="field">
+      <script type="text/javascript">
+        $(function() {
+          $("#created").datepicker({ dateFormat: 'yy-mm-dd' } );
+        });
+      </script>
+      <!-- TODO: date format needs to come from application.conf -->
+      <input id="created" type="text" name="entity.created" 
+        value="${entity?.created?.format('yyyy-MM-dd')}"
+        size="10" />
+  </div>
+  <span class="error">${errors.forKey('entity.created')}</span>
+</div>
+ <div class="row">
+  <div class="label">Task</div>
+  <div class="field">
+        <select name="entity.Task.id">
+                      <option value="">(None)</option>              
+        %{ models.Task.all().fetch().sort{ it.toString() }.each() { }%
+          %{
+            selected = false;
+            if (entity?.Task?.id == it.id) {
+              selected = true
+            }
+          }%
+          <option value="${it?.id}" ${selected ? 'selected'.raw() : ''}>${it}</option>
+        %{ } }%
+        </select>
+  </div>
+  <span class="error">${errors.forKey('entity.Task')}</span>
+</div>
+ <div class="row">
+  <div class="label"></div>
+  <div class="field">
+      <input type="hidden" name="entity.id" value="${entity?.id}"/>
+  </div>
+  <span class="error">${errors.forKey('entity.id')}</span>
+</div>
+

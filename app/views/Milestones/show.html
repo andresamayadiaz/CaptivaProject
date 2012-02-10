@@ -65,8 +65,18 @@
         			</p>
             	</div>
             	<div class="modal-footer">
-              		<input type="submit" class="btn primary" value="Save Task">
+              		<input id="submitBtn" type="submit" class="btn primary" value="Save Task">
             	</div>
+            	<script type="text/javascript">
+	                    	$(document).ready(function(){
+							    $("#createForm").validate({
+							    	submitHandler: function(form) {
+									   $("#submitBtn").attr("disabled", true);
+									   $(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
             	#{/form}
             </div>
         </div>

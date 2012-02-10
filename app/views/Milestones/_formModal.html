@@ -12,7 +12,7 @@
             #{field 'entity.Name'}
             <label for="${field.name}">Name</label>
             <div class="input">
-              <input class="input-xlarge" id="Name" name="${field.name}" type="text"> 
+              <input class="input-xlarge required" id="Name" name="${field.name}" type="text"> 
               <span class="help-inline error">#{error 'entity.Name' /}</span>
             </div>
             #{/field}
@@ -21,7 +21,7 @@
             #{field 'entity.Description'}
             <label for="${field.name}">Description</label>
             <div class="input">
-              <textarea class="input-xlarge" name="${field.name}" type="text"></textarea>
+              <textarea class="input-xlarge required" name="${field.name}" type="text"></textarea>
               <span class="help-inline error">#{error 'entity.Description' /}</span>
             </div>
             #{/field}
@@ -30,7 +30,7 @@
             #{field 'entity.DueDate'}
             <label for="${field.name}">Due Date</label>
             <div class="input">
-                <input class="input-large" id="DueDate" name="${field.name}" type="text">
+                <input class="input-large required" id="DueDate" name="${field.name}" type="text">
                 <span class="help-inline error">#{error 'entity.DueDate' /}</span>
             </div>
             #{/field}
@@ -39,7 +39,7 @@
             #{field 'entity.Owner.id'}
             <label for="${field.name}">Owner</label>
             <div class="input">
-                #{select 'entity.Owner.id', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect", id:'owner' /}
+                #{select 'entity.Owner.id', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
                 <span class="help-inline error">#{error 'entity.Owner' /}</span>
             </div>
             #{/field}

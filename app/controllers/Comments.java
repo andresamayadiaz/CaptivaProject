@@ -3,6 +3,7 @@ package controllers;
 import java.util.List;
 import models.Comment;
 import models.User;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;
 import play.i18n.Messages;
@@ -62,4 +63,5 @@ public class Comments extends BaseController {
         flash.success(Messages.get("scaffold.updated", "Comment"));
         index();
     }
+    
 }

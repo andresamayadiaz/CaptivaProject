@@ -61,14 +61,24 @@
 	                    <a href="#" class="close">×</a>
 	                    <h3>New Comment</h3>
 	                </div>
-	                #{form @Comments.save(), id:'createForm'}
+	                #{form @Comments.save(), id:'createCommentForm'}
 	                <div class="modal-body">
 	                    <p>
 	                        #{include 'Comments/_formModal.html' /}
 	                    </p>
 	                </div>
 	                <div class="modal-footer">
-	                    <input type="submit" class="btn primary" value="Save Comment">
+	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Comment">
+	                    <script type="text/javascript">
+	                    	$(document).ready(function(){
+							    $("#createCommentForm").validate({
+							    	submitHandler: function(form) {
+									   $("#submitBtn").attr("disabled", true);
+									   $(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
 	                </div>
 	                #{/form}
 	            </div>
@@ -94,28 +104,6 @@
 	                           </td>
 	                       </tr>
 	                   #{/list}
-	                   <tr>
-	                       <td>
-	                           <p>Juan Perez</p>
-	                       </td>
-	                       <td>
-                               <p>2012-01-18</p>
-                           </td>
-	                       <td>
-	                           <p>Texto del comentario ladj alk jdhqcmp kpoj pij ininnkjnkas kjnjkn jkwajk dnjk</p>
-	                       </td>
-	                   </tr>
-	                   <tr>
-                           <td>
-                               <p>Arnulfo Martinez</p>
-                           </td>
-                           <td>
-                               <p>2012-01-15</p>
-                           </td>
-                           <td>
-                               <p>Este es otro comentario de la tarea seleccionada que contiene mayor cantidad de texto con la finalidad de probar mucho texto.</p>
-                           </td>
-                       </tr>
 	               </tbody>
 	           </table>
 	        </div>
@@ -123,7 +111,33 @@
 	        <!-- Task Times -->
 	        <div class="span8">
 	           <h3>Time Registry</h3>
-	           <p class="pull-right"><a href="#">Add Time</a></p>
+	           <p class="pull-right"><a href="#" data-controls-modal="new-time-modal" data-backdrop="true">Add Time</a></p>
+	           <div id="new-time-modal" class="modal hide fade in" >
+	                <div class="modal-header">
+	                    <a href="#" class="close">×</a>
+	                    <h3>Add Time</h3>
+	                </div>
+	                #{form @Times.save(), id:'createTaskForm'}
+	                <div class="modal-body">
+	                    <p>
+	                        #{include 'Times/_formModal.html' /}
+	                    </p>
+	                </div>
+	                <div class="modal-footer">
+	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Time">
+	                    <script type="text/javascript">
+	                    	$(document).ready(function(){
+							    $("#createTaskForm").validate({
+							    	submitHandler: function(form) {
+									   $("#submitBtn").attr("disabled", true);
+									   $(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
+	                </div>
+	                #{/form}
+	            </div>
 	           <table class="zebra-striped condensed-table">
 	               <thead>
 	                   <tr>
@@ -134,34 +148,22 @@
 	                   </tr>
 	               </thead>
                    <tbody>
-                       <tr>
-                           <td>
-                               <p>Juan Perez</p>
-                           </td>
-                           <td>
-                               <p>2012-01-30</p>
-                           </td>
-                           <td>
-                               <p>Correccion de tarea</p>
-                           </td>
-                           <td>
-                               <p>1.8</p>
-                           </td>
-                       </tr>
-                       <tr>
-                           <td>
-                               <p>Andres Amaya</p>
-                           </td>
-                           <td>
-                               <p>2012-01-30</p>
-                           </td>
-                           <td>
-                               <p>Apoyo con un BUG Fix</p>
-                           </td>
-                           <td>
-                               <p>0.5</p>
-                           </td>
-                       </tr>
+                   		#{list items:entity?.Times, as:'time'}
+                   			<tr>
+	                           <td>
+	                               <p>${time?.createdBy.fullName}</p>
+	                           </td>
+	                           <td>
+	                               <p>${time?.created.format('yyyy-MM-dd')}</p>
+	                           </td>
+	                           <td>
+	                               <p>${time?.comment}</p>
+	                           </td>
+	                           <td>
+	                               <p>${time?.time}</p>
+	                           </td>
+	                       </tr>
+                   		#{/list}
                    </tbody>
                </table>
             </div>

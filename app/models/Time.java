@@ -17,10 +17,10 @@ public class Time extends Model {
 	public Double time;
 	
 	@Required
-	@MinSize(20)
 	public String comment;
 	
 	@Required
+	@ManyToOne
 	public User createdBy;
 	
 	public Date created;
