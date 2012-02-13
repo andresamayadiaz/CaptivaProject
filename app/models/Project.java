@@ -34,6 +34,7 @@ public class Project extends Model {
 	public boolean isOpen = true;
 	
 	@OneToMany (mappedBy="Project")
+	@OrderBy("DueDate DESC")
 	public List<Milestone> Milestones;
 	
 	@PrePersist 

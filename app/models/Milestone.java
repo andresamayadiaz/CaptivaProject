@@ -29,6 +29,7 @@ public class Milestone extends Model {
 	public Project Project;
 	
 	@OneToMany (mappedBy="Milestone")
+	@OrderBy("DueDate DESC")
 	public List<Task> Tasks;
 	
 	@Required(message = "Status is required")

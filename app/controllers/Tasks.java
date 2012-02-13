@@ -1,6 +1,8 @@
 package controllers;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,17 +96,21 @@ public class Tasks extends BaseController {
     }
     
     public static void graphData(java.lang.Long id){
+    	
     	Task entity = Task.findById(id);
 		notFoundIfNull(entity);
-		int deltaDays = (int) ( entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000);
+		
+		Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) );
 		Double deltaTime = (entity.estimated*60) / deltaDays;
-		
+		Double deltaTime2 = deltaTime * deltaDays;
 		Date actual = new Date(entity.created.getTime());
-		Map<String, String> chart = new HashMap<String,String>();
+		List<String[]> chart = new ArrayList<String[]>();
+		//Logger.info("deltaDays: " + deltaDays + " deltaTime: " + deltaTime + " DueDate: "+entity.DueDate.getTime() + " created: "+entity.created.getTime());
 		
-		while(actual.before(entity.DueDate)){
-			chart.put(actual.toString(), deltaTime.toString());
-			Logger.info("ACTUAL: "+actual.toString());
+		for(int i = 1; i <= deltaDays; i++){
+			deltaTime2 -= deltaTime;
+			//chart.put(actual.toString(), deltaTime2.toString());
+			chart.add(new String[]{actual.toString(), deltaTime2.toString()});
 			actual.setTime(actual.getTime()+1*24*60*60*1000); // add 1 day to actual date
 		}
 		

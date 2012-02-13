@@ -22,22 +22,22 @@ public class Projects extends BaseController {
 		if(params.get("statusFilter") != null){
 			
 			if(params.get("statusFilter").equals("true")){ // open
-				List<Project> entities = Project.find("isOpen", true).fetch();
+				List<Project> entities = Project.find("isOpen = true ORDER BY Name").fetch();
 				renderArgs.put("statusFilter", "true");
 		        render(entities);
 			}else if(params.get("statusFilter").equals("false")){ // closed
-				List<Project> entities = Project.find("isOpen", false).fetch();
+				List<Project> entities = Project.find("isOpen = false ORDER BY Name").fetch();
 				renderArgs.put("statusFilter", "false");
 		        render(entities);
 			}else { // all
-				List<Project> entities = Project.all().fetch();
+				List<Project> entities = Project.find("ORDER BY Name").fetch();
 				renderArgs.put("statusFilter", "all");
 		        render(entities);
 			}
-
+			
 		}
 		
-        List<Project> entities = Project.find("isOpen", true).fetch();
+        List<Project> entities = Project.find("isOpen = true ORDER BY Name").fetch();
         render(entities);
     }
     
