@@ -1,6 +1,9 @@
 package controllers;
 
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 
@@ -20,7 +23,7 @@ public class Tasks extends BaseController {
         List<Task> entities = models.Task.all().fetch();
         render(entities);
     }
-
+    
     public static void create(Task entity) {
         render(entity);
     }
@@ -49,10 +52,17 @@ public class Tasks extends BaseController {
         //Logger.info("Saving Task: %s", "Name: "+entity.Name+" / Desc: "+entity.Description+" / Owner: "+entity.Owner.id +" / Milestone: "+entity.Milestone.id);
         entity.save();
         flash.success(Messages.get("scaffold.created", "Task"));
-        Milestones.show(entity.Milestone.id);
+        show(entity.id);
     }
-
+    
     public static void update(@Valid Task entity) {
+    	
+    	if(entity.isOpen){
+    		entity.isOpen = true;
+    	}else {
+    		entity.isOpen = false;
+    	}
+    	
         if (validation.hasErrors()) {
             flash.error(Messages.get("scaffold.validation"));
             render("@edit", entity);
@@ -62,7 +72,7 @@ public class Tasks extends BaseController {
         
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Task"));
-        index();
+        show(entity.id);
     }
     
     public static void close(java.lang.Long id){
@@ -81,5 +91,24 @@ public class Tasks extends BaseController {
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Task"));
 		Milestones.show(entity.Milestone.id);
+    }
+    
+    public static void graphData(java.lang.Long id){
+    	Task entity = Task.findById(id);
+		notFoundIfNull(entity);
+		int deltaDays = (int) ( entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000);
+		Double deltaTime = (entity.estimated*60) / deltaDays;
+		
+		Date actual = new Date(entity.created.getTime());
+		Map<String, String> chart = new HashMap<String,String>();
+		
+		while(actual.before(entity.DueDate)){
+			chart.put(actual.toString(), deltaTime.toString());
+			Logger.info("ACTUAL: "+actual.toString());
+			actual.setTime(actual.getTime()+1*24*60*60*1000); // add 1 day to actual date
+		}
+		
+		renderJSON(chart);
+		
     }
 }

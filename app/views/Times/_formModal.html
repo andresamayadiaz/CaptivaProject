@@ -34,13 +34,13 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		
-		var totalTime = 90;
+		var totalTime = 0;
 		
 		var timer = $.timer(function() {
                 // do timer functionality
                 totalTime++;
                 $("#txtHumanTime").html(HumanTime(totalTime));
-                $("#txtTime").val(Math.round(totalTime/60*1000)/1000);
+                $("#txtTime").val(Math.round(totalTime/60*100)/100);
         });
         
         timer.set({ time : 1000, autostart : false });
@@ -69,7 +69,8 @@
 			$("#btnStart").removeClass("info");
 			$("#btnStart").html("Start");
 			timer.stop();
-			$("#txtTime").val("0:0");
+			$("#txtHumanTime").html("0:0");
+			$("#txtTime").val("0");
 			
 		});
 		

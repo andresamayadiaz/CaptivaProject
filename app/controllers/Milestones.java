@@ -50,7 +50,7 @@ public class Milestones extends BaseController {
         }
         entity.save();
         flash.success(Messages.get("scaffold.created", "Milestone"));
-        Projects.show(entity.Project.id);
+        show(entity.id);
     }
     
     public static void update(@Valid Milestone entity) {
@@ -63,7 +63,7 @@ public class Milestones extends BaseController {
         
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Milestone"));
-        index();
+        show(entity.id);
     }
     
     @Check("any")
@@ -73,7 +73,7 @@ public class Milestones extends BaseController {
 		entity.isOpen = false;
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Milestone"));
-		Projects.show(entity.Project.id);
+		show(id);
     }
     
 	@Check("any")
@@ -83,6 +83,6 @@ public class Milestones extends BaseController {
 		entity.isOpen = true;
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Milestone"));
-		Projects.show(entity.Project.id);
+		show(id);
     }
 }

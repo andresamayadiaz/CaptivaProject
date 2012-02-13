@@ -1,5 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Task Show' /}
+<script src="@{'/public/javascripts/jquery.jqplot.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script src="@{'/public/javascripts/plugins/jqplot.dateAxisRenderer.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 
 <div class="container-fluid">
     <div class="sidebar">
@@ -23,11 +25,15 @@
             <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
         </div>
             <div class="row">
-                <div class="span4">
+                <div class="span2">
                     <h3>Due Date</h3>
                     <p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
                 </div>
-                <div class="span4">
+                <div class="span2">
+                    <h3>Created</h3>
+                    <p>${entity?.created?.format('yyyy-MM-dd')}</p>
+                </div>
+                <div class="span2">
                     <h3>Owner</h3>
                     <p>${entity?.Owner?.fullName}</p>
                 </div>
@@ -46,11 +52,26 @@
                 </div>
                 <div class="span2">
                     <h3>Actual (hrs)</h3>
-                    <span class="label">0</span>
+                    <span class="label">${entity.actual}</span>
+                </div>
+                <div class="span2">
+                    <h3>Actions</h3>
+                    <a href="@{Tasks.edit(entity?.id)}">Edit</a>
                 </div>
             </div>
         <div class="clearfix"></div>
         <!-- END MAIN TASK INFO -->
+        
+        <!-- TASK GRAPH -->
+        <div class="row">
+            <div class="span8">
+                <h3>Chart</h3>
+                <div id="taskChart"  style="height: 300px; width: 600px; position: relative; ">
+                </div>
+            </div>
+        </div>
+        <!-- END TASK GRAPH -->
+        
         <div class="row">
 	        <!-- Task Comments -->
 	        <div class="span8 border">
@@ -172,3 +193,17 @@
         <!-- END TASKS -->
     </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	  var line1=[['2008-08-12 4:00PM',4], ['2008-09-12 4:00PM',6.5], ['2008-10-12 4:00PM',5.7], ['2008-11-12 4:00PM',9], ['2008-12-12 4:00PM',8.2], ['2008-12-20 4:00PM',8.2], ['2008-12-14 4:00PM',5]];
+	  var plot1 = $.jqplot('taskChart', [line1], {
+	    title:'Fecha',
+	    axes:{
+	        xaxis:{
+	            renderer:$.jqplot.DateAxisRenderer
+	        }
+	    },
+	    series:[{lineWidth:2, markerOptions:{style:'square'}}]
+	  });  
+    });
+</script>

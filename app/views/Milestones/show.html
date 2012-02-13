@@ -22,11 +22,15 @@
             <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
         </div>
 			<div class="row">
-				<div class="span4">
+				<div class="span2">
 					<h3>Due Date</h3>
 					<p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
 				</div>
-				<div class="span4">
+				<div class="span2">
+                    <h3>Created</h3>
+                    <p>${entity?.created?.format('yyyy-MM-dd')}</p>
+                </div>
+				<div class="span2">
 					<h3>Owner</h3>
 					<p>${entity?.Owner?.fullName}</p>
 				</div>
@@ -47,6 +51,16 @@
 					<h3>Tasks</h3>
 					<span class="label success">${entity?.Tasks.size()}</span>
 				</div>
+				<div class="span2">
+                    <h3>Actions</h3>
+                    <a href="@{Milestones.edit(entity?.id)}">Edit</a><br />
+                    #{if entity.isOpen}
+                        <a href="@{Milestones.close(entity.id)}" onclick="if (!confirm('Are you sure you want to close this milestone?')) return false;">Close</a>
+                    #{/if}
+                    #{else}
+                        <a href="@{Milestones.open(entity.id)}" onclick="if (!confirm('Are you sure you want to open this milestone?')) return false;">Open</a>
+                    #{/else}
+                </div>
 			</div>
 		<div class="clearfix"></div>
 		<!-- END MAIN MILESTONE INFO -->
@@ -106,10 +120,9 @@
         			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
         			<td>${task?.Description}</td>
         			<td>${task?.Owner.fullName}</td>
-        			<td>${task?.estimated} / 0.0</td>
+        			<td>${task?.estimated} / ${task?.actual}</td>
         			<td>
         			 <a href="@{Tasks.close(task.id)}">Close</a>
-        			 <a href="#">Time</a>
         			</td>
         		</tr>
         		#{/if}

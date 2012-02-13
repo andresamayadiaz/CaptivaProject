@@ -38,3 +38,15 @@ Comment(comment1):
     comment: Esto es un comentario de la tarea de prueba
     createdBy: andres
     Task: task1
+    
+Time(time1):
+    time: 45
+    comment: Initial Time
+    createdBy: andres
+    Task: task1
+    
+Time(time2):
+    time: 20
+    comment: Second Time
+    createdBy: andres
+    Task: task1

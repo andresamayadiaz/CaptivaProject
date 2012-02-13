@@ -77,7 +77,7 @@ public class Projects extends BaseController {
         }
         entity.save();
         flash.success(Messages.get("scaffold.created", "Project"));
-        index();
+        show(entity.id);
     }
 
 	@Check("any")
@@ -91,7 +91,7 @@ public class Projects extends BaseController {
         
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Project"));
-        index();
+        show(entity.id);
     }
     
 	@Check("any")
@@ -101,7 +101,7 @@ public class Projects extends BaseController {
 		entity.isOpen = false;
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Project"));
-		index();
+		show(id);
     }
     
 	@Check("any")
@@ -111,7 +111,7 @@ public class Projects extends BaseController {
 		entity.isOpen = true;
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Project"));
-		index();
+		show(id);
     }
     
 }
