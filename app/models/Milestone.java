@@ -37,9 +37,9 @@ public class Milestone extends Model {
 	
 	public Date created;
 	
-	@PrePersist 
-    protected void onCreate() { 
-            created = new Date(); 
+	@PrePersist
+    protected void onCreate() {
+		this.created = new Date(); 
     }
 	
 	public String toString(){

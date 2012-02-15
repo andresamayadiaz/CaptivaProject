@@ -21,8 +21,26 @@ import play.data.validation.Valid;
 @With(Security.class)
 @Check("any")
 public class Tasks extends BaseController {
+	
     public static void index() {
-        List<Task> entities = models.Task.all().fetch();
+    	// check if filter apply
+		if(params.get("statusFilter") != null) {			
+			if(params.get("statusFilter").equals("true")){ // open
+				List<Task> entities = Task.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
+				renderArgs.put("statusFilter", "true");
+		        render(entities);
+			} else if(params.get("statusFilter").equals("false")){ // closed
+				List<Task> entities = Task.find("Owner = ? and isOpen = false ORDER BY Name", Security.getConnectedUser()).fetch();
+				renderArgs.put("statusFilter", "false");
+		        render(entities);
+			} else { // all
+				List<Task> entities = Task.find("Owner = ? ORDER BY Name", Security.getConnectedUser()).fetch();
+				renderArgs.put("statusFilter", "all");
+		        render(entities);
+			}			
+		}
+    	
+        List<Task> entities = Task.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
         render(entities);
     }
     
@@ -59,25 +77,26 @@ public class Tasks extends BaseController {
     
     public static void update(@Valid Task entity) {
     	
-    	if(entity.isOpen){
+    	/*if(entity.isOpen) {
     		entity.isOpen = true;
-    	}else {
+    	} else {
     		entity.isOpen = false;
-    	}
+    	}*/
+    	
+    	Logger.info("isOpen: " + entity.isOpen);
     	
         if (validation.hasErrors()) {
             flash.error(Messages.get("scaffold.validation"));
             render("@edit", entity);
         }
         
-              entity = entity.merge();
-        
+        entity = entity.merge();
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Task"));
         show(entity.id);
     }
     
-    public static void close(java.lang.Long id){
+    public static void close(java.lang.Long id) {
 		Task entity = Task.findById(id);
 		notFoundIfNull(entity);
 		entity.isOpen = false;
@@ -86,7 +105,7 @@ public class Tasks extends BaseController {
 		Milestones.show(entity.Milestone.id);
     }
     
-    public static void open(java.lang.Long id){
+    public static void open(java.lang.Long id) {
 		Task entity = Task.findById(id);
 		notFoundIfNull(entity);
 		entity.isOpen = true;
@@ -95,8 +114,7 @@ public class Tasks extends BaseController {
 		Milestones.show(entity.Milestone.id);
     }
     
-    public static void graphData(java.lang.Long id){
-    	
+    public static void graphData(java.lang.Long id) {
     	Task entity = Task.findById(id);
 		notFoundIfNull(entity);
 		
@@ -115,6 +133,5 @@ public class Tasks extends BaseController {
 		}
 		
 		renderJSON(chart);
-		
     }
 }

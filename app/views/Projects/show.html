@@ -21,11 +21,15 @@
             <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
         </div>
 			<div class="row">
-				<div class="span4">
+				<div class="span2">
 					<h3>Due Date</h3>
 					<p>${entity?.DueDate?.format('yyyy-MM-dd')}</p>
 				</div>
-				<div class="span4">
+				<div class="span2">
+					<h3>Created</h3>
+					<p>${entity?.created?.format('yyyy-MM-dd')}</p>
+				</div>
+				<div class="span2">
 					<h3>Owner</h3>
 					<p>${entity?.Owner?.fullName}</p>
 				</div>
@@ -41,6 +45,10 @@
 				<div class="span2">
 					<h3>Issues</h3>
 					<span class="label warning">20</span>
+				</div>
+				<div class="span2">
+					<h3>Tasks</h3>
+					<span class="label success">${entity?.totalTasks}</span>
 				</div>
 				<div class="span2">
 					<h3>Milestones</h3>

@@ -37,14 +37,28 @@ public class Project extends Model {
 	@OrderBy("DueDate DESC")
 	public List<Milestone> Milestones;
 	
+	@Transient
+	public int totalTasks;
+	
 	@PrePersist 
     protected void onCreate() { 
             created = new Date(); 
-    } 
+    }	
 	
     @PreUpdate 
     protected void onUpdate() { 
             updated = new Date(); 
-    } 
-	
+    }
+    
+    @PostLoad
+    protected void getTotalTasks() {
+    	int totalTask = 0;
+		for(Milestone milestone : this.Milestones){
+			if (milestone.Tasks != null) {
+				totalTask += milestone.Tasks.size();
+			}
+		}
+		
+		this.totalTasks = totalTask;
+    }
 }
