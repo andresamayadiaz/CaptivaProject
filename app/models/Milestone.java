@@ -21,6 +21,7 @@ public class Milestone extends Model {
 	
 	@Required(message = "Owner is required")
 	@ManyToOne
+	@JoinColumn (name="Owner")
 	public User Owner;
 	
 	@Required(message = "Project is required")
@@ -35,6 +36,10 @@ public class Milestone extends Model {
 	@OneToMany (mappedBy="Milestone")
 	@OrderBy("DueDate DESC")
 	public List<Issue> Issues;
+	
+	@OneToMany (mappedBy="Milestone")
+	@OrderBy("created DESC")
+	public List<Time> Times;
 	
 	@Required(message = "Status is required")
 	public boolean isOpen = true;

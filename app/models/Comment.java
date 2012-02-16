@@ -18,6 +18,7 @@ public class Comment extends Model {
 	
 	@Required
 	@ManyToOne
+	@JoinColumn (name="CreatedBy")
 	public User createdBy;
 	
 	@ManyToOne

@@ -27,6 +27,7 @@ public class Issue extends Model {
 	
 	@Required(message = "Owner is requiered")
 	@ManyToOne
+	@JoinColumn (name="Owner")
 	public User Owner;
 	
 	@Required(message = "Milestone is required")

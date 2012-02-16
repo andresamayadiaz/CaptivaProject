@@ -21,6 +21,7 @@ public class Time extends Model {
 	
 	@Required
 	@ManyToOne
+	@JoinColumn (name="CreatedBy")
 	public User createdBy;
 	
 	public Date created;
@@ -32,6 +33,10 @@ public class Time extends Model {
 	@ManyToOne
 	@JoinColumn (name="Issue")
 	public Issue Issue;
+	
+	@ManyToOne
+	@JoinColumn (name="Milestone")
+	public Milestone Milestone;
 	
 	@PrePersist 
     protected void onCreate() { 

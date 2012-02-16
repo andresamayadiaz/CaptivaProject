@@ -48,8 +48,17 @@
             #{field 'entity.Owner.id'}
             <label for="${field.name}">Owner</label>
             <div class="input">
-                #{select 'entity.Owner.id', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
+                #{select 'entity.Owner.id', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner', value:entity.Owner.id /}
                 <span class="help-inline error">#{error 'entity.Owner' /}</span>
+            </div>
+            #{/field}
+        </div>
+        <div class="clearfix">
+            #{field 'entity.Milestone.id'}
+            <label for="${field.name}">Milestone</label>
+            <div class="input">
+                #{select 'entity.Milestone.id', items:models.Milestone.find('Project = ? and isOpen = true ORDER BY Name', entity.Milestone.Project).fetch(), valueProperty:'id', labelProperty:'Name', class:"normalSelect required", id:'milestone', value:entity.Milestone.id /}
+                <span class="help-inline error">#{error 'entity.Milestone' /}</span>
             </div>
             #{/field}
         </div>

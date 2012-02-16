@@ -54,6 +54,7 @@
                         <td>${entity.Description}</td>
                         <td>${entity.DueDate.format('yyyy-MM-dd')}</td>
                         <td>${entity.Owner.fullName}</td>
+                        <td>
                            #{if entity.isOpen}
                                <span class="label success">Open</span>
                            #{/if}
