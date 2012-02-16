@@ -22,5 +22,4 @@ public class Application extends BaseController {
 	public static void home(){
 		render();
 	}
-
 }

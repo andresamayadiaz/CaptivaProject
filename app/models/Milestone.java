@@ -21,6 +21,7 @@ public class Milestone extends Model {
 	
 	@Required(message = "Owner is required")
 	@ManyToOne
+	@JoinColumn (name="Owner")
 	public User Owner;
 	
 	@Required(message = "Project is required")

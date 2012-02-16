@@ -21,6 +21,7 @@ public class Time extends Model {
 	
 	@Required
 	@ManyToOne
+	@JoinColumn (name="CreatedBy")
 	public User createdBy;
 	
 	public Date created;

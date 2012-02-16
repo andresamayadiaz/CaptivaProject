@@ -25,6 +25,7 @@ public class Project extends Model {
 	
 	@Required(message = "Owner is requiered")
 	@ManyToOne
+	@JoinColumn (name="Owner")
 	public User Owner;
 	
 	@Required(message = "Due Date is requiered")
@@ -40,6 +41,9 @@ public class Project extends Model {
 	@Transient
 	public int totalTasks;
 	
+	@Transient
+	public int totalIssues;
+	
 	@PrePersist 
     protected void onCreate() { 
             created = new Date(); 
@@ -51,7 +55,9 @@ public class Project extends Model {
     }
     
     @PostLoad
-    protected void getTotalTasks() {
+    protected void calculatePostLoadData() {
+    	
+    	// total Tasks
     	int totalTask = 0;
 		for(Milestone milestone : this.Milestones){
 			if (milestone.Tasks != null) {
@@ -60,5 +66,15 @@ public class Project extends Model {
 		}
 		
 		this.totalTasks = totalTask;
+		
+		// total Issues
+		int totalIssue = 0;
+		for(Milestone milestone : this.Milestones){
+			if (milestone.Issues != null) {
+				totalIssue += milestone.Issues.size();
+			}
+		}
+		
+		this.totalIssues = totalIssue;
     }
 }

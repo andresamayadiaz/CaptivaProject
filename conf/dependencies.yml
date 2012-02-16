@@ -12,3 +12,4 @@ repositories:
         root: "http://download.eclipse.org/jgit/maven"
         contains:
             - org.eclipse.jgit -> *
+
