@@ -1,0 +1,6 @@
+tmp/
+eclipse/
+.settings/
+.project
+.DS_Store
+.classpath
