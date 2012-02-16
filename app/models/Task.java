@@ -43,6 +43,8 @@ public class Task extends Model {
 	@Required
 	public boolean isOpen = true;
 	
+	public Date ClosedDate;
+	
 	@Transient
 	public Double actual;
 	

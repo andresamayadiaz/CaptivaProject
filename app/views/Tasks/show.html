@@ -3,8 +3,6 @@
 <script src="@{'/public/javascripts/jquery.jqplot.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 <script src="@{'/public/javascripts/plugins/jqplot.dateAxisRenderer.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 
-<script src="@{'/public/javascripts/plugins/jqplot.pieRenderer.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-
 <link href="@{'/public/stylesheets/jquery.jqplot.min.css'}" rel="stylesheet">
 
 <div class="container-fluid">
@@ -70,7 +68,7 @@
         <div class="row">
             <div class="span8">
                 <h3>Chart</h3>
-                <div id="taskChart"  style="height: 300px; width: 600px; position: relative; ">
+                <div id="taskChart"  style="height: 400px; width: 800px; position: relative; ">
                 </div>
             </div>
         </div>
@@ -78,7 +76,7 @@
         
         <div class="row">
 	        <!-- Task Comments -->
-	        <div class="span8 border">
+	        <div class="span10">
 	           <h3>Comments</h3>
 	           <p class="pull-right"><a href="#" data-controls-modal="new-comment-modal" data-backdrop="true">Add Comment</a></p>
 		           <div id="new-comment-modal" class="modal hide fade in" >
@@ -134,7 +132,7 @@
 	        </div>
 	        <!-- End Task Comments -->
 	        <!-- Task Times -->
-	        <div class="span8">
+	        <div class="span10">
 	           <h3>Time Registry</h3>
 	           <p class="pull-right"><a href="#" data-controls-modal="new-time-modal" data-backdrop="true">Add Time</a></p>
 	           <div id="new-time-modal" class="modal hide fade in" >
@@ -200,27 +198,63 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	   var plot1;
-	   var ajaxData = function(url, plot, options){
+	   var planned;
+	   var real;
+	   var plannedData = function(url, plot, options){
 		   
 		   var ret = null;
 		   $.ajax({
 			   async: false,
 			   dataType:"json",
-			   url: "@{Tasks.graphdata(entity.id)}",
+			   url: "@{Tasks.plannedData(entity.id)}",
 			   success:function(data){
 				   ret = data;
-			   }
+				   planned = ret;
+				}
 		   });
-		   	plot1 = $.jqplot('taskChart', [ret], {
-			    title:'Burn Down Chart',
-			    //dataRenderer: ajaxData,
-			    axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}"},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${entity.estimated*60}"}},
+		   
+		   realData();
+		   	
+	   }
+	   
+	   var realData = function(url, plot, options){
+		   
+		   var ret = null;
+		   $.ajax({
+			   async: false,
+			   dataType:"json",
+			   url: "@{Tasks.realData(entity.id)}",
+			   success:function(data){
+				   ret = data;
+				   real = ret;
+				}
+		   });
+		   	plot1 = $.jqplot('taskChart', [planned, real], {
+			    title:'Time Chart',
+			    seriesDefaults: {
+		          rendererOptions: {
+		              smooth: true
+		          }
+		        },
+			    axes:{
+			    	xaxis:{
+			    		renderer:$.jqplot.DateAxisRenderer, 
+			    		min:"${entity?.created.format('yyyy-MM-dd')}", 
+			    		max:"${entity?.DueDate.format('yyyy-MM-dd')}",
+			    		label:'Days'
+			    		},
+			    	yaxis:{
+			    		renderer:$.jqplot.LinearAxisRenderer,
+			    		min:"0", 
+			    		max:"${entity.estimated}",
+			    		label:'Hours'
+			    		}
+			    	},
 			    series:[{lineWidth:2, markerOptions:{style:'square'}, showMarker:false}]
 	  		});
 	   }
-	  ajaxData(); 
-	  //var line1=[['2008-08-12',"4"],['2008-09-12',"6.5"],['2008-10-12',"5.7"],['2008-11-12',"9"],['2008-12-12',"8.2"],['2008-12-20',"8.2"],['2008-12-25',"5"]];
-	  //var line2 = [["2012-02-12","140.625"],["2012-02-13","131.25"],["2012-02-14","121.875"],["2012-02-15","112.5"],["2012-02-16","103.125"],["2012-02-17","93.75"],["2012-02-18","84.375"],["2012-02-19","75.0"],["2012-02-20","65.625"],["2012-02-21","56.25"],["2012-02-22","46.875"],["2012-02-23","37.5"],["2012-02-24","28.125"],["2012-02-25","18.75"],["2012-02-26","9.375"],["2012-02-27","0.0"]];
-	  
+	   
+	  plannedData(); 
+
     });
 </script>

@@ -1,40 +1,80 @@
 #{extends 'main.html' /}
-<h2>Tasks</h2>
-<table class="entity Task">
-	<thead>
-		<tr>
-			<th><!-- actions --></th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Estimated</th>
-				<th>Created</th>
-				<th>Due Date</th>
-				<th>Owner</th>
-				<th>Milestone</th>
-				<th>Is Open</th>
-				<th>Id</th>
-		</tr>
-	</thead>
-	<tbody>
-	#{list items:entities, as:'entity'}
-		<tr>
-			<td>
-				<a href="@{Tasks.show(entity.id)}">Show</a>&nbsp;
-				<a href="@{Tasks.edit(entity.id)}">Edit</a>&nbsp;
-				<a href="@{Tasks.delete(entity.id)}" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
-			</td>
-					<td>${entity.Name}</td>
-					<td>${entity.Description}</td>
-					<td>${entity.estimated}</td>
-					<td>${entity.created}</td>
-					<td>${entity.DueDate}</td>
-					<td>${entity.Owner}</td>
-					<td>${entity.Milestone}</td>
-					<td>${entity.isOpen}</td>
-					<td>${entity.id}</td>
-		</tr>
-	#{/list}
-	</tbody>
-</table>
-<a href="@{Tasks.create}">Create</a>
+#{set title:'Task List' /}
 
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+   <!-- Example row of columns -->
+    <div class="row">
+      <div class="span16">
+        <h2>Tasks List</h2>
+        <div class="row">
+            #{form @Tasks.index(), id:'filter'}
+            <div class="clearfix">
+                <label for="statusFilter">Status Filter:</label>
+                <div class="input">
+                  <select class="input-medium" name="statusFilter">
+                  	<option value="true" #{if statusFilter == "true"}SELECTED#{/if}>Open</option>
+                  	<option value="false" #{if statusFilter == "false"}SELECTED#{/if}>Closed</option>
+                  	<option value="all" #{if statusFilter == "all"}SELECTED#{/if}>All</option>
+                  </select>
+                  <input type="submit" class="btn" value="Search" />
+                </div>
+            </div>
+            #{/form}
+        </div>
+        <table class="bordered-table zebra-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                #{list items:entities, as:'entity'}
+                    <tr>
+                        <td>${entity.Name}</td>
+                        <td>${entity.Description}</td>
+                        <td>${entity.DueDate.format("yyyy-MM-dd")}</td>
+                        <td>${entity.Owner.fullName}</td>
+                        <td>
+                        	#{if entity.isOpen}
+                        		<span class="label success">Open</span>
+                        	#{/if}
+                        	#{else}
+                        		<span class="label error">Closed</span>
+                        	#{/else}
+                        </td>
+                        <td>
+                            <a href="@{Tasks.show(entity.id)}" class="btn">Show</a>
+                            <a href="@{Tasks.edit(entity.id)}" class="btn">Edit</a>
+                            #{if entity.isOpen}
+                                <a href="@{Tasks.close(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
+                            #{/if}
+                            #{else}
+                                <a href="@{Tasks.open(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to open this record?')) return false;">Open</a>
+                            #{/else}
+                            <a href="@{Tasks.delete(entity.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+                        </td>
+                    </tr>
+                #{/list}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

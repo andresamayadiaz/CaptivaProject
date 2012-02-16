@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Milestone Show' /}
 <script src="@{'/public/javascripts/jquery.jqplot.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/plugins/jqplot.pieRenderer.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script src="@{'/public/javascripts/plugins/jqplot.dateAxisRenderer.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 
 <link href="@{'/public/stylesheets/jquery.jqplot.min.css'}" rel="stylesheet">
 
@@ -68,137 +68,268 @@
 			</div>
 		<div class="clearfix"></div>
 		<!-- END MAIN MILESTONE INFO -->
-		
+
 		<!-- TASK GRAPH -->
         <div class="row">
             <div class="span8">
                 <h3>Chart</h3>
-                <div id="milestoneChart"  style="margin-top: 20px; margin-left: 20px; width: 200px; height: 200px; position: relative; ">
+                <div id="milestoneChart"  style="height: 400px; width: 800px; position: relative; ">
                 </div>
             </div>
         </div>
         <!-- END TASK GRAPH -->
-		
-		<div class="page-header">
-            <h2>Open Tasks</h2>
-            <a href="#" data-controls-modal="new-task-modal" data-backdrop="true">New Task</a>
-            <div id="new-task-modal" class="modal hide fade in" >
-            	<div class="modal-header">
-              		<a href="#" class="close">×</a>
-              		<h3>Add Task</h3>
-            	</div>
-            	#{form @Tasks.save(), id:'createForm'}
-            	<div class="modal-body">
-            		<p>
-            			#{include 'Tasks/_formModal.html' /}
-        			</p>
-            	</div>
-            	<div class="modal-footer">
-              		<input id="submitBtn" type="submit" class="btn primary" value="Save Task">
-            	</div>
-            	<script type="text/javascript">
-	                    	$(document).ready(function(){
-							    $("#createForm").validate({
-							    	submitHandler: function(form) {
-									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
-									 }
-							    });
-							  });
-	                    </script>
-            	#{/form}
-            </div>
-        </div>
-        <!-- Task List -->
-        <table>
-        	<thead>
-        		<tr>
-        			<th>Due Date</th>
-        			<th>Name</th>
-        			<th>Description</th>
-        			<th>Owner</th>
-        			<th>Time (Est./Act.)</th>
-        			<th>Actions</th>
-        		</tr>
-        	</thead>
-        	<tbody>
-        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
-        	#{list items:entity?.Tasks, as:'task'}
-        		#{if task.isOpen}
-        		<tr>
-        			#{if task.DueDate > new Date()}
-        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-        			#{/if}
-        			#{else}
-        				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-        			#{/else}
-        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
-        			<td>${task?.Description}</td>
-        			<td>${task?.Owner.fullName}</td>
-        			<td>${task?.estimated} / ${task?.actual}</td>
-        			<td>
-        			 <a href="@{Tasks.close(task.id)}">Close</a>
-        			</td>
-        		</tr>
-        		#{/if}
-        	#{/list}
-        	</tbody>
-        </table>
-        <!-- End Tasks List -->
-        
-        <div class="page-header">
-            <h2>Closed Tasks</h2>
-        </div>
-        <table>
-        	<thead>
-        		<tr>
-        			<th>Due Date</th>
-        			<th>Name</th>
-        			<th>Description</th>
-        			<th>Owner</th>
-        			<th>Time (Est./Act.)</th>
-        			<th>Actions</th>
-        		</tr>
-        	</thead>
-        	<tbody>
-        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
-        		#{list items:entity?.Tasks, as:'task'}
-        			#{if task.isOpen == false}
-	        		<tr>
-	        		    <td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-	        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
-	        			<td>${task?.Description}</td>
-	        			<td>${task?.Owner.fullName}</td>
-	        			<td>${task?.estimated} / 0.0</td>
-	        			<td><a href="@{Tasks.open(task.id)}">Open</a></td>
-	        		</tr>
-	        		#{/if}
-        		#{/list}
-        	</tbody>
-        </table>
-        <!-- END TASKS -->
+
+		<div class="row">
+			<div class="span8">
+				<div class="page-header">
+	            	<h2>Open Tasks</h2>
+		            <a href="#" data-controls-modal="new-task-modal" data-backdrop="true">New Task</a>
+		            <div id="new-task-modal" class="modal hide fade in" >
+		            	<div class="modal-header">
+		              		<a href="#" class="close">×</a>
+		              		<h3>Add Task</h3>
+		            	</div>
+		            	#{form @Tasks.save(), id:'createForm'}
+		            	<div class="modal-body">
+		            		<p>
+		            			#{include 'Tasks/_formModal.html' /}
+		        			</p>
+		            	</div>
+		            	<div class="modal-footer">
+		              		<input id="submitBtn" type="submit" class="btn primary" value="Save Task">
+		            	</div>
+		            	<script type="text/javascript">
+			                    	$(document).ready(function(){
+									    $("#createForm").validate({
+									    	submitHandler: function(form) {
+											   $("#submitBtn").attr("disabled", true);
+											   $(form).submit();
+											 }
+									    });
+									  });
+			                    </script>
+		            	#{/form}
+		            </div>
+		        </div>
+		        <!-- Task List -->
+		        <table>
+		        	<thead>
+		        		<tr>
+		        			<th>Due Date</th>
+		        			<th>Name</th>
+		        			<th>Description</th>
+		        			<th>Owner</th>
+		        			<th>Time (Est./Act.)</th>
+		        			<th>Actions</th>
+		        		</tr>
+		        	</thead>
+		        	<tbody>
+		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
+		        	#{list items:entity?.Tasks, as:'task'}
+		        		#{if task.isOpen}
+		        		<tr>
+		        			#{if task.DueDate > new Date()}
+		        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+		        			#{/if}
+		        			#{else}
+		        				<td><span class="label important">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+		        			#{/else}
+		        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
+		        			<td>${task?.Description}</td>
+		        			<td>${task?.Owner.fullName}</td>
+		        			<td>${task?.estimated} / ${task?.actual}</td>
+		        			<td>
+		        			 <a href="@{Tasks.close(task.id)}">Close</a>
+		        			</td>
+		        		</tr>
+		        		#{/if}
+		        	#{/list}
+		        	</tbody>
+		        </table>
+		        <!-- End Tasks List -->
+		        <div class="page-header">
+		            <h2>Closed Tasks</h2>
+		        </div>
+		        <table>
+		        	<thead>
+		        		<tr>
+		        			<th>Due Date</th>
+		        			<th>Name</th>
+		        			<th>Description</th>
+		        			<th>Owner</th>
+		        			<th>Time (Est./Act.)</th>
+		        			<th>Actions</th>
+		        		</tr>
+		        	</thead>
+		        	<tbody>
+		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
+		        		#{list items:entity?.Tasks, as:'task'}
+		        			#{if task.isOpen == false}
+			        		<tr>
+			        		    <td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+			        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
+			        			<td>${task?.Description}</td>
+			        			<td>${task?.Owner.fullName}</td>
+			        			<td>${task?.estimated} / 0.0</td>
+			        			<td><a href="@{Tasks.open(task.id)}">Open</a></td>
+			        		</tr>
+			        		#{/if}
+		        		#{/list}
+		        	</tbody>
+		        </table>
+		        <!-- END TASKS -->
+			</div>
+			<div class="span8">
+				<div class="page-header">
+	            	<h2>Open Issues</h2>
+		            <a href="#" data-controls-modal="new-issue-modal" data-backdrop="true">New Issue</a>
+		            <div id="new-issue-modal" class="modal hide fade in" >
+		            	<div class="modal-header">
+		              		<a href="#" class="close"></a>
+		              		<h3>Add Issue</h3>
+		            	</div>
+		            	#{form @Issues.save(), id:'createForm'}
+		            	<div class="modal-body">
+		            		<p>
+		            			#{include 'Issues/_formModal.html' /}
+		        			</p>
+		            	</div>
+		            	<div class="modal-footer">
+		              		<input id="submitBtn" type="submit" class="btn primary" value="Save Issue">
+		            	</div>
+		            	<script type="text/javascript">
+			                    	$(document).ready(function(){
+									    $("#createForm").validate({
+									    	submitHandler: function(form) {
+											   $("#submitBtn").attr("disabled", true);
+											   $(form).submit();
+											 }
+									    });
+									  });
+			                    </script>
+		            	#{/form}
+		            </div>
+		        </div>
+		        <!-- Issues List -->
+		        <table>
+		        	<thead>
+		        		<tr>
+		        			<th>Due Date</th>
+		        			<th>Name</th>
+		        			<th>Description</th>
+		        			<th>Owner</th>
+		        			<th>Time (Est./Act.)</th>
+		        			<th>Actions</th>
+		        		</tr>
+		        	</thead>
+		        	<tbody>
+		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
+		        	#{list items:entity?.Issues, as:'issue'}
+		        		#{if issue.isOpen}
+		        		<tr>
+		        			#{if issue.DueDate > new Date()}
+		        				<td><span class="label notice">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
+		        			#{/if}
+		        			#{else}
+		        				<td><span class="label important">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
+		        			#{/else}
+		        			<td><a href="@{Issues.show(issue.id)}">${issue?.Name}</a></td>
+		        			<td>${issue?.Description}</td>
+		        			<td>${issue?.Owner.fullName}</td>
+		        			<td>${issue?.estimated} / ${issue?.actual}</td>
+		        			<td>
+		        			 <a href="@{Issues.close(issue.id)}">Close</a>
+		        			</td>
+		        		</tr>
+		        		#{/if}
+		        	#{/list}
+		        	</tbody>
+		        </table>
+		        <!-- End Issues List -->
+		        <div class="page-header">
+		            <h2>Closed Issues</h2>
+		        </div>
+		        <table>
+		        	<thead>
+		        		<tr>
+		        			<th>Due Date</th>
+		        			<th>Name</th>
+		        			<th>Description</th>
+		        			<th>Owner</th>
+		        			<th>Time (Est./Act.)</th>
+		        			<th>Actions</th>
+		        		</tr>
+		        	</thead>
+		        	<tbody>
+		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
+		        		#{list items:entity?.Issues, as:'issue'}
+		        			#{if issue.isOpen == false}
+			        		<tr>
+			        		    <td><span class="label">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
+			        			<td><a href="@{Issues.show(issue.id)}">${issue?.Name}</a></td>
+			        			<td>${issue?.Description}</td>
+			        			<td>${issue?.Owner.fullName}</td>
+			        			<td>${issue?.estimated} / 0.0</td>
+			        			<td><a href="@{Issues.open(issue.id)}">Open</a></td>
+			        		</tr>
+			        		#{/if}
+		        		#{/list}
+		        	</tbody>
+		        </table>
+		        <!-- END ISSUES -->
+			</div>
+		</div>
+
     </div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
+	   
 	   var plot1;
-	   var ajaxData = function(url, plot, options){
+	   var planned;
+	   var real;
+	   var plannedData = function(url, plot, options){
 		   
 		   var ret = null;
 		   $.ajax({
 			   async: false,
 			   dataType:"json",
-			   url: "@{Milestones.earnedValue(entity.id)}",
+			   url: "@{Milestones.plannedData(entity.id)}",
 			   success:function(data){
 				   ret = data;
-				   plot1 = $.jqplot('milestoneChart', [ret], {
-					    title:'Earned Value',
-					    seriesDefaults:{ renderer:$.jqplot.PieRenderer}
-			  		});
-			   }
+				   planned = ret;
+				}
 		   });
+		   
+		   realData();
 		   	
 	   }
-	  ajaxData();
+	   
+	   var realData = function(url, plot, options){
+		   
+		   var ret = null;
+		   $.ajax({
+			   async: false,
+			   dataType:"json",
+			   url: "@{Milestones.realData(entity.id)}",
+			   success:function(data){
+				   ret = data;
+				   real = ret;
+				}
+		   });
+		   	plot1 = $.jqplot('milestoneChart', [planned, real], {
+			    title:'Earned Value Chart',
+			    seriesDefaults: {
+		          rendererOptions: {
+		              smooth: true
+		          }
+		        },
+			    axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}", label:'Days'},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${entity.Tasks.size()}", label:'Earned Value'}},
+			    series:[{lineWidth:2, markerOptions:{style:'square'}, showMarker:false}]
+	  		});
+	   }
+	   
+	  plannedData(); 
+	   
     });
 </script>

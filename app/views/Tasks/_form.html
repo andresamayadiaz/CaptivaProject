@@ -58,6 +58,7 @@
             <label for="${field.name}">Is Open?</label>
             <div class="input">
                 <input type="checkbox" name="${field.name}" value="true" ${entity?.isOpen ? 'checked' : ''} />
+                <input type="hidden" name="${field.name}" value="false" /> 
                 <span class="help-inline error">#{error 'entity.isOpen' /}</span>
             </div>
             #{/field}

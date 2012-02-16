@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.List;
+
+import models.Milestone;
 import models.Time;
 import models.User;
 import play.mvc.Controller;
@@ -36,6 +38,7 @@ public class Times extends Controller {
     
     public static void save(Time entity) {
     	entity.createdBy = User.find("byUserName", Security.connected()).<User>first();
+    	entity.Milestone = Milestone.findById(entity.Task.Milestone.id);
     	
     	validation.valid(entity);
         if (validation.hasErrors()) {
@@ -44,17 +47,24 @@ public class Times extends Controller {
         }
         entity.save();
         flash.success(Messages.get("scaffold.created", "Time"));
-        Tasks.show(entity.Task.id);
+        
+        if (entity.Task != null) {
+        	Tasks.show(entity.Task.id);
+        } else {
+        	Issues.show(entity.Issue.id);
+        }
     }
-
-    public static void update(@Valid Time entity) {
+    
+    public static void update(Time entity) {
+    	entity.Milestone = Milestone.findById(entity.Task.Milestone.id);
+    	
+    	validation.valid(entity);
         if (validation.hasErrors()) {
             flash.error(Messages.get("scaffold.validation"));
             render("@edit", entity);
         }
         
-              entity = entity.merge();
-        
+        entity = entity.merge();
         entity.save();
         flash.success(Messages.get("scaffold.updated", "Time"));
         index();

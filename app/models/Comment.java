@@ -20,16 +20,19 @@ public class Comment extends Model {
 	@ManyToOne
 	public User createdBy;
 	
-	@Required(message = "Task is required")
 	@ManyToOne
 	@JoinColumn (name="Task")
 	public Task Task;
+	
+	@ManyToOne
+	@JoinColumn (name="Issue")
+	public Issue Issue;
 	
 	public Date created;
 	
 	@PrePersist 
     protected void onCreate() { 
-            created = new Date();
+		created = new Date();
     }
 	
 }

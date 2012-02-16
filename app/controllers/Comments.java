@@ -1,6 +1,9 @@
 package controllers;
 
 import java.util.List;
+
+import com.google.gson.Gson;
+
 import models.Comment;
 import models.User;
 import play.Logger;
@@ -46,9 +49,15 @@ public class Comments extends BaseController {
             flash.error(Messages.get("scaffold.validation"));
             render("@create", entity);
         }
+        
         entity.save();
         flash.success(Messages.get("scaffold.created", "Comment"));
-        Tasks.show(entity.Task.id);
+        
+        if (entity.Task != null) {
+        	Tasks.show(entity.Task.id);
+        } else {
+        	Issues.show(entity.Issue.id);
+        }
     }
 
     public static void update(@Valid Comment entity) {

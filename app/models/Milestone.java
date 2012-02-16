@@ -32,14 +32,22 @@ public class Milestone extends Model {
 	@OrderBy("DueDate DESC")
 	public List<Task> Tasks;
 	
+	@OneToMany (mappedBy="Milestone")
+	@OrderBy("DueDate DESC")
+	public List<Issue> Issues;
+	
+	@OneToMany (mappedBy="Milestone")
+	@OrderBy("created DESC")
+	public List<Time> Times;
+	
 	@Required(message = "Status is required")
 	public boolean isOpen = true;
 	
 	public Date created;
 	
-	@PrePersist 
-    protected void onCreate() { 
-            created = new Date(); 
+	@PrePersist
+    protected void onCreate() {
+		this.created = new Date(); 
     }
 	
 	public String toString(){

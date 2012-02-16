@@ -20,6 +20,10 @@ public class Security extends Secure.Security {
 	    return false;
 	}
 	
+	static User getConnectedUser() {
+		return User.find("byUserName", connected()).<User>first();
+	}
+	
 	static void onDisconnected() {
 	    Application.index();
 	}
