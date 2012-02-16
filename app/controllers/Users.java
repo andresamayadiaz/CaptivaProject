@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import notifiers.Mails;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -17,6 +19,11 @@ import play.mvc.Http.Request;
 
 @With(Security.class)
 public class Users extends BaseController {
+	
+	public static void mail(){
+		Mails mails = new Mails();
+		mails.welcome(Security.getConnectedUser());
+	}
 	
 	@Check("admin")
     public static void index() {

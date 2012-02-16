@@ -15,3 +15,12 @@ GET     /public/                                staticDir:public
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
+
+GET     /api/{apikey}/repositories         					Api.listRepositories
+POST    /api/{apikey}/repositories         					Api.addRepository
+GET     /api/{apikey}/repositories/{uuid}  					Api.showRepository
+
+GET     /api/{apikey}/keys                 					Api.listSshKeys
+POST    /api/{apikey}/keys                 					Api.addSshKey
+GET     /api/{apikey}/keys/{uuid}          					Api.showSshKey
+DELETE  /api/{apikey}/keys/{uuid}          					Api.deleteSshKey

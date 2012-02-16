@@ -4,3 +4,11 @@ require:
     - play
     - play -> secure
     - play -> scaffold 0.1
+    - org.eclipse.jgit -> org.eclipse.jgit 1.2.0.201112221803-r
+
+repositories:
+    - jgit:
+        type: iBiblio
+        root: "http://download.eclipse.org/jgit/maven"
+        contains:
+            - org.eclipse.jgit -> *

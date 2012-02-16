@@ -21,5 +21,60 @@
         #{form @Users.updateProfile(), id:'profileForm'}
             #{include 'Users/_formprofile.html' /}
         #{/form}
+        
+        <!-- Users SSH Keys -->
+        <div class="row span16">
+        	<h2>SSH Keys</h2>
+        	<div class="row">
+        		#{form @Keys.add(), id:'profileForm'}
+        			<div class="clearfix">
+	        			<label for="keyName">Key Name</label>
+	                    <div class="input">
+	                      <input class="input-large" id="name" name="keyName" type="text">
+	                      <span class="help-inline error">#{error 'keyName' /}</span>
+	                    </div>
+                    </div>
+                    <div class="clearfix">
+	                    <label for="key">Key</label>
+	                    <div class="input">
+	                      <textarea name="key" rows="5"></textarea>
+	                      <span class="help-inline error">#{error 'key' /}</span>
+	                    </div>
+                    </div>
+                    <div class="actions">
+	                    <input type="submit" class="btn primary" value="Add Key">
+                	</div>
+        		#{/form}
+        	</div>
+        		<table class="zebra-striped condensed-table">
+	               <thead>
+	                   <tr>
+	                       <th>Id</th>
+	                       <th>Name</th>
+	                       <th>Value</th>
+	                       <th>Action</th>
+	                   </tr>
+	               </thead>
+                   <tbody>
+                   		#{list items:entity.sshkeys, as:'entry'}
+                   			<tr>
+	                           <td>
+	                               <p>${entry.id}</p>
+	                           </td>
+	                           <td>
+	                               <p>${entry.name}</p>
+	                           </td>
+	                           <td>
+	                               <textarea class="xxlarge" rows="5" readonly="readonly">${entry.sshkey}</textarea>
+	                           </td>
+	                           <td>
+	                               <p><a href="@{Keys.delete(entry.id)}" class="btn">Delete</a></p>
+	                           </td>
+	                       </tr>
+                   		#{/list}
+                   </tbody>
+               </table>
+        </div>
+        <!-- End Users SSH Keys -->
     </div>
 </div>

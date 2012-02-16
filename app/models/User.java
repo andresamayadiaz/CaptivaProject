@@ -28,6 +28,9 @@ public class User extends Model {
 	@NoBinding("updateProfile")
     public boolean isAdmin;
 	
+	@OneToMany (mappedBy="User")
+	public List<Key> sshkeys;
+	
 	public User(String userName, String fullName, String password, boolean isAdmin)
 	{
 	    this.userName = userName;
@@ -43,6 +46,16 @@ public class User extends Model {
 	public static User getByUserName(String userName)
     {
         return find("byUserName", userName).first();
+    }
+	
+	public void addKey(String name, String keyString) throws Key.SshKeyException {
+        Key key = new Key();
+        key.name = name;
+        key.sshkey = Key.extractKey(keyString);
+        key.User = this;
+        key.save();
+        //sshkeys.put(UUID.randomUUID().toString(), key);
+        //sshkeys.add(key);
     }
 	
     @Override
