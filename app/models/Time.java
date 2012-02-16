@@ -25,10 +25,13 @@ public class Time extends Model {
 	
 	public Date created;
 	
-	@Required(message = "Task is required")
 	@ManyToOne
 	@JoinColumn (name="Task")
 	public Task Task;
+	
+	@ManyToOne
+	@JoinColumn (name="Issue")
+	public Issue Issue;
 	
 	@PrePersist 
     protected void onCreate() { 

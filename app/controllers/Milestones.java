@@ -27,10 +27,6 @@ public class Milestones extends BaseController {
 				List<Milestone> entities = Milestone.find("Owner = ? and isOpen = false ORDER BY Name", Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "false");
 		        render(entities);
-			} else if (params.get("statusFilter").equals("me")) { // me
-				List<Milestone> entities = Milestone.find("Owner = ? and isOpen = ? ORDER BY Name", Security.getConnectedUser(), true).fetch();
-				renderArgs.put("statusFilter", "me");
-		        render(entities);
 			} else { // all
 				List<Milestone> entities = Milestone.find("Owner = ? ORDER BY Name", Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "all");

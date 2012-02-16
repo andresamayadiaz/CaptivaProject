@@ -26,7 +26,6 @@
                   <select class="input-medium" name="statusFilter">
                   	<option value="true" #{if statusFilter == "true"}SELECTED#{/if}>Open</option>
                   	<option value="false" #{if statusFilter == "false"}SELECTED#{/if}>Closed</option>
-                  	<option value="me" #{if statusFilter == "me"}SELECTED#{/if}>Me</option>
                   	<option value="all" #{if statusFilter == "all"}SELECTED#{/if}>All</option>
                   </select>
                   <input type="submit" class="btn" value="Search" />

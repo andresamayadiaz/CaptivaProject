@@ -1,0 +1,10 @@
+#{extends 'main.html' /}
+<h2>Create Issue</h2>
+<div class="entity">
+#{form @Issues.save(), id:'createForm'}
+	#{include 'Issues/_form.html' /}
+	<input type="submit" name="submit" value="Save" />
+#{/form}
+</div>
+<a href="@{Issues.index}">Cancel</a>
+

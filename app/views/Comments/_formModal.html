@@ -7,7 +7,12 @@
                 </p>
             #{/ifErrors}
         </div>
-        <input type="hidden" name="entity.Task.id" value="${entity?.id}" />
+        #{if entity.getClass().getName() == "models.Task"}
+        	<input type="hidden" name="entity.Task.id" value="${entity?.id}" />
+        #{/if}
+        #{else}
+        	<input type="hidden" name="entity.Issue.id" value="${entity?.id}" />
+        #{/else}
         <div class="clearfix">
             #{field 'entity.comment'}
             <label for="${field.name}">Comment</label>

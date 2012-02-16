@@ -1,0 +1,7 @@
+#{extends 'main.html' /}
+<h2>Edit Issue</h2>
+<div class="entity">
+#{form @Issues.update(), id:'createForm'}
+	#{include 'Issues/_form.html' /}
+#{/form}
+</div>

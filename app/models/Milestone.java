@@ -32,6 +32,10 @@ public class Milestone extends Model {
 	@OrderBy("DueDate DESC")
 	public List<Task> Tasks;
 	
+	@OneToMany (mappedBy="Milestone")
+	@OrderBy("DueDate DESC")
+	public List<Issue> Issues;
+	
 	@Required(message = "Status is required")
 	public boolean isOpen = true;
 	

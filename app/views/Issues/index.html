@@ -1,5 +1,5 @@
 #{extends 'main.html' /}
-#{set title:'Milestones List' /}
+#{set title:'Issues List' /}
 
 <div class="container-fluid">
  <div class="sidebar">
@@ -7,7 +7,7 @@
      <h5>Options</h5>
      <ul>
        <li><a href="#">My Projects</a></li>
-       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">My Open Issues</a></li>
        <li><a href="#">Milestones</a></li>
        <li><a href="#">Reports</a></li>
      </ul>
@@ -17,9 +17,9 @@
    <!-- Example row of columns -->
     <div class="row">
       <div class="span16">
-        <h2>Milestones List</h2>
+        <h2>Issues List</h2>
         <div class="row">
-            #{form @Milestones.index(), id:'filter'}
+            #{form @Issues.index(), id:'filter'}
             <div class="clearfix">
                 <label for="statusFilter">Status Filter:</label>
                 <div class="input">
@@ -49,7 +49,7 @@
                     <tr>
                         <td>${entity.Name}</td>
                         <td>${entity.Description}</td>
-                        <td>${entity.DueDate}</td>
+                        <td>${entity.DueDate.format("yyyy-MM-dd")}</td>
                         <td>${entity.Owner.fullName}</td>
                         <td>
                         	#{if entity.isOpen}
@@ -60,15 +60,15 @@
                         	#{/else}
                         </td>
                         <td>
-                            <a href="@{Milestones.show(entity.id)}" class="btn">Show</a>
-                            <a href="@{Milestones.edit(entity.id)}" class="btn">Edit</a>
+                            <a href="@{Issues.show(entity.id)}" class="btn">Show</a>
+                            <a href="@{Issues.edit(entity.id)}" class="btn">Edit</a>
                             #{if entity.isOpen}
-                                <a href="@{Milestones.close(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
+                                <a href="@{Issues.close(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
                             #{/if}
                             #{else}
-                                <a href="@{Milestones.open(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to open this record?')) return false;">Open</a>
+                                <a href="@{Issues.open(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to open this record?')) return false;">Open</a>
                             #{/else}
-                            <a href="@{Milestones.delete(entity.id)}" class="btn danger"  onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+                            <a href="@{Issues.delete(entity.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
                         </td>
                     </tr>
                 #{/list}

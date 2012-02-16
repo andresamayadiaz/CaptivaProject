@@ -30,6 +30,15 @@ Task(task1):
     Description: Tarea inicial de prueba para el desarrollo
     DueDate: 2012-02-29
     estimated: 2.5
+    Owner: admin
+    Milestone: milestone1
+    isOpen: true
+    
+Issue(issue1):
+    Name: Issue de Prueba
+    Description: Issue inicial de prueba para el desarrollo
+    DueDate: 2012-02-29
+    estimated: 2.5
     Owner: andres
     Milestone: milestone1
     isOpen: true

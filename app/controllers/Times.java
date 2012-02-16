@@ -44,7 +44,12 @@ public class Times extends Controller {
         }
         entity.save();
         flash.success(Messages.get("scaffold.created", "Time"));
-        Tasks.show(entity.Task.id);
+        
+        if (entity.Task != null) {
+        	Tasks.show(entity.Task.id);
+        } else {
+        	Issues.show(entity.Issue.id);
+        }
     }
 
     public static void update(@Valid Time entity) {
