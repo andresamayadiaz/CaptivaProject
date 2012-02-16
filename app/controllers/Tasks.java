@@ -104,17 +104,21 @@ public class Tasks extends BaseController {
 		Double deltaTime = (entity.estimated*60) / deltaDays;
 		Double deltaTime2 = deltaTime * deltaDays;
 		Date actual = new Date(entity.created.getTime());
-		List<String[]> chart = new ArrayList<String[]>();
+		List<String[]> planned = new ArrayList<String[]>();
+		List<String[]> real = new ArrayList<String[]>();
 		//Logger.info("deltaDays: " + deltaDays + " deltaTime: " + deltaTime + " DueDate: "+entity.DueDate.getTime() + " created: "+entity.created.getTime());
 		
 		for(int i = 1; i <= deltaDays; i++){
+			// PLANNED
 			deltaTime2 -= deltaTime;
-			//chart.put(actual.toString(), deltaTime2.toString());
-			chart.add(new String[]{actual.toString(), deltaTime2.toString()});
+			planned.add(new String[]{actual.toString(), deltaTime2.toString()});
 			actual.setTime(actual.getTime()+1*24*60*60*1000); // add 1 day to actual date
+			
+			// REAL
+			
 		}
 		
-		renderJSON(chart);
+		renderJSON(planned);
 		
     }
 }

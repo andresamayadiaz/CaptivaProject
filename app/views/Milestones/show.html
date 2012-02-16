@@ -1,5 +1,9 @@
 #{extends 'main.html' /}
 #{set title:'Milestone Show' /}
+<script src="@{'/public/javascripts/jquery.jqplot.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+<script src="@{'/public/javascripts/plugins/jqplot.pieRenderer.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+
+<link href="@{'/public/stylesheets/jquery.jqplot.min.css'}" rel="stylesheet">
 
 <div class="container-fluid">
     <div class="sidebar">
@@ -64,6 +68,17 @@
 			</div>
 		<div class="clearfix"></div>
 		<!-- END MAIN MILESTONE INFO -->
+		
+		<!-- TASK GRAPH -->
+        <div class="row">
+            <div class="span8">
+                <h3>Chart</h3>
+                <div id="milestoneChart"  style="margin-top: 20px; margin-left: 20px; width: 200px; height: 200px; position: relative; ">
+                </div>
+            </div>
+        </div>
+        <!-- END TASK GRAPH -->
+		
 		<div class="page-header">
             <h2>Open Tasks</h2>
             <a href="#" data-controls-modal="new-task-modal" data-backdrop="true">New Task</a>
@@ -164,3 +179,26 @@
         <!-- END TASKS -->
     </div>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+	   var plot1;
+	   var ajaxData = function(url, plot, options){
+		   
+		   var ret = null;
+		   $.ajax({
+			   async: false,
+			   dataType:"json",
+			   url: "@{Milestones.earnedValue(entity.id)}",
+			   success:function(data){
+				   ret = data;
+				   plot1 = $.jqplot('milestoneChart', [ret], {
+					    title:'Earned Value',
+					    seriesDefaults:{ renderer:$.jqplot.PieRenderer}
+			  		});
+			   }
+		   });
+		   	
+	   }
+	  ajaxData();
+    });
+</script>
