@@ -334,7 +334,7 @@ $(document).ready(function(){
 				smooth: true
 			}
 		},
-				axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}", label:'Days'},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${entity.Tasks.size()}", label:'Earned Value'}},
+				axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}", label:'Days'},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${models.Milestone.totalPlannedTime(entity.id)}", label:'Earned Value'}},
 				series:[{lineWidth:2, markerOptions:{style:'square'}, showMarker:false}]
 			});
 		}
