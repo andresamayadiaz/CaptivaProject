@@ -18,6 +18,12 @@ import play.data.validation.Valid;
 @Check("any")
 public class Tasks extends BaseController {
 	
+	public static void test(){
+		for(Task task : Task.expireToday()){
+			Logger.info("Name: %s DueDate: %s", task.Name, task.DueDate);
+		}
+	}
+	
     public static void index() {
     	// check if filter apply
 		if(params.get("statusFilter") != null) {			

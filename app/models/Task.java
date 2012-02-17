@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 import notifiers.Mails;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Entity
@@ -50,6 +51,23 @@ public class Task extends Model {
 	
 	@Transient
 	public Double actual;
+	
+	public static List<Task> expireToday(){
+		List<Task> tasks = Task.find("DueDate >= ? AND isOpen=true", new Date()).fetch();
+				
+		return tasks;
+	}
+	
+	public static List<Task> expireThisWeek(){
+		
+        Calendar cal = Calendar.getInstance();;
+        Date date = new Date();
+        cal.setTime(date);
+        int week = cal.get(Calendar.WEEK_OF_YEAR);
+		List<Task> tasks = Task.find("WEEK(DueDate) = ?  AND isOpen=true", week).fetch();
+		
+		return tasks;
+	}
 	
 	@PrePersist 
     protected void onCreate() { 
