@@ -27,19 +27,31 @@
       
       	<div class="span8">
       		<h3>Write Users (${entity.writeUsers.size()})</h3>
-      		<ul>
+      		<ul class="unstyled">
       			#{list items:entity.writeUsers, as:'user'}
-      			<li>${user.fullName}</li>
+      			<li class="alert-message info">${user.fullName}<a class="close" href="@{Repositories.removeWriteUser(entity.id, user.id)}">×</a></li>
       			#{/list}
       		</ul>
+      		<h4>Add Write User</h4>
+      		#{form @Repositories.addWriteUser(), id:'createForm'}
+      			<input type="hidden" name="repoId" value="${entity.id}" />
+      			#{select 'userId', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
+      			<input type="submit" class="btn primary" value="Add" />
+      		#{/form}
       	</div>
       	<div class="span8">
       		<h3>Read Users (${entity.readUsers.size()})</h3>
-      		<ul>
+      		<ul class="unstyled">
       			#{list items:entity.readUsers, as:'user'}
-      			<li>${user.fullName}</li>
+      			<li class="alert-message warning">${user.fullName}<a class="close" href="@{Repositories.removeReadUser(entity.id, user.id)}">×</a></li>
       			#{/list}
       		</ul>
+      		<h4>Add Read User</h4>
+      		#{form @Repositories.addReadUser(), id:'createForm'}
+      			<input type="hidden" name="repoId" value="${entity.id}" />
+      			#{select 'userId', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
+      			<input type="submit" class="btn primary" value="Add" />
+      		#{/form}
       	</div>
       	
       </div>

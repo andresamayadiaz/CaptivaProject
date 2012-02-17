@@ -31,14 +31,6 @@ public class User extends Model {
 	@OneToMany (mappedBy="User")
 	public List<Key> sshkeys;
 	
-	/*
-	@ManyToMany(mappedBy="writeUsers")
-    public Set<Repository> writeRepos = new HashSet<Repository>();
-	
-	@ManyToMany(mappedBy="readUsers")
-	public Set<Repository> readRepos = new HashSet<Repository>();
-	*/
-	
 	public User(String userName, String fullName, String password, boolean isAdmin)
 	{
 	    this.userName = userName;

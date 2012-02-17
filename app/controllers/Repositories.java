@@ -1,10 +1,18 @@
 package controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.lib.*;
 
 import models.Issue;
 import models.Repository;
 import models.User;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
@@ -25,6 +33,25 @@ public class Repositories extends BaseController {
 		Repository entity = Repository.findById(id);
 		notFoundIfNull(entity);
 		
+		// EXPERIMENTAL aad Feb 2012
+		File repoDir = new File(Repository.BASE_DIR + "/", entity.name + ".git");
+		try {
+			FileRepositoryBuilder builder = new FileRepositoryBuilder();
+			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();
+			
+			RevWalk walk = new RevWalk(repo);
+			Logger.info("Walk: %s", walk.toString());
+			for (RevCommit commit : walk) {
+				// extract the commit fields you need, for example:
+				Logger.info("commit: %s", commit.toString());
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// END EXPERIMENTAL aad Feb 2012
+		
 		render(entity);
 	}
 	
@@ -38,71 +65,60 @@ public class Repositories extends BaseController {
         Application.index();
     }
 	
+	@Check("admin")
+	public static void addWriteUser(java.lang.Long repoId, java.lang.Long userId){
+		User user = User.findById(userId);
+		notFoundIfNull(user);
+		
+		Repository repo = Repository.findById(repoId);
+		notFoundIfNull(user);
+		
+		repo.writeUsers.add(user);
+		repo.save();
+		
+		show(repoId);
+	}
 	
-    public static void access(String name) {
-        try {
-        	User user = Security.getConnectedUser();
-            final Repository repository = Repository.find("byName", name).first();
-            notFoundIfNull(repository);
-            
-            String domain = Http.Request.current().domain;
-            render(user, repository, domain);
-        } catch (IndexOutOfBoundsException e) {
-            error(501, "user doesn't exist");
-        }
-
-		Application.index();
-	}
-    
-    
-	public static void accessDelete(String name, String type, String username) {
-		final Repository repository = Repository.find("byName", name).first();
-		notFoundIfNull(repository);
+	@Check("admin")
+	public static void addReadUser(java.lang.Long repoId, java.lang.Long userId){
+		User user = User.findById(userId);
+		notFoundIfNull(user);
 		
-		if (!repository.owner.equals(Security.connected())) {
-			error(500, "you are not the owner");
-		}
+		Repository repo = Repository.findById(repoId);
+		notFoundIfNull(user);
 		
-		if ("read".equals(type)) {
-			repository.readUsers.remove(username);
-		} else if ("write".equals(type)) {
-			repository.writeUsers.remove(username);
-		} else
-			error(500, "must be read or write");
-
-		repository.save();
-		access(name);
+		repo.readUsers.add(user);
+		repo.save();
+		
+		show(repoId);
 	}
-    
 	
-	public static void accessAdd(String name) {
-		String username = params.get("username");
-		String type = params.get("type");
+	@Check("admin")
+	public static void removeWriteUser(java.lang.Long repoId, java.lang.Long userId){
+		User user = User.findById(userId);
+		notFoundIfNull(user);
 		
-		/*
-		if (!Application.usernamePattern.matcher(username).matches()) {
-			error(500, "username must be [A-Za-z0-9_]");
-			return;
-		}
-		*/
+		Repository repo = Repository.findById(repoId);
+		notFoundIfNull(user);
 		
-		if (User.find("byUserName", username).fetch().size() != 1) {
-			error(500, "cannot find user");
-		}
+		repo.writeUsers.remove(user);
+		repo.save();
 		
-		final Repository repository = Repository.find("byName", name).first();
-		if (!repository.owner.equals(Security.connected())) {
-			error(500, "you are not the owner");
-		}
-		
-		if ("read".equals(type)) {
-			repository.readUsers.add( (User) User.find("byUserName", username).first());
-		} else if ("write".equals(type)) {
-			repository.writeUsers.add( (User) User.find("byUserName", username).first());
-		} else
-			error(500, "must be read or write");
-		
-		repository.save();
-		access(name);
+		show(repoId);
 	}
+	
+	@Check("admin")
+	public static void removeReadUser(java.lang.Long repoId, java.lang.Long userId){
+		User user = User.findById(userId);
+		notFoundIfNull(user);
+		
+		Repository repo = Repository.findById(repoId);
+		notFoundIfNull(user);
+		
+		repo.readUsers.remove(user);
+		repo.save();
+		
+		show(repoId);
+	}
+    
 }

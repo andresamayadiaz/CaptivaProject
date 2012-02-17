@@ -18,21 +18,22 @@ import play.db.jpa.Model;
 
 @Entity
 public class Repository extends Model {
-	private final static String BASE_DIR = Play.configuration.getProperty("git.repo", System.getProperty("user.home") + "/repo");
+	public final static String BASE_DIR = Play.configuration.getProperty("git.repo", System.getProperty("user.home") + "/repo");
 	public final static Pattern repositoryPattern = Pattern.compile("^[A-Za-z0-9_]+$");
 	
 	@Required
 	@Column(unique=true, nullable=false)
 	public String name;
 	
-	@Required
-	public String owner;
+	@ManyToOne
+	@JoinColumn (name="Owner")
+	public User owner;
 	
-	@ManyToMany(cascade=CascadeType.PERSIST)
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="repository_writeusers") 
     public Set<User> writeUsers = new HashSet();
 	
-	@ManyToMany(cascade=CascadeType.PERSIST)
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="repository_readusers") 
 	public Set<User> readUsers = new HashSet(); 
 	
@@ -57,7 +58,7 @@ public class Repository extends Model {
 			repository.writeUsers = new HashSet();
 		}
 		repository.name = name;
-		repository.owner = owner;
+		repository.owner = usrOwner;
 		repository.writeUsers.add( usrOwner );
 		
 		repository.save();
