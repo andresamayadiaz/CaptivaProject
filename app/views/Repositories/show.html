@@ -1,0 +1,50 @@
+#{extends 'main.html' /}
+#{set title:'Repositories' /}
+
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+    <div class="row">
+      <div class="span8">
+        <h1>Repository: ${entity.name}</h1>
+        <h3>Owner: ${entity.owner}</h3>
+      </div>
+    </div>
+    
+      <!-- Users -->
+      
+      <div class="row">
+      
+      	<div class="span8">
+      		<h3>Write Users (${entity.writeUsers.size()})</h3>
+      		<ul>
+      			#{list items:entity.writeUsers, as:'user'}
+      			<li>${user.fullName}</li>
+      			#{/list}
+      		</ul>
+      	</div>
+      	<div class="span8">
+      		<h3>Read Users (${entity.readUsers.size()})</h3>
+      		<ul>
+      			#{list items:entity.readUsers, as:'user'}
+      			<li>${user.fullName}</li>
+      			#{/list}
+      		</ul>
+      	</div>
+      	
+      </div>
+      
+      <!-- End Users -->
+      
+  </div>
+</div>

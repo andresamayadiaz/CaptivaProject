@@ -1,5 +1,8 @@
 package controllers;
 
+import java.util.List;
+
+import models.Issue;
 import models.Repository;
 import models.User;
 import play.mvc.Controller;
@@ -7,13 +10,24 @@ import play.mvc.Http;
 import play.mvc.With;
 import controllers.Security;
 
-/**
- * Created by IntelliJ IDEA. User: mush Date: 7/30/11 Time: 2:44 PM To change
- */
 @With(Security.class)
 @Check("any")
 public class Repositories extends BaseController {
-
+	
+	@Check("admin")
+	public static void index(){
+		List<Repository> entities = Repository.all().fetch();
+        render(entities);
+	}
+	
+	@Check("any")
+	public static void show(java.lang.Long id){
+		Repository entity = Repository.findById(id);
+		notFoundIfNull(entity);
+		
+		render(entity);
+	}
+	
 	@Check("admin")
 	public static void add(String name) {
 		try {
@@ -23,7 +37,8 @@ public class Repositories extends BaseController {
 		}
         Application.index();
     }
-
+	
+	
     public static void access(String name) {
         try {
         	User user = Security.getConnectedUser();
@@ -38,6 +53,7 @@ public class Repositories extends BaseController {
 
 		Application.index();
 	}
+    
     
 	public static void accessDelete(String name, String type, String username) {
 		final Repository repository = Repository.find("byName", name).first();
@@ -58,6 +74,7 @@ public class Repositories extends BaseController {
 		access(name);
 	}
     
+	
 	public static void accessAdd(String name) {
 		String username = params.get("username");
 		String type = params.get("type");

@@ -1,0 +1,55 @@
+#{extends 'main.html' /}
+#{set title:'Repositories' /}
+
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+   <!-- Example row of columns -->
+    <div class="row">
+      <div class="span16">
+        <h2>Repositories List</h2>
+        <p class="pull-right">
+        	#{form @Repositories.add(), id:'createForm'}
+        		<input type="text" class="medium" name="name" />
+            	<input type="submit" class="btn primary" value="Add">
+            #{/form}
+        </p>
+        <table class="bordered-table zebra-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Write Users</th>
+                <th>Read Users</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                #{list items:entities, as:'entity'}
+                    <tr>
+                        <td><a href="#">${entity.name}</a></td>
+                        <td>${entity.owner}</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>
+                            <a href="@{Repositories.show(entity.id)}" class="btn">Show</a>
+                            <a href="#" class="btn danger"  onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+                        </td>
+                    </tr>
+                #{/list}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
