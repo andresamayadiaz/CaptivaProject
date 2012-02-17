@@ -7,6 +7,8 @@ import play.db.jpa.*;
 
 import javax.persistence.*;
 
+import notifiers.Mails;
+
 import java.util.*;
 
 @Entity
@@ -77,4 +79,17 @@ public class Project extends Model {
 		
 		this.totalIssues = totalIssue;
     }
+    
+    @PostPersist
+    public void createdNotification(){
+    	Mails mails = new Mails();
+    	mails.projectCreated(this);
+    }
+    
+    @PostUpdate
+    public void updatedNotification(){
+    	Mails mails = new Mails();
+    	mails.projectUpdated(this);
+    }
+    
 }

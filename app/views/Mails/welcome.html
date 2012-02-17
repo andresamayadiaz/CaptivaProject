@@ -1,11 +1,8 @@
-<html>
-<body><head><title>Welcome</title></head><body>
-<!-- <img src="http://captivatecnologia.com/wp-content/uploads/2011/07/captivablanco220.png"/> -->
-<p>
-    Hello ${user.fullName}, welcome to <b>Captiva Project</b>.
-</p>
-<p>
-	To login click <a href="@@{Application.index()}">this link</a>
-</p>
-</body>
-</html>
+#{extends 'Mails/layout.html' /}
+			<h1>Captiva Project RC1</h1>
+			<p>
+			    Hello ${user.fullName}, welcome to <b>Captiva Project RC1</b>.
+			</p>
+			<p>
+				To login click <a href="@@{Application.index()}">this link</a>
+			</p>

@@ -6,6 +6,8 @@ import play.db.jpa.*;
 
 import javax.persistence.*;
 
+import notifiers.Mails;
+
 import java.util.*;
 
 @Entity
@@ -60,6 +62,18 @@ public class Issue extends Model {
 		}
 		this.actual = (double) Math.round((act/60)*100)/100; // round to two decimals
 	}
+	
+	@PostPersist
+    public void createdNotification(){
+    	Mails mails = new Mails();
+    	mails.issueCreated(this);
+    }
+    
+    @PostUpdate
+    public void updatedNotification(){
+    	Mails mails = new Mails();
+    	mails.issueUpdated(this);
+    }
 	
 	public String toString(){
 		return Name;

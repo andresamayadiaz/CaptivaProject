@@ -1,0 +1,14 @@
+#{extends 'Mails/layout.html' /}
+			<h1>Project Updated: " ${project.Name} " Assigned to you</h1>
+			<p>
+			    ${project.Description}
+			</p>
+			<p>
+				<ul>
+					<li>Created: ${project.created.format('yyyy-MM-dd')}</li>
+					<li>Due Date: <b>${project.DueDate.format('yyyy-MM-dd')}</b></li>
+				</ul>
+			</p>
+			<p>
+				To login click <a href="@@{Application.index()}">this link</a>
+			</p>

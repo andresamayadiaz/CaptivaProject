@@ -1,0 +1,16 @@
+#{extends 'Mails/layout.html' /}
+			<h1>New Task: " ${task.Name} " Assigned to you</h1>
+			<p>
+			    ${task.Description}
+			</p>
+			<p>
+				<ul>
+					<li>Project: ${task.Milestone.Project.Name}</li>
+					<li>Milestone: ${task.Milestone.Name}</li>
+					<li>Created: ${task.created.format('yyyy-MM-dd')}</li>
+					<li>Due Date: <b>${task.DueDate.format('yyyy-MM-dd')}</b></li>
+				</ul>
+			</p>
+			<p>
+				To login click <a href="@@{Application.index()}">this link</a>
+			</p>
