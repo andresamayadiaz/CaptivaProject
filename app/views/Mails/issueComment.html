@@ -1,0 +1,18 @@
+#{extends 'Mails/layout.html' /}
+			<h1>New Comment on Issue: " ${comment.Issue.Name} "</h1>
+			<p>
+				<blockquote>
+			    	${comment.comment}
+			    </blockquote>
+			</p>
+			<p>
+				<ul>
+					<li>Author: ${comment.createdBy.fullName}</li>
+					<li>Project: ${comment.Issue.Milestone.Project.Name}</li>
+					<li>Milestone: ${comment.Issue.Milestone.Name}</li>
+					<li>Created: ${comment.created.format('yyyy-MM-dd')}</li>
+				</ul>
+			</p>
+			<p>
+				To login click <a href="@@{Application.index()}">this link</a>
+			</p>

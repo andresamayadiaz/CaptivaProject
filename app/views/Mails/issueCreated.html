@@ -1,0 +1,16 @@
+#{extends 'Mails/layout.html' /}
+			<h1>New Issue: " ${issue.Name} " Assigned to you</h1>
+			<p>
+			    ${issue.Description}
+			</p>
+			<p>
+				<ul>
+					<li>Project: ${issue.Milestone.Project.Name}</li>
+					<li>Milestone: ${issue.Milestone.Name}</li>
+					<li>Created: ${issue.created.format('yyyy-MM-dd')}</li>
+					<li>Due Date: <b>${issue.DueDate.format('yyyy-MM-dd')}</b></li>
+				</ul>
+			</p>
+			<p>
+				To login click <a href="@@{Application.index()}">this link</a>
+			</p>

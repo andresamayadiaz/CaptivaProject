@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import models.Milestone;
+import models.Task;
 import models.User;
 import play.Logger;
 import play.data.binding.As;
@@ -22,7 +23,7 @@ public class Users extends BaseController {
 	
 	public static void mail(){
 		Mails mails = new Mails();
-		mails.welcome(Security.getConnectedUser());
+		mails.taskReminder((Task) Task.all().first());
 	}
 	
 	@Check("admin")
