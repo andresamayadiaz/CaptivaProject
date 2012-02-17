@@ -52,6 +52,13 @@ public class Task extends Model {
 	@Transient
 	public Double actual;
 	
+	public static int countByUser(java.lang.Long userId){
+		
+		int count = Task.find("Owner = ? AND isOpen = true", User.findById(userId)).fetch().size();
+		return count;
+		
+	}
+	
 	public static List<Task> expireToday(){
 		List<Task> tasks = Task.find("DueDate >= ? AND isOpen=true", new Date()).fetch();
 				

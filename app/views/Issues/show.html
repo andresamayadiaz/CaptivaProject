@@ -63,7 +63,7 @@
         <div class="clearfix"></div>
         <!-- END MAIN ISSUE INFO -->
         
-        <!-- ISSUE GRAPH -->
+        <!-- ISSUE GRAPH
         <div class="row">
             <div class="span8">
                 <h3>Chart</h3>
@@ -71,7 +71,7 @@
                 </div>
             </div>
         </div>
-        <!-- END ISSUE GRAPH -->
+        END ISSUE GRAPH -->
         
         <div class="row">
 	        <!-- Issue Comments -->
@@ -197,29 +197,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-	   var ajaxData = function(url, plot, options){
-		   
-		   var ret = null;
-		   $.ajax({
-			   async: false,
-			   dataType:"json",
-			   url: "@{Issues.graphdata(entity.id)}",
-			   success:function(data){
-				   ret = data;
-			   }
-		   });
-		   return ret;
-	   }
 	   
-	  var jsonurl = "@{Issues.graphdata(entity.id)}";
-	  //var line1=[['2008-08-12',"4"],['2008-09-12',"6.5"],['2008-10-12',"5.7"],['2008-11-12',"9"],['2008-12-12',"8.2"],['2008-12-20',"8.2"],['2008-12-25',"5"]];
-	  //var line2 = [["2012-02-12","140.625"],["2012-02-13","131.25"],["2012-02-14","121.875"],["2012-02-15","112.5"],["2012-02-16","103.125"],["2012-02-17","93.75"],["2012-02-18","84.375"],["2012-02-19","75.0"],["2012-02-20","65.625"],["2012-02-21","56.25"],["2012-02-22","46.875"],["2012-02-23","37.5"],["2012-02-24","28.125"],["2012-02-25","18.75"],["2012-02-26","9.375"],["2012-02-27","0.0"]];
-	  var plot1 = $.jqplot('issueChart', [], {
-	    title:'Burn Down Chart',
-	    dataRenderer: ajaxData,
-	    axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}"},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${entity.estimated*60}"}},
-	    series:[{lineWidth:2, markerOptions:{style:'square'}, showMarker:false}]
-	  });
 	  
     });
 </script>

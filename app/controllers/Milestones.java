@@ -119,15 +119,12 @@ public class Milestones extends BaseController {
 		Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) ); // Duration in Days
 		Double totalEstimated = 0.0;
 		Double totalCompleted = 0.0;
-		int totalTasks = entity.Tasks.size();
-		int totalCompletedTasks = 0;
 		
 		// GET A TOTAL ESTIMATED TIME
 		for( Task task : entity.Tasks ){
 			totalEstimated += task.estimated;
 			if(!task.isOpen){
 				totalCompleted += task.estimated;
-				totalCompletedTasks++;
 			}
 		}
 		
