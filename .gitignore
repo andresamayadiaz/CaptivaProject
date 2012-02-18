@@ -5,3 +5,5 @@ eclipse
 .DS_Store
 .classpath
 precompiled
+bin
+data

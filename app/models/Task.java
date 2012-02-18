@@ -43,6 +43,9 @@ public class Task extends Model {
 	@OneToMany (mappedBy="Task")
 	public List<Time> Times;
 	
+	@OneToMany(mappedBy="Task")
+	public List<File> Files;
+	
 	@Required
 	public boolean isOpen = true;
 	

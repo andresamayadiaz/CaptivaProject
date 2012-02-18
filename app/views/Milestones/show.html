@@ -133,8 +133,7 @@
 		        	</thead>
 		        	<tbody>
 		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
-		        	#{list items:entity?.Tasks, as:'task'}
-		        		#{if task.isOpen}
+		        	#{list items:entity?.getTasks(true), as:'task'}
 		        		<tr>
 		        			#{if task.DueDate > new Date()}
 		        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
@@ -150,7 +149,6 @@
 		        			 <a href="@{Tasks.close(task.id)}">Close</a>
 		        			</td>
 		        		</tr>
-		        		#{/if}
 		        	#{/list}
 		        	</tbody>
 		        </table>
@@ -201,8 +199,7 @@
 		        	</thead>
 		        	<tbody>
 		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
-		        	#{list items:entity?.Issues, as:'issue'}
-		        		#{if issue.isOpen}
+		        	#{list items:entity?.getIssues(true), as:'issue'}
 		        		<tr>
 		        			#{if issue.DueDate > new Date()}
 		        				<td><span class="label notice">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
@@ -218,7 +215,6 @@
 		        			 <a href="@{Issues.close(issue.id)}">Close</a>
 		        			</td>
 		        		</tr>
-		        		#{/if}
 		        	#{/list}
 		        	</tbody>
 		        </table>
@@ -241,8 +237,7 @@
 		        	</thead>
 		        	<tbody>
 		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
-		        		#{list items:entity?.Tasks, as:'task'}
-		        			#{if task.isOpen == false}
+		        		#{list items:entity?.getTasks(false), as:'task'}
 			        		<tr>
 			        		    <td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
 			        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
@@ -251,7 +246,6 @@
 			        			<td>${task?.estimated} / 0.0</td>
 			        			<td><a href="@{Tasks.open(task.id)}">Open</a></td>
 			        		</tr>
-			        		#{/if}
 		        		#{/list}
 		        	</tbody>
 		        </table>
@@ -274,8 +268,7 @@
 		        	</thead>
 		        	<tbody>
 		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
-		        		#{list items:entity?.Issues, as:'issue'}
-		        			#{if issue.isOpen == false}
+		        		#{list items:entity?.getIssues(false), as:'issue'}
 			        		<tr>
 			        		    <td><span class="label">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
 			        			<td><a href="@{Issues.show(issue.id)}">${issue?.Name}</a></td>
@@ -284,7 +277,6 @@
 			        			<td>${issue?.estimated} / 0.0</td>
 			        			<td><a href="@{Issues.open(issue.id)}">Open</a></td>
 			        		</tr>
-			        		#{/if}
 		        		#{/list}
 		        	</tbody>
 		        </table>

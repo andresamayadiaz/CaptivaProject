@@ -51,6 +51,16 @@ public class Milestone extends Model {
 		this.created = new Date(); 
     }
 	
+	public List<Task> getTasks(Boolean isOpen) {
+		List<Task> tasks = Task.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+		return tasks;
+	}
+	
+	public List<Issue> getIssues(Boolean isOpen) {
+		List<Issue> issues = Issue.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+		return issues;
+	}
+	
 	public String toString(){
 		return Name;
 	}

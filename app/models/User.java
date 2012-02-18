@@ -8,6 +8,8 @@ import play.libs.Codec;
 
 import javax.persistence.*;
 
+import notifiers.Mails;
+
 import java.util.*;
 
 @Entity
@@ -57,6 +59,12 @@ public class User extends Model {
         //sshkeys.put(UUID.randomUUID().toString(), key);
         //sshkeys.add(key);
     }
+	
+	@PostPersist
+	public void UserCreated() {
+		Mails mails = new Mails();
+		mails.welcome(this);
+	}
 	
     @Override
     public String toString()
