@@ -16,32 +16,33 @@ import play.Play;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
-/**
- * Created by IntelliJ IDEA. User: mush Date: 7/30/11 Time: 2:17 PM To change
- */
 @Entity
 public class Repository extends Model {
-	private final static String BASE_DIR = Play.configuration.getProperty("git.repo", System.getProperty("user.home") + "/repo");
+	public final static String BASE_DIR = Play.configuration.getProperty("git.repo", System.getProperty("user.home") + "/repo");
 	public final static Pattern repositoryPattern = Pattern.compile("^[A-Za-z0-9_]+$");
 	
 	@Required
 	@Column(unique=true, nullable=false)
 	public String name;
 	
-	@Required
-	public String owner;
+	@ManyToOne
+	@JoinColumn (name="Owner")
+	public User owner;
 	
 	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable(name="repository_writeusers") 
     public Set<User> writeUsers = new HashSet();
 	
 	@ManyToMany(cascade=CascadeType.ALL)
-    public Set<User> readUsers = new HashSet();
+	@JoinTable(name="repository_readusers") 
+	public Set<User> readUsers = new HashSet(); 
 	
 	public static Repository create(String name, String owner) throws RepositoryException {
 		if (!repositoryPattern.matcher(name).matches()) {
 			throw new RepositoryException("repository name not allowed");
 		}
-		if (User.find("byUserName", owner).fetch().size() != 1) {
+		User usrOwner = User.find("byUserName", owner).first();
+		if (usrOwner == null) {
 			throw new RepositoryException("user doesn't exist");
 		}
 		
@@ -52,10 +53,14 @@ public class Repository extends Model {
         Logger.debug("Creating repo: " + repoDir.getAbsolutePath());
 		Git.init().setBare(true).setDirectory(repoDir).call();
 		
-		final Repository repository = new Repository();
+		Repository repository = new Repository();
+		if(repository.writeUsers == null){
+			repository.writeUsers = new HashSet();
+		}
 		repository.name = name;
-		repository.owner = owner;
-		repository.writeUsers.add( (User) User.find("byUserName", owner).first());
+		repository.owner = usrOwner;
+		repository.writeUsers.add( usrOwner );
+		
 		repository.save();
 		return repository;
 	}

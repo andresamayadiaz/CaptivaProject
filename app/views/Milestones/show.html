@@ -74,7 +74,7 @@
         <div class="row">
             <div class="span8">
                 <h3>Chart</h3>
-                <div id="milestoneChart"  style="height: 400px; width: 800px; position: relative; ">
+                <div id="milestoneChart"  style="height: 300px; width: 600px; position: relative; ">
                 </div>
             </div>
         </div>
@@ -83,8 +83,8 @@
         <ul class="tabs" data-tabs="tabs">
         	<li class="active"><a href="#openTasks">Open Tasks</a></li>
         	<li><a href="#openIssues">Open Issues</a></li>
-        	<li><a href="#closeTasks">Close Tasks</a></li>
-        	<li><a href="#closeIssues">Close Issues</a></li>
+        	<li><a href="#closeTasks">Closed Tasks</a></li>
+        	<li><a href="#closeIssues">Closed Issues</a></li>
         </ul>
         
         <div class="tab-content">
@@ -326,7 +326,7 @@ $(document).ready(function(){
 				smooth: true
 			}
 		},
-				axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}", label:'Days'},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${entity.Tasks.size()}", label:'Earned Value'}},
+				axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer, min:"${entity?.created.format('yyyy-MM-dd')}", max:"${entity?.DueDate.format('yyyy-MM-dd')}", label:'Days'},yaxis:{renderer:$.jqplot.LinearAxisRenderer,min:"0", max:"${models.Milestone.totalPlannedTime(entity.id)}", label:'Earned Value'}},
 				series:[{lineWidth:2, markerOptions:{style:'square'}, showMarker:false}]
 			});
 		}

@@ -2,11 +2,15 @@ package controllers;
 
 import java.util.*;
 
+import notifiers.Mails;
+
 import com.google.gson.Gson;
 
+import models.Comment;
 import models.Milestone;
 import models.Task;
 import models.Time;
+import models.User;
 import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -53,7 +57,7 @@ public class Tasks extends BaseController {
         Task entity = Task.findById(id);
         render(entity);
     }
-
+    
     public static void delete(java.lang.Long id) {
         Task entity = Task.findById(id);
         entity.delete();
@@ -110,6 +114,16 @@ public class Tasks extends BaseController {
 		entity.save();
 		flash.success(Messages.get("scaffold.updated", "Task"));
 		Milestones.show(entity.Milestone.id);
+    }
+    
+    public static void reminder(java.lang.Long id){
+    	Task task = Task.findById(id);
+    	notFoundIfNull(task);
+    	
+    	Mails mails = new Mails();
+    	mails.taskReminder(task);
+    	flash.success("Reminder Sent!");
+    	show(id);
     }
     
     public static void plannedData(java.lang.Long id) {

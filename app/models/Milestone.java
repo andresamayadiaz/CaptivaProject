@@ -46,6 +46,28 @@ public class Milestone extends Model {
 	
 	public Date created;
 	
+	public static Double totalPlannedTime(java.lang.Long id){
+		
+		Milestone entity = Milestone.findById(id);
+		
+		Double deltaTime = 0.0;
+		for(Task task : entity.Tasks){
+			deltaTime += task.estimated;
+		}
+		return deltaTime;
+	}
+	
+	public static Double totalActualTime(java.lang.Long id){
+		
+		Milestone entity = Milestone.findById(id);
+		
+		Double deltaTime = 0.0;
+		for(Time time : entity.Times){
+			deltaTime += time.time;
+		}
+		return deltaTime;
+	}
+	
 	@PrePersist
     protected void onCreate() {
 		this.created = new Date(); 

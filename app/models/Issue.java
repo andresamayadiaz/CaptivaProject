@@ -49,6 +49,13 @@ public class Issue extends Model {
 	@Transient
 	public Double actual;
 	
+	public static int countByUser(java.lang.Long userId){
+		
+		int count = Issue.find("Owner = ? AND isOpen = true", User.findById(userId)).fetch().size();
+		return count;
+		
+	}
+	
 	@PrePersist 
     protected void onCreate() { 
         created = new Date(); 

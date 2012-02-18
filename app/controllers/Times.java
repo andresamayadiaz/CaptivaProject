@@ -38,7 +38,12 @@ public class Times extends Controller {
     
     public static void save(Time entity) {
     	entity.createdBy = User.find("byUserName", Security.connected()).<User>first();
-    	entity.Milestone = Milestone.findById(entity.Task.Milestone.id);
+    	
+    	if(entity.Task != null){
+    		entity.Milestone = Milestone.findById(entity.Task.Milestone.id);
+    	}else if(entity.Issue != null){
+    		entity.Milestone = Milestone.findById(entity.Issue.Milestone.id);
+    	}
     	
     	validation.valid(entity);
         if (validation.hasErrors()) {

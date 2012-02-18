@@ -2,6 +2,8 @@ package controllers;
 
 import java.util.List;
 
+import jobs.Notifications;
+
 import notifiers.Mails;
 
 import com.google.gson.Gson;
@@ -21,9 +23,9 @@ import play.mvc.Http.Request;
 @With(Security.class)
 public class Users extends BaseController {
 	
-	public static void mail(){
-		Mails mails = new Mails();
-		mails.taskReminder((Task) Task.all().first());
+	public static void test(){
+		//Notifications not = new Notifications();
+		//not.now();
 	}
 	
 	@Check("admin")

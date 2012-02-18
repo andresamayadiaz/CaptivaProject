@@ -44,8 +44,8 @@
           <ul class="nav">
             <li class="active"><a href="@{Application.index}">Home</a></li>
             <li><a href="@{Projects.index}">Projects</a></li>
-            <li><a href="@{Tasks.index}">Tasks</a></li>
-            <li><a href="@{Issues.index}">Issues</a></li>
+            <li><a href="@{Tasks.index}">Tasks (${models.Task.countByUser(userId)})</a></li>
+            <li><a href="@{Issues.index}">Issues (${models.Issue.countByUser(userId)})</a></li>
             <li><a href="@{Milestones.index}">Milestones</a></li>
             <li><a href="#">Reports</a></li>
 	          #{secure.check 'admin'}
@@ -53,7 +53,7 @@
 	                <a href="#" class="dropdown-toggle">Admin</a>
 	                <ul class="dropdown-menu">
 	                  <li><a href="@{Users.index}">Users List</a></li>
-	                  <li><a href="#">Something else here</a></li>
+	                  <li><a href="@{Repositories.index}">Repositories</a></li>
 	                  <li class="divider"></li>
 	                  <li><a href="#">Another link</a></li>
 	                </ul>

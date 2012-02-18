@@ -25,8 +25,17 @@
                 <li><a href="@{Milestones.show(entity.Milestone?.id)}">${entity.Milestone?.Name}</a><span class="divider">/</span></li>
                 <li>${entity.Name}</li>
             </ul>
-            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
+            #{if flash.success}
+		        <div class="alert-message success">
+		            <a class="close" href="#">×</a>
+		            <p>
+		                &{flash.success}
+		            </p>
+		        </div>
+			#{/if}
+            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>            
         </div>
+        	
             <div class="row">
                 <div class="span2">
                     <h3>Due Date</h3>

@@ -119,15 +119,12 @@ public class Milestones extends BaseController {
 		Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) ); // Duration in Days
 		Double totalEstimated = 0.0;
 		Double totalCompleted = 0.0;
-		int totalTasks = entity.Tasks.size();
-		int totalCompletedTasks = 0;
 		
 		// GET A TOTAL ESTIMATED TIME
 		for( Task task : entity.Tasks ){
 			totalEstimated += task.estimated;
 			if(!task.isOpen){
 				totalCompleted += task.estimated;
-				totalCompletedTasks++;
 			}
 		}
 		
@@ -165,18 +162,20 @@ public class Milestones extends BaseController {
 		notFoundIfNull(entity);
 		
 		Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) );
-		Double deltaTasks = entity.Tasks.size() / deltaDays;
-		Double deltaTask = deltaTasks;
+		
+		Double totalTime = entity.totalPlannedTime(id);
+		Double deltaTimes = totalTime / deltaDays;
+		
 		Date actual = new Date(entity.created.getTime());
 		List<String[]> planned = new ArrayList<String[]>();
 		
 		for(int i = 1; i <= deltaDays; i++){
 			
 			// PLANNED
-			planned.add(new String[]{actual.toString(), deltaTask.toString()});
+			planned.add(new String[]{actual.toString(), totalTime.toString()});
 			
 			// UPDATE DATA
-			deltaTask += deltaTasks;
+			totalTime -= deltaTimes;
 			actual.setTime(actual.getTime()+1*24*60*60*1000); // add 1 day to actual date
 			
 		}
@@ -192,9 +191,8 @@ public class Milestones extends BaseController {
 		// TODO: better to use total tasks or total milestone estimated???
 		
 		Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) );
-		Double deltaTasks = entity.Tasks.size() / deltaDays;
-		Double deltaTask = deltaTasks;
-		Double tmp = 0.0;
+		Double totalPlanned = entity.totalPlannedTime(id);
+		Double tmp = totalPlanned;
 		Date actual = new Date(entity.created.getTime());
 		List<String[]> real = new ArrayList<String[]>();
 		
@@ -204,15 +202,14 @@ public class Milestones extends BaseController {
 			for(Task task : entity.Tasks){
 				if(task.ClosedDate != null){
 					if(task.ClosedDate.compareTo(actual)<=0){
-						tmp += 1;
+						tmp -= task.estimated;
 					}
 				}
 			}
 			real.add(new String[]{actual.toString(), tmp.toString()});
 			
 			// UPDATE DATA
-			tmp = 0.0;
-			deltaTask += deltaTasks;
+			tmp = totalPlanned;
 			actual.setTime(actual.getTime()+1*24*60*60*1000); // add 1 day to actual date
 			
 		}

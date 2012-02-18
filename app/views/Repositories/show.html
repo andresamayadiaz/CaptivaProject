@@ -1,0 +1,62 @@
+#{extends 'main.html' /}
+#{set title:'Repositories' /}
+
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+    <div class="row">
+      <div class="span8">
+        <h1>Repository: ${entity.name}</h1>
+        <h3>Owner: ${entity.owner}</h3>
+      </div>
+    </div>
+    
+      <!-- Users -->
+      
+      <div class="row">
+      
+      	<div class="span8">
+      		<h3>Write Users (${entity.writeUsers.size()})</h3>
+      		<ul class="unstyled">
+      			#{list items:entity.writeUsers, as:'user'}
+      			<li class="alert-message info">${user.fullName}<a class="close" href="@{Repositories.removeWriteUser(entity.id, user.id)}">×</a></li>
+      			#{/list}
+      		</ul>
+      		<h4>Add Write User</h4>
+      		#{form @Repositories.addWriteUser(), id:'createForm'}
+      			<input type="hidden" name="repoId" value="${entity.id}" />
+      			#{select 'userId', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
+      			<input type="submit" class="btn primary" value="Add" />
+      		#{/form}
+      	</div>
+      	<div class="span8">
+      		<h3>Read Users (${entity.readUsers.size()})</h3>
+      		<ul class="unstyled">
+      			#{list items:entity.readUsers, as:'user'}
+      			<li class="alert-message warning">${user.fullName}<a class="close" href="@{Repositories.removeReadUser(entity.id, user.id)}">×</a></li>
+      			#{/list}
+      		</ul>
+      		<h4>Add Read User</h4>
+      		#{form @Repositories.addReadUser(), id:'createForm'}
+      			<input type="hidden" name="repoId" value="${entity.id}" />
+      			#{select 'userId', items:models.User.all().fetch(), valueProperty:'id', labelProperty:'fullName', class:"normalSelect required", id:'owner' /}
+      			<input type="submit" class="btn primary" value="Add" />
+      		#{/form}
+      	</div>
+      	
+      </div>
+      
+      <!-- End Users -->
+      
+  </div>
+</div>
