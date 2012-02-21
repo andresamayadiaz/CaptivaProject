@@ -42,7 +42,7 @@ public class Repositories extends BaseController {
 			RevWalk walk = new RevWalk(repo);
 			Logger.info("Walk: %s", walk.toString());
 			for (RevCommit commit : walk) {
-				// extract the commit fields you need, for example:
+				
 				Logger.info("commit: %s", commit.toString());
 			}
 			

@@ -10,10 +10,6 @@ import play.db.jpa.Model;
 
 import jobs.AuthorizedKeysGenerator;
 
-/**
- * Created by IntelliJ IDEA. User: mush Date: 7/31/11 Time: 7:34 PM
- */
-
 @Entity
 public class Key extends Model {
 	
@@ -22,14 +18,18 @@ public class Key extends Model {
 	public String name;
 	
 	@Required
-	@Column(length=1000) 
+	@Column(length=512) 
 	public String sshkey;
 	
+	@Required
 	@ManyToOne
 	@JoinColumn (name="User")
 	public User User;
 	
+	@Transient
     public final static Pattern keyPattern = Pattern.compile("^(ssh-[a-z]+ +[A-Za-z0-9+/=]+).*$", Pattern.DOTALL | Pattern.MULTILINE);
+	
+	@Transient
     public final static AuthorizedKeysGenerator authorizedKeysGenerator = new AuthorizedKeysGenerator();
     
 	public static String extractKey(String key) throws SshKeyException {

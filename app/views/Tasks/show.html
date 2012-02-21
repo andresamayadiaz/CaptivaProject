@@ -23,6 +23,7 @@
             <ul class="breadcrumb">
                 <li><a href="@{Projects.show(entity.Milestone?.Project?.id)}">${entity.Milestone?.Project?.Name}</a><span class="divider">/</span></li>
                 <li><a href="@{Milestones.show(entity.Milestone?.id)}">${entity.Milestone?.Name}</a><span class="divider">/</span></li>
+                <li>Tasks<span class="divider">/</span></li>
                 <li>${entity.Name}</li>
             </ul>
             #{if flash.success}
@@ -78,7 +79,7 @@
         <div class="row">
             <div class="span8">
                 <h3>Chart</h3>
-                <div id="taskChart"  style="height: 400px; width: 800px; position: relative; ">
+                <div id="taskChart"  style="height: 300px; width: 600px; position: relative; ">
                 </div>
             </div>
         </div>

@@ -21,6 +21,7 @@
             <ul class="breadcrumb">
                 <li><a href="@{Projects.show(entity.Milestone?.Project?.id)}">${entity.Milestone?.Project?.Name}</a><span class="divider">/</span></li>
                 <li><a href="@{Milestones.show(entity.Milestone?.id)}">${entity.Milestone?.Name}</a><span class="divider">/</span></li>
+                <li>Issues<span class="divider">/</span></li>
                 <li>${entity.Name}</li>
             </ul>
             <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>

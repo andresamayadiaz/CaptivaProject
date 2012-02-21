@@ -114,7 +114,7 @@
         	#{list items:entity?.Milestones, as:'milestone'}
         		#{if milestone.isOpen}
         		<tr>
-        			#{if milestone.DueDate > new Date()}
+        			#{if milestone.DueDate >= new Date()}
         				<td><span class="label notice">${milestone?.DueDate?.format('yyyy-MM-dd')}</span></td>
         			#{/if}
         			#{else}
