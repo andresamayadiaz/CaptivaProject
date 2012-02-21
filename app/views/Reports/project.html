@@ -1,0 +1,807 @@
+<html>
+<head>
+	<title>${entity?.Name} - Report</title>
+	<style media="print">
+		body {
+			font-family: sans-serif, Helvetica, Arial;
+		}
+		
+		h1 small {
+			font-size: 20px;
+			color: gray;
+		}
+		
+		.separator20 {
+			margin-top: -15px;
+			border: 0.005em solid gray;	
+		}
+		
+		.projectInfo {
+			border: 0;
+			padding: 0;
+			font-size: 11px;
+		}
+		
+		.projectInfo th {
+			width: 100px;
+		}
+		
+		.milestonesInfo {
+			border: 0;
+			font-size: 12px;		
+		}
+		
+		table {
+			page-break-inside:avoid;
+		}
+		
+		.milestonesInfo th {
+			width: 250px;
+		}
+		
+		.taskList thead th {
+			font-size: 9px;
+		}
+		
+		.taskList tbody td {
+			font-size: 9px;		
+		}
+		
+		.issueList thead th {
+			font-size: 9px;
+		}
+		
+		.issueList tbody td {
+			font-size: 9px;		
+		}
+	</style>
+</head>
+
+<body>
+<h1>
+${entity?.Name}
+<small>${entity?.Description}</small>
+</h1>
+<hr class="separator20" />
+<table class="projectInfo">
+	<tr>
+		<th>Owner:</th>
+		<td>${entity.Owner.fullName} &lt;${entity.Owner.userName}&gt;</td>
+	</tr>
+	<tr>
+		<th>Created:</th>
+		<td>${entity.created.format('yyyy-MM-dd HH:mm:ss')}</td>
+	</tr>
+	<tr>
+		<th>Due Date:</th>
+		<td>${entity.DueDate.format('yyyy-MM-dd')}</td>
+	</tr>
+</table>
+
+<h3>
+Milestones
+</h3>
+<hr class="separator20" />
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+#{list items:entity?.Milestones, as:'milestone'}
+		<table class="milestonesInfo">
+		<tr>
+			<th>${milestone.Name}</th>
+			<td rowspan="3"><strong>Owner</strong>: ${milestone.Owner.fullName}</td>
+			<td style="width:50px;"></td>
+			<td rowspan="3"><strong>Due Date</strong>: ${milestone.DueDate.format('yyyy-MM-dd')}</td>
+		<tr>
+		<tr>
+			<td colspan="4" style="color: gray;">${milestone.Description}</td>
+		</tr>
+		<tr>
+			<td style="font-size:11px"><strong>Tasks</strong></td>
+		</tr>
+		#{if milestone.Tasks.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="taskList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Tasks, as:'task'}
+								<tr>
+									<td>${task.Name}</td>
+									<td>${task.Owner.fullName}</td>
+									<td>${task.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${task.estimated}</td>
+									<td>${task.actual}</td>
+									<td>${task.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No tasks!</td>
+			</tr>
+		#{/else}
+		<tr>
+			<td style="font-size:11px"><strong>Issues</strong></td>
+		</tr>
+		#{if milestone.Issues.size() > 0}
+			<tr>
+				<td colspan="4">
+					<table class="issueList">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Owner</th>
+								<th>Due Date</th>
+								<th>Estimated hrs</th>
+								<th>Actual hrs</th>
+								<th>Is open?</th>
+							</tr>
+						</thead>
+						<tbody>
+							#{list items:milestone.Issues, as:'issue'}
+								<tr>
+									<td>${issue.Name}</td>
+									<td>${issue.Owner.fullName}</td>
+									<td>${issue.DueDate.format('yyyy-MM-dd')}</td>
+									<td>${issue.estimated}</td>
+									<td>${issue.actual}</td>
+									<td>${issue.isOpen}</td>
+								</tr>
+							#{/list}
+						</tbody>
+					</table>
+				<td>
+			</tr>
+		#{/if}
+		#{else}
+			<tr>
+				<td colspan="5" style="font-size: 9px; color: gray;">No issues!</td>
+			</tr>
+		#{/else}
+	</table>
+	<hr style="border: 0.005em solid gray;" />
+#{/list}
+
+</body>
+</html>
