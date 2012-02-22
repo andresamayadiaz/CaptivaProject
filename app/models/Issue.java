@@ -62,12 +62,23 @@ public class Issue extends Model {
     }
 	
 	@PostLoad
-	protected void getActual(){
+	protected void getActual() {
 		Double act = 0.0;
 		for(Time time : this.Times){
 			act += time.time;
 		}
 		this.actual = (double) Math.round((act/60)*100)/100; // round to two decimals
+	}
+	
+	public static Double getTotalHoursTime(java.lang.Long id) {
+		Issue entity = Issue.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Time time : entity.Times) {
+			deltaTime += time.time;
+		}
+		
+		return (double) Math.round((deltaTime/60)*100)/100;
 	}
 	
 	@PostPersist

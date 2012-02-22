@@ -54,14 +54,14 @@
 					<h3>Milestones</h3>
 					<span class="label success">${entity?.Milestones.size()}</span>
 				</div>
-				<div class="span2">
+				<div class="span3">
                     <h3>Actions</h3>
-                    <a href="@{Projects.edit(entity?.id)}">Edit</a><br />
+                    <a class="btn" href="@{Projects.edit(entity?.id)}">Edit</a>
                     #{if entity.isOpen}
-                        <a href="@{Projects.close(entity.id)}" onclick="if (!confirm('Are you sure you want to close this project?')) return false;">Close</a>
+                        <a class="btn info" href="@{Projects.close(entity.id)}" onclick="if (!confirm('Are you sure you want to close this project?')) return false;">Close</a>
                     #{/if}
                     #{else}
-                        <a href="@{Projects.open(entity.id)}" onclick="if (!confirm('Are you sure you want to open this project?')) return false;">Open</a>
+                        <a class="btn info" href="@{Projects.open(entity.id)}" onclick="if (!confirm('Are you sure you want to open this project?')) return false;">Open</a>
                     #{/else}
                 </div>
 			</div>
@@ -124,7 +124,7 @@
         			<td>${milestone?.Description}</td>
         			<td>12</td>
         			<td>8</td>
-        			<td><a href="@{Milestones.close(milestone.id)}">Close</a></td>
+        			<td><a class="btn info" href="@{Milestones.close(milestone.id)}">Close</a></td>
         		</tr>
         		#{/if}
         	#{/list}
@@ -156,7 +156,7 @@
 	        			<td>${milestone?.Description}</td>
 	        			<td>12</td>
 	        			<td>8</td>
-	        			<td><a href="@{Milestones.open(milestone.id)}">Open</a></td>
+	        			<td><a class="btn info" href="@{Milestones.open(milestone.id)}">Open</a></td>
 	        		</tr>
 	        		#{/if}
         		#{/list}

@@ -68,6 +68,54 @@ public class Milestone extends Model {
 		return deltaTime;
 	}
 	
+	public static Double getTotalEstimatedIssuesTime(java.lang.Long id) {
+		Milestone entity = Milestone.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Issue issue : entity.Issues) {
+			deltaTime += issue.estimated;
+		}
+		
+		return deltaTime;
+	}
+	
+	public static Double getTotalActualIssuesTime(java.lang.Long id) {
+		Milestone entity = Milestone.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Issue issue : entity.Issues) {
+			for(Time time : issue.Times) {
+				deltaTime += time.time;
+			}
+		}
+		
+		return (double) Math.round((deltaTime/60)*100)/100; // round to two decimals;
+	}
+	
+	public static Double getTotalEstimatedTasksTime(java.lang.Long id) {
+		Milestone entity = Milestone.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Task issue : entity.Tasks) {
+			deltaTime += issue.estimated;
+		}
+		
+		return deltaTime;
+	}
+	
+	public static Double getTotalActualTasksTime(java.lang.Long id) {
+		Milestone entity = Milestone.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Task issue : entity.Tasks) {
+			for(Time time : issue.Times) {
+				deltaTime += time.time;
+			}
+		}
+		
+		return (double) Math.round((deltaTime/60)*100)/100; // round to two decimals;
+	}
+	
 	@PrePersist
     protected void onCreate() {
 		this.created = new Date(); 

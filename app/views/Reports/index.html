@@ -1,0 +1,89 @@
+#{extends 'main.html' /}
+#{set title:'Reports List' /}
+
+<div class="container-fluid">
+	<div class="sidebar">
+		<div class="well">
+			<h5>Options</h5>
+			<ul>
+				<li><a href="#">My Projects</a></li>
+				<li><a href="#">My Open Tasks</a></li>
+				<li><a href="#">Milestones</a></li>
+				<li><a href="#">Reports</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="content">
+	 	<div class="clearfix">
+	 		#{form @Reports.project(), id:'formProject', method:'GET'}
+	 		<div class="span15">
+	 			<h3>
+	 			Project report
+	 			<small>Generate a project report with milestones, tasks and issues.</small>
+	 			</h3>
+	 			<div class="clearfix">
+		 			<div class="clearfix">
+		 				<label>Project</label>
+		 				<div class="input">
+		 					#{select 'id', items:models.Project.findAll(), valueProperty:'id', labelProperty:'Name', value:'${id}' /}
+		 					<span class="help-inline error">#{error 'id' /}</span>
+		 					<input type="hidden" value="${id}">
+		 				</div>
+		 			</div>
+		 			<div class="clearfix">
+		 				<div class="actions">
+		 					<input type="submit" value="Generate" class="btn" />
+		 				</div>
+		 			</div>
+	 			</div>
+	 		</div>
+	 		#{/form}
+	 		#{form @Reports.projectDetailedByDates(), id:'formProjectDetailedByDates', method:'GET'}
+	 		<div class="span15">
+	 			<h3>
+	 			Project tasks and issues report
+	 			<small>Generate a detailed tasks and issues report by range dates.</small>
+	 			</h3>
+	 			<div class="clearfix">
+	 				<label>Project</label>
+	 				<div class="input">
+	 					#{select 'id', items:models.Project.findAll(), valueProperty:'id', labelProperty:'Name', value:'${id}' /}
+	 					<span class="help-inline error">#{error 'id' /}</span>
+	 				</div>
+	 			</div>
+	 			<div class="clearfix">
+	 				<label>Start date</label>
+	 				<div class="input">
+	 					<input type="text" class="input-small" id="startDate" name="startDate" value="${starDate}" />
+	 					<span class="help-inline error">#{error 'startDate' /}</span>
+	 				</div>
+	 			</div>
+	 			<div class="clearfix">
+	 				<label>Due date</label>
+	 				<div class="input">
+	 					<input type="text" class="input-small" id="dueDate" name="dueDate" value="${dueDate}" />
+	 					<span class="help-inline error">#{error 'dueDate' /}</span>
+	 				</div>
+	 			</div>
+	 			<div class="clearfix">
+	 				<div class="actions">
+	 					<input type="submit" value="Generate" class="btn" />
+	 				</div>
+	 			</div>
+	 		</div>
+	 		#{/form}
+	 	</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$( "#startDate" ).datepicker({
+	dateFormat: 'yy-mm-dd',
+	minDate: new Date()
+});
+
+$( "#dueDate" ).datepicker({
+	dateFormat: 'yy-mm-dd',
+	minDate: new Date()
+});
+</script>

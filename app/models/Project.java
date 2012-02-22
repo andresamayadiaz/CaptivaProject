@@ -86,6 +86,42 @@ public class Project extends Model {
     	mails.projectCreated(this);
     }
     
+    public static Double getTotalHoursTasksTime(java.lang.Long id) {
+    	Project entity = Project.findById(id);
+    	List<Milestone> milestones = Milestone.find("Project = ? AND isOpen = true", entity).fetch();
+    	double deltaTime = 0.0;
+    	
+    	for (Milestone milestone : milestones) {
+    		List<Task> tasks = Task.find("Milestone = ? AND isOpen = true", milestone).fetch();
+    		for (Task task : tasks) {
+    			List<Time> times = Time.find("Task = ?", task).fetch();
+    			for (Time time : times) {
+    				deltaTime += time.time;
+    			}
+    		}
+    	}
+		
+		return (double) Math.round((deltaTime/60)*100)/100;
+    }
+    
+    public static Double getTotalHoursIssuesTime(java.lang.Long id) {
+    	Project entity = Project.findById(id);
+    	List<Milestone> milestones = Milestone.find("Project = ? AND isOpen = true", entity).fetch();
+    	double deltaTime = 0.0;
+    	
+    	for (Milestone milestone : milestones) {
+    		List<Issue> issues = Issue.find("Milestone = ? AND isOpen = true", milestone).fetch();
+    		for (Issue issue : issues) {
+    			List<Time> times = Time.find("Issue = ?", issue).fetch();
+    			for (Time time : times) {
+    				deltaTime += time.time;
+    			}
+    		}
+    	}
+		
+		return (double) Math.round((deltaTime/60)*100)/100;
+    }
+    
     @PostUpdate
     public void updatedNotification(){
     	Mails mails = new Mails();

@@ -93,6 +93,17 @@ public class Task extends Model {
 		this.actual = (double) Math.round((act/60)*100)/100; // round to two decimals
 	}
 	
+	public static Double getTotalHoursTime(java.lang.Long id) {
+		Task entity = Task.findById(id);
+		
+		double deltaTime = 0.0;
+		for (Time time : entity.Times) {
+			deltaTime += time.time;
+		}
+		
+		return (double) Math.round((deltaTime/60)*100)/100;
+	}
+	
 	@PostPersist
     public void createdNotification(){
     	Mails mails = new Mails();

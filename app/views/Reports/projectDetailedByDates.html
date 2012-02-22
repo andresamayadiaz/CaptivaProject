@@ -1,0 +1,299 @@
+<html>
+<head>
+	<title>${entity?.Name} - Report</title>
+	<style media="print">
+		body {
+			font-family: sans-serif, Helvetica, Arial;
+			margin-left: 0;
+		}
+		
+		h1 small {
+			font-weight: 500;
+			font-size: 20px;
+			color: #DBDBDB;
+		}
+		
+		.separator20 {
+			margin-top: -15px;
+			border: 0.005em solid gray;	
+		}
+		
+		.projectInfo {
+			border: 0;
+			padding: 0;
+			font-size: 11px;
+		}
+		
+		.projectInfo th {
+			width: 100px;
+		}
+		
+		.milestonesInfo {
+			border: 0;
+			font-size: 12px;		
+		}
+		
+		table {
+			page-break-inside:avoid;
+		}
+		
+		.milestonesInfo th {
+			width: 220px;
+		}
+		
+		.taskList {
+			width: 680px;
+		}
+		
+		.taskList thead th {
+			font-size: 9px;
+			border: 0.005em solid #E6E6E6;
+		}
+		
+		.taskList tbody td {
+			font-size: 9px;		
+		}
+		
+		.issueList {
+			width: 680px;
+		}
+		
+		.issueList thead th {
+			font-size: 9px;
+			border: 0.005em solid #E6E6E6;
+		}
+		
+		.issueList tbody td {
+			font-size: 9px;
+		}
+		
+		.tmp {
+			width: 680px;
+		}
+		
+		.tmp thead th {
+			font-size: 9px;
+		}
+		
+		.tmp tbody td {
+			font-size: 9px;
+		}
+	</style>
+</head>
+
+<body>
+<h1>
+${entity?.Name}
+<small>${entity?.Description}</small>
+</h1>
+<hr class="separator20" />
+<table class="projectInfo">
+	<tr>
+		<th>Owner:</th>
+		<td>${entity.Owner.fullName} &lt;${entity.Owner.userName}&gt;</td>
+	</tr>
+	<tr>
+		<th>Created:</th>
+		<td>${entity.created.format('yyyy-MM-dd')}</td>
+	</tr>
+	<tr>
+		<th>Due Date:</th>
+		<td>${entity.DueDate.format('yyyy-MM-dd')}</td>
+	</tr>
+	<tr>
+		<th>Status:</th>
+		<td>${entity.isOpen ? 'Open' : 'Closed'}</td>
+	</tr>
+	<tr>
+		<th>Dates range:</th>
+		<td>${startDate.getTime().format('yyyy-MM-dd')}&nbsp;&nbsp;&nbps;to&nbsp;&nbsp;&nbps;${dueDate.getTime().format('yyyy-MM-dd')}</td>
+	</tr>
+</table>
+
+<div>
+	<h3>
+	Tasks
+	</h3>
+	<hr class="separator20" />
+	#{if tasksByRange.size() > 0}
+		%{ taskCounter = 1; }%
+		#{list items:tasksByRange, as:'task'}
+			<table class="milestonesInfo">
+				<tr>
+					<th colspan="4">#${taskCounter} - ${task.Name}</th>
+				</tr>
+				<tr>
+					<td colspan="4" style="color: gray;">${task.Description}</td>
+				</tr>
+				<tr>
+					<td style="min-width: 50px;"><strong>Owner</strong>: ${task.Owner.fullName}</td>
+					<td style="min-width: 50px;"><strong>Created</strong>: ${task.created.format('yyyy-MM-dd')}</td>
+					<td style="min-width: 50px;"><strong>Due Date</strong>: ${task.DueDate.format('yyyy-MM-dd')}</td>
+					<td style="min-width: 50px;"><strong>Status</strong>: ${task.isOpen ? 'Open' : 'Closed'}</td>
+				</tr>
+				<tr>
+					<td colspan="4" style="height:10px;"></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="font-size:11px"><strong>Times</strong></td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<table class="taskList">
+							<thead>
+								<tr>
+									<th style="min-width: 100px">Created</th>
+									<th style="min-width: 100px">Owner</th>
+									<th style="min-width: 150px">Comment</th>								
+									<th style="min-width: 10px">Hrs</th>
+								</tr>
+							</thead>
+							<tbody>
+								%{
+									tasksTimeList = models.Time.find("Task = ?", task).fetch();
+								}%
+								#{list items:tasksTimeList, as:'time'}
+									<tr>
+										<td>${time.created.format('yyyy-MM-dd')}</td>
+										<td>${time.createdBy.fullName}</td>
+										<td>${time.comment}</td>
+										<td>${(double)Math.round((time.time/60)*100)/100}</td>
+									</tr>
+								#{/list}
+								<tr>
+									<td colspan="3"></td>
+									<td><strong style="border-bottom:0.005em solid gray;">${models.Task.getTotalHoursTime(task.id)}</strong></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<hr style="border: 0.005em solid gray;" />
+			%{ taskCounter++; }%
+		#{/list}
+		<table class="milestonesInfo">
+			<tr>
+			<td colspan="4"
+			</tr>
+			<tr>
+				<td>
+					<table class="tmp">
+					<thead>
+						<tr>
+							<th style="min-width: 100px"></th>
+							<th style="min-width: 100px"></th>
+							<th style="min-width: 150px"></th>								
+							<th style="min-width: 10px">Total hrs.</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="3" style="background: #E6E6E6;"></td>
+							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursTasksTime(entity.id)}</strong></td>
+						</tr>
+					</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	#{/if}
+	#{else}
+		<span style="width: 680px; font-size: 9px; color: gray;">No tasks!</span>
+	#{/else}
+</div>
+<div id="issues">
+	<h3>
+	Issues
+	</h3>
+	<hr class="separator20" />
+	#{if issuesByRange.size() > 0}
+		%{ issueCounter = 1; }%
+		#{list items:issuesByRange, as:'issue'}
+			<table class="milestonesInfo">
+				<tr>
+					<th colspan="4">#${issueCounter} - ${issue.Name}</th>
+				</tr>
+				<tr>
+					<td colspan="4" style="color: gray;">${issue.Description}</td>
+				</tr>
+				<tr>
+					<td style="min-width: 50px;"><strong>Owner</strong>: ${issue.Owner.fullName}</td>
+					<td style="min-width: 50px;"><strong>Created</strong>: ${issue.created.format('yyyy-MM-dd')}</td>
+					<td style="min-width: 50px;"><strong>Due Date</strong>: ${issue.DueDate.format('yyyy-MM-dd')}</td>
+					<td style="min-width: 50px;"><strong>Status</strong>: ${issue.isOpen ? 'Open' : 'Closed'}</td>
+				</tr>
+				<tr>
+					<td colspan="4" style="height:10px;"></td>
+				</tr>
+				<tr>
+					<td colspan="4" style="font-size:11px"><strong>Times</strong></td>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<table class="issueList">
+							<thead>
+								<tr>
+									<th style="min-width: 100px">Created</th>
+									<th style="min-width: 100px">Owner</th>
+									<th style="min-width: 150px">Comment</th>								
+									<th style="min-width: 10px">Hrs</th>
+								</tr>
+							</thead>
+							<tbody>
+								%{
+									issuesTimeList = models.Time.find("Issue = ?", issue).fetch();
+								}%
+								#{list items:issuesTimeList, as:'time'}
+									<tr>
+										<td>${time.created.format('yyyy-MM-dd')}</td>
+										<td>${time.createdBy.fullName}</td>
+										<td>${time.comment}</td>
+										<td>${(double)Math.round((time.time/60)*100)/100}</td>
+									</tr>
+								#{/list}
+								<tr>
+									<td colspan="3"></td>
+									<td><strong style="border-bottom:0.005em solid gray;">${models.Issue.getTotalHoursTime(issue.id)}</strong></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<hr style="border: 0.005em solid gray;" />
+			%{ taskCounter++; }%
+		#{/list}
+		<table class="milestonesInfo">
+			<tr>
+			<td colspan="4"
+			</tr>
+			<tr>
+				<td>
+					<table class="tmp">
+					<thead>
+						<tr>
+							<th style="min-width: 100px"></th>
+							<th style="min-width: 100px"></th>
+							<th style="min-width: 150px"></th>								
+							<th style="min-width: 10px">Total hrs.</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="3" style="background: #E6E6E6;"></td>
+							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursIssuesTime(entity.id)}</strong></td>
+						</tr>
+					</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	#{/if}
+	#{else}
+		<span style="font-size: 9px; color: gray;">No issues!</span>
+	#{/else}
+</div>
+
+</body>
+</html>

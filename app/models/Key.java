@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import javax.persistence.*;
 
+import play.data.validation.MaxSize;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -22,7 +23,7 @@ public class Key extends Model {
 	public String name;
 	
 	@Required
-	@Column(length=1000) 
+	@MaxSize(1000)
 	public String sshkey;
 	
 	@ManyToOne

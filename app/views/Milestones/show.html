@@ -1,10 +1,15 @@
 #{extends 'main.html' /}
 #{set title:'Milestone Show' /}
-<script src="@{'/public/javascripts/jquery.jqplot.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/plugins/jqplot.dateAxisRenderer.js'}" type="text/javascript" charset="${_response_encoding}"></script>
-<script src="@{'/public/javascripts/bootstrap-tabs.js'}" type="text/javascript" charset="${_response_encoding}"></script>
 
-<link href="@{'/public/stylesheets/jquery.jqplot.min.css'}" rel="stylesheet">
+#{set 'moreStyles'}
+	#{stylesheet 'jquery.jqplot.min.css' /}
+#{/set}
+
+#{set 'moreScripts'}
+    #{script 'jquery.jqplot.min.js' /}
+    #{script 'plugins/jqplot.dateAxisRenderer.js' /}
+    #{script 'bootstrap-tabs.js' /}
+#{/set}
 
 <div class="container-fluid">
     <div class="sidebar">
