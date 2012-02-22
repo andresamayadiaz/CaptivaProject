@@ -2,13 +2,25 @@
 <classpath>
 	<classpathentry excluding="views/**" kind="src" path="app"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="src" path="secure"/>
+	<classpathentry kind="src" path="pdf-0.9"/>
 	<classpathentry kind="src" path="scaffold-0.1"/>
+	<classpathentry kind="src" path="secure"/>
 	
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\framework\play-1.2.4.jar" sourcepath="D:/workspace/frameworks/java/play/play-1.2.4/framework/src" />
+	<classpathentry kind="lib" path="D:\Workspace\Proyectos\Trabajo\Java\Play\CaptivaProject\lib\itextpdf-5.1.3.jar"/>
 	<classpathentry kind="lib" path="D:\Workspace\Proyectos\Trabajo\Java\Play\CaptivaProject\lib\jsch-0.1.44-1.jar"/>
 	<classpathentry kind="lib" path="D:\Workspace\Proyectos\Trabajo\Java\Play\CaptivaProject\lib\org.eclipse.jgit-1.2.0.201112221803-r.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\core-renderer.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\itext-2.1.7.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\jaxen-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\play-pdf.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\shani-parser-v1.4.17.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\xml-apis.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\yahp-internal.jar"/>
+	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\modules\pdf-0.9\lib\yahp.jar"/>
 	<classpathentry kind="lib" path="D:\Workspace\Proyectos\Trabajo\Java\Play\CaptivaProject\modules\scaffold-0.1\lib\play-scaffold.jar"/>
 	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\framework\lib\activation-1.1.1.jar"/>
 	<classpathentry kind="lib" path="D:\Workspace\Frameworks\Java\Play\play-1.2.4\framework\lib\antlr-2.7.6.jar"/>
