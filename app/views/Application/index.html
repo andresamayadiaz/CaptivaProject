@@ -1,6 +1,94 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-Welcome ${user}!<br />
-Pagina Application.index<br />
-<a href="@{Secure.logout()}">Log out</a>
+<div class="container-fluid">
+	<div class="sidebar">
+		<div class="well">
+			<h5>Options</h5>
+			<ul>
+				<li><a href="#">My Projects</a></li>
+				<li><a href="#">My Open Tasks</a></li>
+				<li><a href="#">Milestones</a></li>
+				<li><a href="#">Reports</a></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="content">
+		<div class="well">
+				<h2>Open tasks</h2>
+			</div>
+		<div class="row">
+			<div class="span18">
+				<table class="bordered-table zebra-striped">
+		            <thead>
+		              <tr>
+		              	<th>Project</th>
+		                <th>Name</th>
+		                <th>Description</th>
+		                <th>Due Date</th>
+		                <th>Owner</th>
+		                <th>Status</th>
+		                <th>Actions</th>
+		              </tr>
+		            </thead>
+		            <tbody>
+		                #{list items:tasks, as:'task'}
+		                    <tr>
+		                    	<td>${task.Milestone.Project.Name}</td>
+		                        <td><a href="@{Tasks.show(task.id)}">${task.Name}</a></td>
+		                        <td>${task.Description}</td>
+		                        <td>${task.DueDate.format("yyyy-MM-dd")}</td>
+		                        <td>${task.Owner.fullName}</td>
+		                        <td><span class="label success">Open</span></td>
+		                        <td style="text-align: center;">
+		                            <a href="@{Tasks.edit(task.id)}" class="btn">Edit</a>
+		                            <a href="@{Tasks.close(task.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
+		                            <a href="@{Tasks.delete(task.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+		                        </td>
+		                    </tr>
+		                #{/list}
+		            </tbody>
+	        	</table>
+			</div>
+		</div>
+		
+		<div class="well">
+				<h2>Open issues</h2>
+			</div>
+		<div class="row">
+			<div class="span18">
+				<table class="bordered-table zebra-striped">
+		            <thead>
+		              <tr>
+		              	<th>Project</th>
+		                <th>Name</th>
+		                <th>Description</th>
+		                <th>Due Date</th>
+		                <th>Owner</th>
+		                <th>Status</th>
+		                <th>Actions</th>
+		              </tr>
+		            </thead>
+		            <tbody>
+		                #{list items:issues, as:'issue'}
+		                    <tr>
+		                    	<td>${issue.Milestone.Project.Name}</td>
+		                        <td><a href="@{Issues.show(issue.id)}">${issue.Name}</a></td>
+		                        <td>${issue.Description}</td>
+		                        <td>${issue.DueDate.format("yyyy-MM-dd")}</td>
+		                        <td>${issue.Owner.fullName}</td>
+		                        <td><span class="label success">Open</span></td>
+		                        <td style="text-align: center;">
+		                            <a href="@{Issues.edit(issue.id)}" class="btn">Edit</a>
+		                            <a href="@{Issues.close(issue.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
+		                            <a href="@{Issues.delete(issue.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
+		                        </td>
+		                    </tr>
+		                #{/list}
+		            </tbody>
+	        	</table>
+			</div>
+		</div>
+	</div>
+</div>

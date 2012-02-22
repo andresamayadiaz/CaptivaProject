@@ -2,8 +2,9 @@ package controllers;
 
 import java.util.List;
 
-import models.Key;
 import models.Repository;
+import models.SSHKey;
+import models.SSHKey.SshKeyException;
 import models.StatusJson;
 import models.User;
 import play.mvc.Controller;
@@ -54,9 +55,9 @@ public class Api extends Controller {
         try {
             user.addKey(name, key);
             user.save();
-            Key.authorizedKeysGenerator.now();
+            SSHKey.authorizedKeysGenerator.now();
             renderJSON(new StatusJson(200, "ADDED"));
-        } catch (Key.SshKeyException e) {
+        } catch (SshKeyException e) {
             renderJSON(new StatusJson(500, e.getMessage()));
         }
     }
@@ -66,7 +67,7 @@ public class Api extends Controller {
         if(user == null){
         	renderJSON(new StatusJson(500, "apiKey not Found"));
         }
-        final Key key = Key.find("byName", name).first();
+        final SSHKey key = SSHKey.find("byName", name).first();
         if(key == null){
         	renderJSON(new StatusJson(500, "key not found"));
         }
@@ -77,7 +78,7 @@ public class Api extends Controller {
         final User user = User.find("byApikey", apikey).first();
         user.sshkeys.remove(uuid);
         user.save();
-        Key.authorizedKeysGenerator.now();
+        SSHKey.authorizedKeysGenerator.now();
         renderJSON(new StatusJson(200, "DELETED"));
     }
 }

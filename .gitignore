@@ -1,9 +1,9 @@
-tmp
-eclipse
-.settings
-.project
+tmp/
+eclipse/
+.settings/
+.project/
 .DS_Store
 .classpath
-precompiled
-bin
-data
+precompiled/
+bin/
+data/

@@ -26,7 +26,7 @@
         <div class="row span16">
         	<h2>SSH Keys</h2>
         	<div class="row">
-        		#{form @Keys.add(), id:'profileForm'}
+        		#{form @SSHKeys.add(), id:'profileForm'}
         			<div class="clearfix">
 	        			<label for="keyName">Key Name</label>
 	                    <div class="input">
@@ -68,7 +68,7 @@
 	                               <textarea class="xxlarge" rows="5" readonly="readonly">${entry.sshkey}</textarea>
 	                           </td>
 	                           <td>
-	                               <p><a href="@{Keys.delete(entry.id)}" class="btn">Delete</a></p>
+	                               <p><a href="@{SSHKeys.delete(entry.id)}" class="btn">Delete</a></p>
 	                           </td>
 	                       </tr>
                    		#{/list}

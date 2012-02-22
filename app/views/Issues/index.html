@@ -16,7 +16,7 @@
  <div class="content">
    <!-- Example row of columns -->
     <div class="row">
-      <div class="span16">
+      <div class="span18">
         <h2>Issues List</h2>
         <div class="row">
             #{form @Issues.index(), id:'filter'}
@@ -61,8 +61,7 @@
                         		<span class="label error">Closed</span>
                         	#{/else}
                         </td>
-                        <td>
-                            <a href="@{Issues.show(entity.id)}" class="btn">Show</a>
+                        <td style="text-align: center;">
                             <a href="@{Issues.edit(entity.id)}" class="btn">Edit</a>
                             #{if entity.isOpen}
                                 <a href="@{Issues.close(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>

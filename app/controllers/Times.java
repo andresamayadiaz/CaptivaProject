@@ -5,6 +5,7 @@ import java.util.List;
 import models.Milestone;
 import models.Time;
 import models.User;
+import play.Logger;
 import play.mvc.Controller;
 import play.i18n.Messages;
 import play.data.validation.Validation;

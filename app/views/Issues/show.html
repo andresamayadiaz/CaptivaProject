@@ -8,6 +8,7 @@
 #{set 'moreScripts'}
 	#{script 'jquery.jqplot.min.js' /}
 	#{script 'plugins/jqplot.dateAxisRenderer.js' /}
+	#{script 'bootstrap-tabs.js' /}
 #{/set}
 
 <div class="container-fluid">
@@ -80,73 +81,22 @@
         </div>
         END ISSUE GRAPH -->
         
-        <div class="row">
-	        <!-- Issue Comments -->
-	        <div class="span8 border">
-	           <h3>Comments</h3>
-	           <p class="pull-right"><a href="#" data-controls-modal="new-comment-modal" data-backdrop="true">Add Comment</a></p>
-		           <div id="new-comment-modal" class="modal hide fade in" >
-	                <div class="modal-header">
-	                    <a href="#" class="close">×</a>
-	                    <h3>New Comment</h3>
-	                </div>
-	                #{form @Comments.save(), id:'createCommentForm'}
-	                <div class="modal-body">
-	                    <p>
-	                        #{include 'Comments/_formModal.html' /}
-	                    </p>
-	                </div>
-	                <div class="modal-footer">
-	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Comment">
-	                    <script type="text/javascript">
-	                    	$(document).ready(function(){
-							    $("#createCommentForm").validate({
-							    	submitHandler: function(form) {
-									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
-									 }
-							    });
-							  });
-	                    </script>
-	                </div>
-	                #{/form}
-	            </div>
-	           <table class="bordered-table zebra-striped">
-	               <thead>
-                       <tr>
-                           <th>User</th>
-                           <th>Date</th>
-                           <th>Comment</th>
-                       </tr>
-                   </thead>
-	               <tbody>
-	                   #{list items:entity?.Comments, as:'comment'}
-	                       <tr>
-	                           <td>
-	                               <p>${comment?.createdBy.fullName}</p>
-	                           </td>
-	                           <td>
-	                               <p>${comment?.created?.format('yyyy-MM-dd')}</p>
-	                           </td>
-	                           <td>
-	                               <p>${comment?.comment}</p>
-	                           </td>
-	                       </tr>
-	                   #{/list}
-	               </tbody>
-	           </table>
-	        </div>
-	        <!-- End Issue Comments -->
-	        <!-- Issue Times -->
-	        <div class="span8">
-	           <h3>Time Registry</h3>
-	           <p class="pull-right"><a href="#" data-controls-modal="new-time-modal" data-backdrop="static">Add Time</a></p>
-	           <div id="new-time-modal" class="modal hide fade in" >
-	                <div class="modal-header">
-	                    <a href="#" class="close">×</a>
+        <ul class="tabs" data-tabs="tabs">
+        	<li class="active"><a href="#times">Times</a></li>
+        	<li><a href="#comments">Comments</a></li>
+        </ul>
+        
+        <div class="tab-content">
+        	<!-- TIMES -->
+        	<div class="active" id="times">
+        		<h3>Time Registry</h3>
+	           	<p class="pull-right"><a href="#" data-controls-modal="new-time-modal" data-backdrop="static">Add Time</a></p>
+	           	<div id="new-time-modal" class="modal hide fade in" >
+					<div class="modal-header">
+	                	<a href="#" class="close">×</a>
 	                    <h3>Add Time</h3>
 	                </div>
-	                #{form @Times.save(), id:'createIssueForm'}
+	                #{form @Times.save(), id:'createTaskForm'}
 	                <div class="modal-body">
 	                    <p>
 	                        #{include 'Times/_formModal.html' /}
@@ -156,7 +106,7 @@
 	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Time">
 	                    <script type="text/javascript">
 	                    	$(document).ready(function(){
-							    $("#createIssueForm").validate({
+							    $("#createTaskForm").validate({
 							    	submitHandler: function(form) {
 									   $("#submitBtn").attr("disabled", true);
 									   $(form).submit();
@@ -166,14 +116,14 @@
 	                    </script>
 	                </div>
 	                #{/form}
-	            </div>
-	           <table class="zebra-striped condensed-table">
+				</div>
+				<table class="bordered-table zebra-striped">
 	               <thead>
 	                   <tr>
 	                       <th>User</th>
 	                       <th>Date</th>
 	                       <th>Comment</th>
-	                       <th>Time</th>
+	                       <th>Time (mins)</th>
 	                   </tr>
 	               </thead>
                    <tbody>
@@ -195,10 +145,66 @@
                    		#{/list}
                    </tbody>
                </table>
-            </div>
-	        <!-- End Issue Times -->
+        	</div>
+        	<!-- END TASKS -->
+        	<!-- COMMENTS -->
+        	<div id="comments">
+    			<h3>Comments</h3>
+    			<p class="pull-right"><a href="#" data-controls-modal="new-comment-modal" data-backdrop="true">Add Comment</a></p>
+	           	<div id="new-comment-modal" class="modal hide fade in" >
+               		<div class="modal-header">
+						<a href="#" class="close">X</a>
+                    	<h3>New Comment</h3>
+                	</div>
+                	#{form @Comments.save(), id:'createCommentForm'}
+                	<div class="modal-body">
+	                    <p>
+	                        #{include 'Comments/_formModal.html' /}
+	                    </p>
+                	</div>
+	                <div class="modal-footer">
+	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Comment">
+	                    <script type="text/javascript">
+	                    	$(document).ready(function(){
+							    $("#createCommentForm").validate({
+							    	submitHandler: function(form) {
+									   $("#submitBtn").attr("disabled", true);
+									   $(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
+	                </div>
+                	#{/form}
+           		</div>
+	           	<table class="bordered-table zebra-striped">
+	            	<thead>
+	                	<tr>
+	                    	<th>User</th>
+	                       	<th>Date</th>
+	                       	<th>Comment</th>
+	                   	</tr>
+	               	</thead>
+	               	<tbody>
+	                	#{list items:entity?.Comments, as:'comment'}
+	                      	<tr>
+								<td>
+	                            	<p>${comment?.createdBy.fullName}</p>
+	                           	</td>
+	                           	<td>
+	                            	<p>${comment?.created?.format('yyyy-MM-dd')}</p>
+	                           	</td>
+	                           	<td>
+	                               	<p>${comment?.comment}</p>
+	                           	</td>
+	                       	</tr>
+	                   	#{/list}
+	               	</tbody>
+	           	</table>
+        	</div>
+        	<!-- END COMMENTS -->
         </div>
-        <!-- END ISSUES -->
+        
     </div>
 </div>
 <script type="text/javascript">

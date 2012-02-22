@@ -1,6 +1,6 @@
 package jobs;
 
-import models.Key;
+import models.SSHKey;
 import models.User;
 import play.Logger;
 import play.jobs.Job;
@@ -54,7 +54,7 @@ public class AuthorizedKeysGenerator extends Job {
             
             for (User user : users ) {
                 String command = "command=\"$HOME/gitaccess " + user.userName + "\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty";
-                for (Key entry : user.sshkeys) {
+                for (SSHKey entry : user.sshkeys) {
                     bufferedWriter.append(command);
                     bufferedWriter.append(' ');
                     bufferedWriter.append(entry.sshkey); // verify value

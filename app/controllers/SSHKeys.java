@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Key;
+import models.SSHKey;
 import models.User;
 import play.data.validation.Required;
 import play.mvc.Controller;
@@ -14,13 +14,13 @@ import controllers.Security;
  */
 @With(Security.class)
 @Check("any")
-public class Keys extends BaseController {
+public class SSHKeys extends BaseController {
 	
     public static void delete(java.lang.Long id) {
-    	Key entity = Key.findById(id);
+    	SSHKey entity = SSHKey.findById(id);
     	notFoundIfNull(entity);
     	entity.delete();
-        Key.authorizedKeysGenerator.now();
+    	SSHKey.authorizedKeysGenerator.now();
         Users.profile();
     }
     
@@ -30,9 +30,9 @@ public class Keys extends BaseController {
         try {
         	user.addKey(keyName, key);
             //user.save();
-            Key.authorizedKeysGenerator.now();
+        	SSHKey.authorizedKeysGenerator.now();
             Users.profile();
-        } catch (Key.SshKeyException e) {
+        } catch (SSHKey.SshKeyException e) {
             error(500, e.getMessage());
         }
     }

@@ -31,7 +31,7 @@ public class User extends Model {
     public boolean isAdmin;
 	
 	@OneToMany (mappedBy="User")
-	public List<Key> sshkeys;
+	public List<SSHKey> sshkeys;
 	
 	public User(String userName, String fullName, String password, boolean isAdmin)
 	{
@@ -50,10 +50,10 @@ public class User extends Model {
         return find("byUserName", userName).first();
     }
 	
-	public void addKey(String name, String keyString) throws Key.SshKeyException {
-        Key key = new Key();
+	public void addKey(String name, String keyString) throws SSHKey.SshKeyException {
+		SSHKey key = new SSHKey();
         key.name = name;
-        key.sshkey = Key.extractKey(keyString);
+        key.sshkey = SSHKey.extractKey(keyString);
         key.User = this;
         key.save();
         //sshkeys.put(UUID.randomUUID().toString(), key);
