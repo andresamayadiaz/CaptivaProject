@@ -36,6 +36,7 @@
         <table class="bordered-table zebra-striped">
             <thead>
               <tr>
+              	<th>Project</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Due Date</th>
@@ -47,7 +48,8 @@
             <tbody>
                 #{list items:entities, as:'entity'}
                     <tr>
-                        <td>${entity.Name}</td>
+                    	<td>${entity.Milestone.Project.Name}</td>
+                        <td><a href="@{Tasks.show(entity.id)}">${entity.Name}</a></td>
                         <td>${entity.Description}</td>
                         <td>${entity.DueDate.format("yyyy-MM-dd")}</td>
                         <td>${entity.Owner.fullName}</td>

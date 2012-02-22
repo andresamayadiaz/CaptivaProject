@@ -4,10 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.collections.list.TreeList;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.lib.*;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.gitective.core.CommitFinder;
+import org.gitective.core.CommitUtils;
+import org.gitective.core.TreeUtils;
+import org.gitective.core.filter.commit.CommitListFilter;
+
+import com.google.gson.Gson;
 
 import models.Issue;
 import models.Repository;
@@ -39,11 +47,19 @@ public class Repositories extends BaseController {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
 			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();
 			
-			RevWalk walk = new RevWalk(repo);
-			Logger.info("Walk: %s", walk.toString());
-			for (RevCommit commit : walk) {
-				// extract the commit fields you need, for example:
-				Logger.info("commit: %s", commit.toString());
+			// Get Last Commit
+			RevCommit latestCommit = CommitUtils.getHead(repo);
+			Logger.info("LAST COMMIT: %s, Message: %s", latestCommit.name(), latestCommit.getFullMessage());
+			
+			// Get All Commits
+			CommitListFilter filter = new CommitListFilter();
+			CommitFinder service = new CommitFinder(repo);
+			service.setFilter(filter);
+			service.find();
+			for(RevCommit commit : filter.getCommits()){
+				Logger.info("Commit: %s, Message: %s", commit.name(), commit.getFullMessage());
+				//RevTree tree = commit.getTree();
+				//Logger.info("Tree: %s", new Gson().toJson(tree));
 			}
 			
 		} catch (IOException e) {
@@ -62,7 +78,7 @@ public class Repositories extends BaseController {
 		} catch (Repository.RepositoryException e) {
 			error(500, e.getMessage());
 		}
-        Application.index();
+        index();
     }
 	
 	@Check("admin")
