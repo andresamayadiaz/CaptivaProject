@@ -10,13 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by IntelliJ IDEA.
- * User: mush
- * Date: 7/31/11
- * Time: 3:18 PM
- * To change this template use File | Settings | File Templates.
- */
 public class AuthorizedKeysGenerator extends Job {
     private final static File sshFolder = new File(System.getProperty("user.home"), ".ssh");
     private static final String HEADER = "# Captiva Project";

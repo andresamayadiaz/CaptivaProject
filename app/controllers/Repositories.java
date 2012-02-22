@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.lib.*;
+import org.gitective.core.CommitUtils;
+
+import com.google.gson.Gson;
 
 import models.Issue;
 import models.Repository;
@@ -39,12 +40,9 @@ public class Repositories extends BaseController {
 			FileRepositoryBuilder builder = new FileRepositoryBuilder();
 			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();
 			
-			RevWalk walk = new RevWalk(repo);
-			Logger.info("Walk: %s", walk.toString());
-			for (RevCommit commit : walk) {
-				
-				Logger.info("commit: %s", commit.toString());
-			}
+			RevCommit latestCommit = CommitUtils.getHead(repo);
+			Logger.info("LAST COMMIT: %s", latestCommit.name());
+			
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -62,7 +60,7 @@ public class Repositories extends BaseController {
 		} catch (Repository.RepositoryException e) {
 			error(500, e.getMessage());
 		}
-        Application.index();
+        index();
     }
 	
 	@Check("admin")
