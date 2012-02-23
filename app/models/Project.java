@@ -46,6 +46,8 @@ public class Project extends Model {
 	@Transient
 	public int totalIssues;
 	
+	public Date ClosedDate;
+	
 	@PrePersist 
     protected void onCreate() { 
             created = new Date(); 
@@ -88,11 +90,11 @@ public class Project extends Model {
     
     public static Double getTotalHoursTasksTime(java.lang.Long id) {
     	Project entity = Project.findById(id);
-    	List<Milestone> milestones = Milestone.find("Project = ? AND isOpen = true", entity).fetch();
+    	List<Milestone> milestones = Milestone.find("Project = ?", entity).fetch();
     	double deltaTime = 0.0;
     	
     	for (Milestone milestone : milestones) {
-    		List<Task> tasks = Task.find("Milestone = ? AND isOpen = true", milestone).fetch();
+    		List<Task> tasks = Task.find("Milestone = ?", milestone).fetch();
     		for (Task task : tasks) {
     			List<Time> times = Time.find("Task = ?", task).fetch();
     			for (Time time : times) {
@@ -106,11 +108,11 @@ public class Project extends Model {
     
     public static Double getTotalHoursIssuesTime(java.lang.Long id) {
     	Project entity = Project.findById(id);
-    	List<Milestone> milestones = Milestone.find("Project = ? AND isOpen = true", entity).fetch();
+    	List<Milestone> milestones = Milestone.find("Project = ?", entity).fetch();
     	double deltaTime = 0.0;
     	
     	for (Milestone milestone : milestones) {
-    		List<Issue> issues = Issue.find("Milestone = ? AND isOpen = true", milestone).fetch();
+    		List<Issue> issues = Issue.find("Milestone = ?", milestone).fetch();
     		for (Issue issue : issues) {
     			List<Time> times = Time.find("Issue = ?", issue).fetch();
     			for (Time time : times) {
@@ -120,6 +122,17 @@ public class Project extends Model {
     	}
 		
 		return (double) Math.round((deltaTime/60)*100)/100;
+    }
+    
+    public void closeProject() {
+    	this.isOpen = false;
+    	this.ClosedDate = new Date();
+    	
+    	for (Milestone milestone : this.Milestones) {
+    		milestone.closeMilestone();
+    	}
+    	
+    	this.save();
     }
     
     @PostUpdate

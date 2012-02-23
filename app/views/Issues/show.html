@@ -31,7 +31,8 @@
                 <li>Issues<span class="divider">/</span></li>
                 <li>${entity.Name}</li>
             </ul>
-            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
+            <h1>${entity.Name}</h1>
+            <small style="font-size: 15px; color: #BFBFBF">${entity?.Description}</small>
         </div>
             <div class="row">
                 <div class="span2">
@@ -63,9 +64,15 @@
                     <h3>Actual (hrs)</h3>
                     <span class="label">${entity.actual}</span>
                 </div>
-                <div class="span2">
+                <div class="span3">
                     <h3>Actions</h3>
                     <a class="btn" href="@{Issues.edit(entity?.id)}">Edit</a>
+                    #{if entity.isOpen}
+                        <a href="@{Issues.close(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to close this record?')) return false;">Close</a>
+                    #{/if}
+                    #{else}
+                        <a href="@{Issues.open(entity.id)}" class="btn info"  onclick="if (!confirm('Are you sure you want to open this record?')) return false;">Open</a>
+                    #{/else}
                 </div>
             </div>
         <div class="clearfix"></div>
@@ -104,12 +111,14 @@
 	                </div>
 	                <div class="modal-footer">
 	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Time">
+	                    <p class="pull-right"><img id="loading" src="@{'/public/images/loading-0.gif'}" alt="Trabajando..." style="display: none;" /></p>
 	                    <script type="text/javascript">
 	                    	$(document).ready(function(){
 							    $("#createTaskForm").validate({
 							    	submitHandler: function(form) {
-									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
+							    		$('#loading').css("display", "block");
+									   	$("#submitBtn").attr("disabled", true);
+									   	$(form).submit();
 									 }
 							    });
 							  });

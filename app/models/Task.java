@@ -115,6 +115,12 @@ public class Task extends Model {
     	Mails mails = new Mails();
     	mails.taskUpdated(this);
     }
+    
+    public void closeTask() {
+    	this.isOpen = false;
+    	this.ClosedDate = new Date();
+    	this.save();
+    }
 	
 	public String toString(){
 		return Name;

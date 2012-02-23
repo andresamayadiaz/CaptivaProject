@@ -46,6 +46,8 @@ public class Milestone extends Model {
 	
 	public Date created;
 	
+	public Date ClosedDate;
+	
 	public static Double totalPlannedTime(java.lang.Long id){
 		
 		Milestone entity = Milestone.findById(id);
@@ -130,6 +132,21 @@ public class Milestone extends Model {
 		List<Issue> issues = Issue.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
 		return issues;
 	}
+	
+	public void closeMilestone() {
+    	this.isOpen = false;
+    	this.ClosedDate = new Date();
+    	
+    	for(Task task : this.Tasks) {
+    		task.closeTask();
+    	}
+    	
+    	for(Issue issue : this.Issues) {
+    		issue.closeIssue();
+    	}
+    	
+    	this.save();
+    }
 	
 	public String toString(){
 		return Name;

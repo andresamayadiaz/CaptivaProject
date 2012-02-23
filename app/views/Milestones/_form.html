@@ -48,7 +48,7 @@
             #{field 'entity.Owner.id'}
             <label for="${field.name}">Owner</label>
             <div class="input">
-                #{select 'entity.Owner.id', items:owners, valueProperty:'id', labelProperty:'fullName', class:"normalSelect", id:'owner' /}
+                #{select 'entity.Owner.id', items:owners, valueProperty:'id', labelProperty:'fullName', class:"normalSelect", id:'owner', value:entity.Owner.id /}
                 <span class="help-inline error">#{error 'entity.Owner' /}</span>
             </div>
             #{/field}

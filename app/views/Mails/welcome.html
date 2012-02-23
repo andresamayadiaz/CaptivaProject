@@ -1,8 +1,11 @@
 #{extends 'Mails/layout.html' /}
-			<h1>Captiva Project RC1</h1>
-			<p>
-			    Hello ${user.fullName}, welcome to <b>Captiva Project RC1</b>.
-			</p>
-			<p>
-				To login click <a href="@@{Application.index()}">this link</a>
-			</p>
+<h1>Captiva Project RC1</h1>
+<p>
+    Hello ${user.fullName}, welcome to <b>Captiva Project RC1</b>.
+</p>
+<p>
+    Your password is: ${user.password}
+</p>
+<p>
+	To login click <a href="@@{Application.index()}">this link</a>
+</p>

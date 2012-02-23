@@ -29,7 +29,8 @@
         		<li><a href="@{Projects.show(entity.Project?.id)}">${entity.Project?.Name}</a><span class="divider">/</span></li>
         		<li>${entity.Name}</li>
         	</ul>
-            <h1>${entity.Name}&nbsp;&nbsp;<small>${entity?.Description}</small></h1>
+            <h1>${entity.Name}</h1>
+            <small style="font-size: 15px; color: #BFBFBF">${entity?.Description}</small>
         </div>
 			<div class="row">
 				<div class="span2">
@@ -61,14 +62,14 @@
 					<h3>Tasks</h3>
 					<span class="label success">${entity?.Tasks.size()}</span>
 				</div>
-				<div class="span2">
+				<div class="span3">
                     <h3>Actions</h3>
-                    <a href="@{Milestones.edit(entity?.id)}">Edit</a><br />
+                    <a class="btn" href="@{Milestones.edit(entity?.id)}">Edit</a>
                     #{if entity.isOpen}
-                        <a href="@{Milestones.close(entity.id)}" onclick="if (!confirm('Are you sure you want to close this milestone?')) return false;">Close</a>
+                        <a class="btn info" href="@{Milestones.close(entity.id)}" onclick="if (!confirm('Are you sure you want to close this milestone?')) return false;">Close</a>
                     #{/if}
                     #{else}
-                        <a href="@{Milestones.open(entity.id)}" onclick="if (!confirm('Are you sure you want to open this milestone?')) return false;">Open</a>
+                        <a class="btn info" href="@{Milestones.open(entity.id)}" onclick="if (!confirm('Are you sure you want to open this milestone?')) return false;">Open</a>
                     #{/else}
                 </div>
 			</div>
@@ -102,7 +103,7 @@
 		              		<a href="#" class="close">×</a>
 		              		<h3>Add Task</h3>
 		            	</div>
-		            	#{form @Tasks.save(), id:'createForm'}
+		            	#{form @Tasks.save(), id:'createTaskForm'}
 		            	<div class="modal-body">
 		            		<p>
 		            			#{include 'Tasks/_formModal.html' /}
@@ -110,17 +111,19 @@
 		            	</div>
 		            	<div class="modal-footer">
 		              		<input id="submitBtn" type="submit" class="btn primary" value="Save Task">
+		              		<p class="pull-right"><img id="loadingTask" src="@{'/public/images/loading-0.gif'}" alt="Trabajando..." style="display: none;" /></p>
 		            	</div>
 		            	<script type="text/javascript">
-			                    	$(document).ready(function(){
-									    $("#createForm").validate({
-									    	submitHandler: function(form) {
-											   $("#submitBtn").attr("disabled", true);
-											   $(form).submit();
-											 }
-									    });
-									  });
-			                    </script>
+	                    	$(document).ready(function(){
+							    $("#createTaskForm").validate({
+							    	submitHandler: function(form) {
+							    		$('#loadingTask').css("display", "block");
+										$("#submitBtn").attr("disabled", true);
+										$(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
 		            	#{/form}
 		            </div>
 		        </div>
@@ -151,7 +154,7 @@
 		        			<td>${task?.Owner.fullName}</td>
 		        			<td>${task?.estimated} / ${task?.actual}</td>
 		        			<td>
-		        			 <a href="@{Tasks.close(task.id)}">Close</a>
+		        			 <a class="btn info" href="@{Tasks.close(task.id)}">Close</a>
 		        			</td>
 		        		</tr>
 		        	#{/list}
@@ -168,7 +171,7 @@
 		              		<a href="#" class="close"></a>
 		              		<h3>Add Issue</h3>
 		            	</div>
-		            	#{form @Issues.save(), id:'createForm'}
+		            	#{form @Issues.save(), id:'createIssueForm'}
 		            	<div class="modal-body">
 		            		<p>
 		            			#{include 'Issues/_formModal.html' /}
@@ -176,17 +179,19 @@
 		            	</div>
 		            	<div class="modal-footer">
 		              		<input id="submitBtn" type="submit" class="btn primary" value="Save Issue">
+		              		<p class="pull-right"><img id="loadingIssue" src="@{'/public/images/loading-0.gif'}" alt="Trabajando..." style="display: none;" /></p>
 		            	</div>
 		            	<script type="text/javascript">
-			                    	$(document).ready(function(){
-									    $("#createForm").validate({
-									    	submitHandler: function(form) {
-											   $("#submitBtn").attr("disabled", true);
-											   $(form).submit();
-											 }
-									    });
-									  });
-			                    </script>
+	                    	$(document).ready(function(){
+							    $("#createIssueForm").validate({
+							    	submitHandler: function(form) {
+							    		$('#loadingIssue').css("display", "block");
+									   	$("#submitBtn").attr("disabled", true);
+									   	$(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
 		            	#{/form}
 		            </div>
 		        </div>
@@ -217,7 +222,7 @@
 		        			<td>${issue?.Owner.fullName}</td>
 		        			<td>${issue?.estimated} / ${issue?.actual}</td>
 		        			<td>
-		        			 <a href="@{Issues.close(issue.id)}">Close</a>
+		        			 <a class="btn info" href="@{Issues.close(issue.id)}">Close</a>
 		        			</td>
 		        		</tr>
 		        	#{/list}
@@ -248,8 +253,8 @@
 			        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
 			        			<td>${task?.Description}</td>
 			        			<td>${task?.Owner.fullName}</td>
-			        			<td>${task?.estimated} / 0.0</td>
-			        			<td><a href="@{Tasks.open(task.id)}">Open</a></td>
+			        			<td>${task?.estimated} / ${task?.actual}</td>
+			        			<td><a class="btn info" href="@{Tasks.open(task.id)}">Open</a></td>
 			        		</tr>
 		        		#{/list}
 		        	</tbody>
@@ -279,8 +284,8 @@
 			        			<td><a href="@{Issues.show(issue.id)}">${issue?.Name}</a></td>
 			        			<td>${issue?.Description}</td>
 			        			<td>${issue?.Owner.fullName}</td>
-			        			<td>${issue?.estimated} / 0.0</td>
-			        			<td><a href="@{Issues.open(issue.id)}">Open</a></td>
+			        			<td>${issue?.estimated} / ${issue?.actual}</td>
+			        			<td><a class="btn info" href="@{Issues.open(issue.id)}">Open</a></td>
 			        		</tr>
 		        		#{/list}
 		        	</tbody>

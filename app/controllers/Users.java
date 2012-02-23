@@ -166,7 +166,7 @@ public class Users extends BaseController {
         
         entity.save();
         flash.success(Messages.get("scaffold.updated", "User"));
-        Application.home();
+        Application.index();
     }
     
 }

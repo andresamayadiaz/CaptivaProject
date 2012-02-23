@@ -98,8 +98,8 @@ public class Projects extends BaseController {
     public static void close(java.lang.Long id){
 		Project entity = Project.findById(id);
 		notFoundIfNull(entity);
-		entity.isOpen = false;
-		entity.save();
+		entity.closeProject();
+		Logger.info("Entro aqui... %s", entity.ClosedDate);
 		flash.success(Messages.get("scaffold.updated", "Project"));
 		show(id);
     }

@@ -46,6 +46,8 @@ public class Issue extends Model {
 	@Required
 	public boolean isOpen = true;
 	
+	public Date ClosedDate;
+	
 	@Transient
 	public Double actual;
 	
@@ -91,6 +93,12 @@ public class Issue extends Model {
     public void updatedNotification(){
     	Mails mails = new Mails();
     	mails.issueUpdated(this);
+    }
+    
+    public void closeIssue() {
+    	this.isOpen = false;
+    	this.ClosedDate = new Date();
+    	this.save();
     }
 	
 	public String toString(){
