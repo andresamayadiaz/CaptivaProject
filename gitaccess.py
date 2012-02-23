@@ -21,15 +21,15 @@ passwd='ceis12345*',db='captivaproject')
 
 cursor=db.cursor()
 
-sql='SELECT repository.id, repository.name, repository.Owner FROM repository INNER JOIN repository_writeusers ON repository.id = repository_writeusers.Repository_id WHERE repository.name="'+repoName+'" AND repository_writeusers.writeUsers_id='+user
+sql='SELECT Repository.id, Repository.name, Repository.Owner FROM Repository INNER JOIN repository_writeusers ON Repository.id = repository_writeusers.Repository_id WHERE Repository.name="'+repoName+'" AND repository_writeusers.writeUsers_id='+user
 cursor.execute(sql)
 resultado=cursor.fetchone()
 
 if resultado == None and command == "git-upload-pack":
-	sql='SELECT repository.id, repository.name, repository.Owner FROM repository INNER JOIN repository_readusers ON repository.id = repository_readusers.Repository_id WHERE repository.name="'+repoName+'" AND repository_readusers.readUsers_id='+user
+	sql='SELECT Repository.id, Repository.name, Repository.Owner FROM Repository INNER JOIN repository_readusers ON Repository.id = repository_readusers.Repository_id WHERE Repository.name="'+repoName+'" AND repository_readusers.readUsers_id='+user
 	cursor.execute(sql)
 	resultado=cursor.fetchone()
 
 if resultado != None:
 	arg = "%s '/home/git/repo/%s.git'" %(command, repoName)
-    os.execv("/usr/bin/git-shell", ["/usr/bin/git-shell","-c", arg])
+	os.execv("/usr/bin/git-shell", ["/usr/bin/git-shell","-c", arg])

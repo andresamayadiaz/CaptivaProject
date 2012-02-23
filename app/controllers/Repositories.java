@@ -23,6 +23,7 @@ import models.Issue;
 import models.Repository;
 import models.User;
 import play.Logger;
+import play.Play;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.With;
@@ -86,7 +87,10 @@ public class Repositories extends BaseController {
 		}
 		// END EXPERIMENTAL aad Feb 2012
 		
-		render(entity, commits);
+		// Repo URL Access
+		String repoUrl = Play.configuration.getProperty("git.user", "git") + "@" + Play.configuration.getProperty("git.url", "project.captivatecnologia.info") + ":" + entity.name + ".git";
+		
+		render(entity, commits, repoUrl);
 	}
 	
 	@Check("admin")
