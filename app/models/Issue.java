@@ -38,9 +38,11 @@ public class Issue extends Model {
 	public Milestone Milestone;
 	
 	@OneToMany (mappedBy="Issue")
+	@OrderBy("created DESC")
 	public List<Comment> Comments;
 	
 	@OneToMany (mappedBy="Issue")
+	@OrderBy("created DESC")
 	public List<Time> Times;
 	
 	@Required

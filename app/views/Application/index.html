@@ -33,7 +33,7 @@
 		              </tr>
 		            </thead>
 		            <tbody>
-		                #{list items:tasks, as:'task'}
+		                #{paginate.list items:tasks, as:'task'}
 		                    <tr>
 		                    	<td>${task.Milestone.Project.Name}</td>
 		                        <td><a href="@{Tasks.show(task.id)}">${task.Name}</a></td>
@@ -47,9 +47,11 @@
 		                            <a href="@{Tasks.delete(task.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
 		                        </td>
 		                    </tr>
-		                #{/list}
+		                #{/paginate.list}
 		            </tbody>
 	        	</table>
+	        	#{paginate.summary items:tasks /}
+        		#{paginate.controls items:tasks /}
 			</div>
 		</div>
 		
@@ -71,7 +73,7 @@
 		              </tr>
 		            </thead>
 		            <tbody>
-		                #{list items:issues, as:'issue'}
+		                #{paginate.list items:issues, as:'issue'}
 		                    <tr>
 		                    	<td>${issue.Milestone.Project.Name}</td>
 		                        <td><a href="@{Issues.show(issue.id)}">${issue.Name}</a></td>
@@ -85,9 +87,11 @@
 		                            <a href="@{Issues.delete(issue.id)}" class="btn danger" onclick="if (!confirm('Are you sure you want to delete this record?')) return false;">Delete</a>
 		                        </td>
 		                    </tr>
-		                #{/list}
+		                #{/paginate.list}
 		            </tbody>
 	        	</table>
+	        	#{paginate.summary items:tasks /}
+        		#{paginate.controls items:tasks /}
 			</div>
 		</div>
 	</div>

@@ -75,16 +75,6 @@
 			</div>
 		<div class="clearfix"></div>
 		<!-- END MAIN MILESTONE INFO -->
-
-		<!-- TASK GRAPH -->
-        <div class="row">
-            <div class="span8">
-                <h3>Chart</h3>
-                <div id="milestoneChart"  style="height: 300px; width: 600px; position: relative; ">
-                </div>
-            </div>
-        </div>
-        <!-- END TASK GRAPH -->
         
         <ul class="tabs" data-tabs="tabs">
         	<li class="active"><a href="#openTasks">Open Tasks</a></li>
@@ -141,7 +131,7 @@
 		        	</thead>
 		        	<tbody>
 		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
-		        	#{list items:entity?.getTasks(true), as:'task'}
+		        	#{paginate.list items:entity?.getTasks(true), as:'task'}
 		        		<tr>
 		        			#{if task.DueDate >= new Date()}
 		        				<td><span class="label notice">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
@@ -157,9 +147,11 @@
 		        			 <a class="btn info" href="@{Tasks.close(task.id)}">Close</a>
 		        			</td>
 		        		</tr>
-		        	#{/list}
+		        	#{/paginate.list}
 		        	</tbody>
 		        </table>
+		        #{paginate.summary items:entity?.getTasks(true) /}
+        		#{paginate.controls items:entity?.getTasks(true) /}
 		        <!-- End Tasks List -->
         	</div>
         	<div id="openIssues">
@@ -209,7 +201,7 @@
 		        	</thead>
 		        	<tbody>
 		        	<!-- corregir, no listar todos, hacer un select al modelo de solo los abiertos -->
-		        	#{list items:entity?.getIssues(true), as:'issue'}
+		        	#{paginate.list items:entity?.getIssues(true), as:'issue'}
 		        		<tr>
 		        			#{if issue.DueDate > new Date()}
 		        				<td><span class="label notice">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
@@ -225,9 +217,11 @@
 		        			 <a class="btn info" href="@{Issues.close(issue.id)}">Close</a>
 		        			</td>
 		        		</tr>
-		        	#{/list}
+		        	#{/paginate.list}
 		        	</tbody>
 		        </table>
+		        #{paginate.summary items:entity?.getIssues(true) /}
+        		#{paginate.controls items:entity?.getIssues(true) /}
 		        <!-- End Issues List -->
         	</div>
         	<div id="closeTasks">
@@ -247,18 +241,22 @@
 		        	</thead>
 		        	<tbody>
 		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
-		        		#{list items:entity?.getTasks(false), as:'task'}
-			        		<tr>
-			        		    <td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
-			        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
-			        			<td>${task?.Description}</td>
-			        			<td>${task?.Owner.fullName}</td>
-			        			<td>${task?.estimated} / ${task?.actual}</td>
-			        			<td><a class="btn info" href="@{Tasks.open(task.id)}">Open</a></td>
-			        		</tr>
-		        		#{/list}
+		        		#{paginate.list items:entity?.getTasks(false), as:'task'}
+		        		<tr>
+	        				<td><span class="label">${task?.DueDate?.format('yyyy-MM-dd')}</span></td>
+		        			<td><a href="@{Tasks.show(task.id)}">${task?.Name}</a></td>
+		        			<td>${task?.Description}</td>
+		        			<td>${task?.Owner.fullName}</td>
+		        			<td>${task?.estimated} / ${task?.actual}</td>
+		        			<td>
+		        				<a class="btn info" href="@{Tasks.open(task.id)}">Open</a>
+		        			</td>
+		        		</tr>
+		        	#{/paginate.list}
 		        	</tbody>
 		        </table>
+		        #{paginate.summary items:entity?.getTasks(false) /}
+        		#{paginate.controls items:entity?.getTasks(false) /}
 		        <!-- END TASKS -->
         	</div>
         	<div id="closeIssues">
@@ -278,7 +276,7 @@
 		        	</thead>
 		        	<tbody>
 		        		<!-- corregir, no volver a listar todos, hacer un select al modelo de solo los cerrados -->
-		        		#{list items:entity?.getIssues(false), as:'issue'}
+		        		#{paginate.list items:entity?.getIssues(false), as:'issue'}
 			        		<tr>
 			        		    <td><span class="label">${issue?.DueDate?.format('yyyy-MM-dd')}</span></td>
 			        			<td><a href="@{Issues.show(issue.id)}">${issue?.Name}</a></td>
@@ -287,12 +285,22 @@
 			        			<td>${issue?.estimated} / ${issue?.actual}</td>
 			        			<td><a class="btn info" href="@{Issues.open(issue.id)}">Open</a></td>
 			        		</tr>
-		        		#{/list}
+		        		#{/paginate.list}
 		        	</tbody>
 		        </table>
+		        #{paginate.summary items:entity?.getIssues(false) /}
+        		#{paginate.controls items:entity?.getIssues(false) /}
 		        <!-- END ISSUES -->
         	</div>
         </div>
+        
+        <!-- TASK GRAPH -->
+        <div class="container">
+            <h3>Chart</h3>
+            <div id="milestoneChart"  style="height: 300px; width: 600px; position: relative; ">
+            </div>
+        </div>
+        <!-- END TASK GRAPH -->    
     </div>
 </div>
 <script type="text/javascript">

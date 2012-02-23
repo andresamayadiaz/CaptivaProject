@@ -39,9 +39,11 @@ public class Task extends Model {
 	public Milestone Milestone;
 	
 	@OneToMany (mappedBy="Task")
+	@OrderBy("created DESC")
 	public List<Comment> Comments;
 	
 	@OneToMany (mappedBy="Task")
+	@OrderBy("created DESC")
 	public List<Time> Times;
 	
 	@OneToMany(mappedBy="Task")

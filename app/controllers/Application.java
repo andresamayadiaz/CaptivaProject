@@ -1,6 +1,8 @@
 package controllers;
 
 import play.*;
+import play.modules.paginate.ModelPaginator;
+import play.modules.paginate.Paginator;
 import play.mvc.*;
 import play.test.Fixtures;
 
@@ -17,8 +19,8 @@ public class Application extends BaseController {
 	@Check("any")
     public static void index() {
 		User entity = Security.getConnectedUser();
-		List<Task> tasks = Task.find("Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).fetch();
-		List<Issue> issues = Issue.find("Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).fetch();
+		Paginator tasks = new ModelPaginator(models.Task.class, "Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).setPageSize(10);
+		Paginator issues = new ModelPaginator(models.Issue.class, "Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).setPageSize(10);
         render(entity, tasks, issues);
     }
 	

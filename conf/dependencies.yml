@@ -5,6 +5,7 @@ require:
     - play -> secure
     - play -> scaffold 0.1
     - play -> pdf 0.9
+    - play -> paginate head
     - org.eclipse.jgit -> org.eclipse.jgit 1.2.0.201112221803-r
     - org.gitective -> gitective-core 0.9.8
 

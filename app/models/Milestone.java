@@ -5,6 +5,10 @@ import play.data.validation.*;
 import play.db.jpa.*;
 import javax.persistence.*;
 
+import play.modules.paginate.ModelPaginator;
+import play.modules.paginate.Paginator;
+import play.mvc.Scope.Params;
+
 import java.util.*;
 
 @Entity
@@ -123,13 +127,17 @@ public class Milestone extends Model {
 		this.created = new Date(); 
     }
 	
-	public List<Task> getTasks(Boolean isOpen) {
-		List<Task> tasks = Task.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+	public Paginator getTasks(Boolean isOpen) {
+		//List<Task> tasks = Task.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+		Paginator tasks = new ModelPaginator(models.Task.class, "Milestone = ? and isOpen = ? ORDER BY dueDate ASC", this, isOpen).setPageSize(10);
+		tasks.setParameterName("task" + isOpen.toString());
+		
 		return tasks;
 	}
 	
-	public List<Issue> getIssues(Boolean isOpen) {
-		List<Issue> issues = Issue.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+	public Paginator getIssues(Boolean isOpen) {
+		//List<Issue> issues = Issue.find("Milestone = ? and isOpen = ?", this, isOpen).fetch();
+		Paginator issues = new ModelPaginator(models.Issue.class, "Milestone = ? and isOpen = ? ORDER BY dueDate ASC", this, isOpen).setPageSize(10);
 		return issues;
 	}
 	
