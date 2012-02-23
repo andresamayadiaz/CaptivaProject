@@ -22,7 +22,11 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
+import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 
@@ -82,7 +86,7 @@ public class JGitUtils {
 				}
 			}
 		} catch (Throwable t) {
-			//error(t, repository, "{0} failed to determine files in commit!");
+			//todo
 		} finally {
 			rw.dispose();
 		}
@@ -179,7 +183,7 @@ public class JGitUtils {
 				list = new ArrayList<RefModel>(list.subList(0, maxCount));
 			}
 		} catch (IOException e) {
-			//error(e, repository, "{0} failed to retrieve {1}", refs);
+			//todo
 		}
 		return list;
 	}
@@ -212,7 +216,7 @@ public class JGitUtils {
 				}
 			}
 		} catch (Throwable t) {
-			//LOGGER.error(MessageFormat.format("Failed to find {0} branch!", name), t);
+			//todo
 		}
 		return branch;
 	}
@@ -261,9 +265,150 @@ public class JGitUtils {
 			commit = rev;
 			walk.dispose();
 		} catch (Throwable t) {
-			//error(t, repository, "{0} failed to get commit {1}", objectId);
+			//todo
 		}
 		return commit;
 	}
+	
+	/**
+	 * Returns a list of commits for the repository or a path within the
+	 * repository. Caller may specify ending revision with objectId. Caller may
+	 * specify offset and maxCount to achieve pagination of results. If the
+	 * repository does not exist or is empty, an empty list is returned.
+	 * 
+	 * @param repository
+	 * @param objectId
+	 *            if unspecified, HEAD is assumed.
+	 * @param path
+	 *            if unspecified, commits for repository are returned. If
+	 *            specified, commits for the path are returned.
+	 * @param offset
+	 * @param maxCount
+	 *            if < 0, all commits are returned.
+	 * @return a paged list of commits
+	 */
+	public static List<RevCommit> getRevLog(Repository repository, String objectId, String path,
+			int offset, int maxCount) {
+		List<RevCommit> list = new ArrayList<RevCommit>();
+		if (maxCount == 0) {
+			return list;
+		}
+		if (!hasCommits(repository)) {
+			return list;
+		}
+		try {
+			// resolve branch
+			ObjectId branchObject;
+			if (new String(objectId).isEmpty()) {
+				branchObject = getDefaultBranch(repository);
+			} else {
+				branchObject = repository.resolve(objectId);
+			}
+
+			RevWalk rw = new RevWalk(repository);
+			rw.markStart(rw.parseCommit(branchObject));
+			if (!new String(path).isEmpty()) {
+				TreeFilter filter = AndTreeFilter.create(
+						PathFilterGroup.createFromStrings(Collections.singleton(path)),
+						TreeFilter.ANY_DIFF);
+				rw.setTreeFilter(filter);
+			}
+			Iterable<RevCommit> revlog = rw;
+			if (offset > 0) {
+				int count = 0;
+				for (RevCommit rev : revlog) {
+					count++;
+					if (count > offset) {
+						list.add(rev);
+						if (maxCount > 0 && list.size() == maxCount) {
+							break;
+						}
+					}
+				}
+			} else {
+				for (RevCommit rev : revlog) {
+					list.add(rev);
+					if (maxCount > 0 && list.size() == maxCount) {
+						break;
+					}
+				}
+			}
+			rw.dispose();
+		} catch (Throwable t) {
+			//todo
+		}
+		return list;
+	}
+	
+	/**
+	 * Returns a list of commits starting from HEAD and working backwards.
+	 * 
+	 * @param repository
+	 * @param maxCount
+	 *            if < 0, all commits for the repository are returned.
+	 * @return list of commits
+	 */
+	public static List<RevCommit> getRevLog(Repository repository, int maxCount) {
+		return getRevLog(repository, null, 0, maxCount);
+	}
+	
+	/**
+	 * Returns a list of commits starting from the specified objectId using an
+	 * offset and maxCount for paging. This is similar to LIMIT n OFFSET p in
+	 * SQL. If the repository does not exist or is empty, an empty list is
+	 * returned.
+	 * 
+	 * @param repository
+	 * @param objectId
+	 *            if unspecified, HEAD is assumed.
+	 * @param offset
+	 * @param maxCount
+	 *            if < 0, all commits are returned.
+	 * @return a paged list of commits
+	 */
+	public static List<RevCommit> getRevLog(Repository repository, String objectId, int offset,
+			int maxCount) {
+		return getRevLog(repository, objectId, null, offset, maxCount);
+	}
+	
+	/**
+	 * Returns a list of commits since the minimum date starting from the
+	 * specified object id.
+	 * 
+	 * @param repository
+	 * @param objectId
+	 *            if unspecified, HEAD is assumed.
+	 * @param minimumDate
+	 * @return list of commits
+	 */
+	public static List<RevCommit> getRevLog(Repository repository, String objectId, Date minimumDate) {
+		List<RevCommit> list = new ArrayList<RevCommit>();
+		if (!hasCommits(repository)) {
+			return list;
+		}
+		try {
+			// resolve branch
+			ObjectId branchObject;
+			if ( new String(objectId).isEmpty() ) {
+				branchObject = getDefaultBranch(repository);
+			} else {
+				branchObject = repository.resolve(objectId);
+			}
+
+			RevWalk rw = new RevWalk(repository);
+			rw.markStart(rw.parseCommit(branchObject));
+			rw.setRevFilter(CommitTimeRevFilter.after(minimumDate));
+			Iterable<RevCommit> revlog = rw;
+			for (RevCommit rev : revlog) {
+				list.add(rev);
+			}
+			rw.dispose();
+		} catch (Throwable t) {
+			//todo
+		}
+		return list;
+	}
+	
+	
 	
 }

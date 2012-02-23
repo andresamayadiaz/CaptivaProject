@@ -60,16 +60,19 @@ public class Repositories extends BaseController {
 				
 				for(RefModel ref : JGitUtils.getLocalBranches(repo, true, 10)){
 					Logger.info("Branch: %s", ref.displayName);
-					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, JGitUtils.getCommit(repo, ref.getName()))){
-						Logger.info("FILE: %s - PATH: %s, - isTree: %s",file.name, file.path, file.isTree());
-					}
 				}
 				
 				for(RefModel ref : JGitUtils.getRemoteBranches(repo, true, 10)){
 					Logger.info("Remote Branch: %s", ref.displayName);
 				}
 				
-				
+				for(RevCommit com : JGitUtils.getRevLog(repo, 10)){
+					Logger.info("COMMIT: %s", com.getName() + " MSG: " +com.getFullMessage());
+					
+					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
+						Logger.info("File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+					}
+				}
 				
 				// END TESTEANDO
 				
