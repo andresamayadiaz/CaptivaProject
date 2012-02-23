@@ -1,9 +1,12 @@
 tmp/
 eclipse/
 .settings/
-.project/
+.project
 .DS_Store
 .classpath
 precompiled/
 bin/
 data/
+logs/
+modules/*
+
