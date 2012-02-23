@@ -29,7 +29,6 @@ public class SSHKeys extends BaseController {
         User user = Security.getConnectedUser();
         try {
         	user.addKey(keyName, key);
-            //user.save();
         	SSHKey.authorizedKeysGenerator.now();
             Users.profile();
         } catch (SSHKey.SshKeyException e) {

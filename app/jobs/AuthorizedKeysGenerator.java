@@ -3,6 +3,7 @@ package jobs;
 import models.SSHKey;
 import models.User;
 import play.Logger;
+import play.Play;
 import play.jobs.Job;
 
 import java.io.*;
@@ -11,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 public class AuthorizedKeysGenerator extends Job {
-    private final static File sshFolder = new File(System.getProperty("user.home"), ".ssh");
+    private final static File sshFolder = new File(Play.configuration.getProperty("git.userhome"), ".ssh");
     private static final String HEADER = "# Captiva Project";
     
     private boolean checkAuthorizedKeys(){
         File authFile = new File(sshFolder, "authorized_keys");
+        Logger.debug("Verifing authorized_keys File: %s", authFile.getAbsolutePath());
+        
         if(!authFile.exists()){
             return true;
         }
@@ -31,7 +34,7 @@ public class AuthorizedKeysGenerator extends Job {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
         }
         return result;
@@ -53,13 +56,13 @@ public class AuthorizedKeysGenerator extends Job {
             List<User> users = User.all().fetch();
             
             for (User user : users ) {
-                String command = "command=\"$HOME/gitaccess " + user.userName + "\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty";
+                String command = "command=\"$HOME/gitaccess " + user.id + "\",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty";
                 for (SSHKey entry : user.sshkeys) {
                     bufferedWriter.append(command);
                     bufferedWriter.append(' ');
                     bufferedWriter.append(entry.sshkey); // verify value
                     bufferedWriter.append(' ');
-                    bufferedWriter.append(entry.sshkey);
+                    bufferedWriter.append(entry.id.toString()+"-"+entry.name.replace(' ', '_')); // use id, name or both ??? aad Feb 2012
                     bufferedWriter.append('\n');
                 }
             }

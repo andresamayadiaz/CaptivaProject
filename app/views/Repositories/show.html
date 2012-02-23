@@ -56,6 +56,20 @@
       	
       </div>
       
+      <div class="row">
+      	<div class="span16">
+      	
+      		<h3>Last 20 Commits</h3>
+      		<dl>
+      			#{list items:commits, as:'commit'}
+      				<dt>${commit.name()}</dt>
+      				<dd>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></dd>
+      			#{/list}
+      		</ul>
+      	
+      	</div>
+      </div>
+      
       <!-- End Users -->
       
   </div>

@@ -13,6 +13,8 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.gitective.core.CommitFinder;
 import org.gitective.core.CommitUtils;
 import org.gitective.core.TreeUtils;
+import org.gitective.core.filter.commit.CommitFilter;
+import org.gitective.core.filter.commit.CommitLimitFilter;
 import org.gitective.core.filter.commit.CommitListFilter;
 
 import com.google.gson.Gson;
@@ -40,26 +42,42 @@ public class Repositories extends BaseController {
 	public static void show(java.lang.Long id){
 		Repository entity = Repository.findById(id);
 		notFoundIfNull(entity);
+		FileRepositoryBuilder builder = new FileRepositoryBuilder();
+		List<RevCommit> commits = null;
 		
 		// EXPERIMENTAL aad Feb 2012
 		File repoDir = new File(Repository.BASE_DIR + "/", entity.name + ".git");
 		try {
-			FileRepositoryBuilder builder = new FileRepositoryBuilder();
-			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();
+			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();			
 			
-			// Get Last Commit
-			RevCommit latestCommit = CommitUtils.getHead(repo);
-			Logger.info("LAST COMMIT: %s, Message: %s", latestCommit.name(), latestCommit.getFullMessage());
-			
-			// Get All Commits
-			CommitListFilter filter = new CommitListFilter();
-			CommitFinder service = new CommitFinder(repo);
-			service.setFilter(filter);
-			service.find();
-			for(RevCommit commit : filter.getCommits()){
-				Logger.info("Commit: %s, Message: %s", commit.name(), commit.getFullMessage());
-				//RevTree tree = commit.getTree();
-				//Logger.info("Tree: %s", new Gson().toJson(tree));
+			if(repo.getAllRefs().size() <= 0){
+				//Logger.debug("repo null");
+			}else {
+				CommitListFilter filter = new CommitListFilter();
+				CommitFinder service = new CommitFinder(repo);
+				service.setFilter(filter);
+				service.find();
+				// Limit to 20 Max Commits
+				int size = (filter.getCommits().size() > 20) ? 20 : filter.getCommits().size();
+				commits = filter.getCommits().subList(0, size);
+				
+				/*
+				// Get Last Commit
+				RevCommit latestCommit = CommitUtils.getHead(repo);
+				Logger.info("LAST COMMIT: %s, Message: %s", latestCommit.name(), latestCommit.getFullMessage());
+				
+				// Get All Commits
+				//CommitListFilter filter = new CommitListFilter();
+				//CommitFinder service = new CommitFinder(repo);
+				//service.setFilter(filter);
+				//service.find();
+				for(RevCommit commit : commits){
+					Logger.info("Commit: %s, Message: %s, Author: %s", commit.name(), commit.getFullMessage(), commit.getAuthorIdent().getEmailAddress());
+					
+					//RevTree tree = commit.getTree();
+					//Logger.info("Tree: %s", new Gson().toJson(tree));
+				}
+				*/
 			}
 			
 		} catch (IOException e) {
@@ -68,7 +86,7 @@ public class Repositories extends BaseController {
 		}
 		// END EXPERIMENTAL aad Feb 2012
 		
-		render(entity);
+		render(entity, commits);
 	}
 	
 	@Check("admin")
