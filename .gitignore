@@ -8,3 +8,4 @@ precompiled/
 bin/
 data/
 logs/
+modules/*
