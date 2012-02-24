@@ -19,8 +19,8 @@ public class Application extends BaseController {
 	@Check("any")
     public static void index() {
 		User entity = Security.getConnectedUser();
-		Paginator tasks = new ModelPaginator(models.Task.class, "Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).setPageSize(10);
-		Paginator issues = new ModelPaginator(models.Issue.class, "Owner = ? AND isOpen = true ORDER BY dueDate ASC", entity).setPageSize(10);
+		Paginator tasks = new ModelPaginator(models.Task.class, "Owner = ? AND isOpen = true ORDER BY DueDate ASC", entity).setPageSize(10);
+		Paginator issues = new ModelPaginator(models.Issue.class, "Owner = ? AND isOpen = true", entity).setPageSize(10); // ORDER BY DueDate ASC
         render(entity, tasks, issues);
     }
 	

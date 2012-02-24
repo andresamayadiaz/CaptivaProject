@@ -21,23 +21,23 @@ String __prevURL = __hasPrev ? _items.getCallbackURL(__currentPage-1) : "#";
 String __nextURL = __hasNext ? _items.getCallbackURL(__currentPage+1) : "#";
 String __lastURL = __hasNext ? _items.getCallbackURL(__maxPage) : "#";
 %}
-<div class="pagination">
-	<ul>
+<div class="pagination-container">
+	<ul class="pagination">
 %{ if (_items.boundaryControlsEnabled) { %}	
-		<li class="prev ${__currentPage == 1 ? 'disabled' : ''}"><a href="${__firstURL}">&{'play-paginate.first'}</a></li>
+		<li class="${__currentPage == 1 ? 'off' : 'first'}"><a href="${__firstURL}">&{'play-paginate.first'}</a></li>
 %{ } %}
-		<li class="prev ${__hasPrev ? '' : 'disabled'}"><a href="${__prevURL}">&{'play-paginate.prev'}</a></li>
+		<li class="${__hasPrev ? 'previous' : 'off'}"><a href="${__prevURL}">&{'play-paginate.prev'}</a></li>
 %{
 for (__idx = __firstPage; __idx <= __lastPage; __idx++) {
 boolean __active = __currentPage == __idx;
 %}
-		<li><a class="${__active ? 'active' : ''}" href="${_items.getCallbackURL(__idx)}">${__idx}</a></li>
+		<li><a class="${__active ? 'active' : 'inactive'}" href="${_items.getCallbackURL(__idx)}">${__idx}</a></li>
 %{
 }
 %}
-		<li class="next ${__hasNext ? '' : 'disabled'}"><a href="${__nextURL}">&{'play-paginate.next'}</a></li>
+		<li class="${__hasNext ? 'next' : 'off'}"><a href="${__nextURL}">&{'play-paginate.next'}</a></li>
 %{ if (_items.boundaryControlsEnabled) { %}	
-		<li class="${__currentPage == __maxPage ? 'disabled' : ''}"><a href="${__lastURL}">&{'play-paginate.last'}</a></li>
+		<li class="${__currentPage == __maxPage ? 'off' : 'last'}"><a href="${__lastURL}">&{'play-paginate.last'}</a></li>
 %{ } %}
 	</ul>
 </div>
