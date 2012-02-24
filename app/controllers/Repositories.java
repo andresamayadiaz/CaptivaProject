@@ -84,6 +84,12 @@ public class Repositories extends BaseController {
 				int size = (filter.getCommits().size() > 20) ? 20 : filter.getCommits().size();
 				commits = filter.getCommits().subList(0, size);
 				
+				for(RevCommit cm : commits){
+					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, cm)){
+						Logger.info("File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+					}
+				}
+				
 			}
 			
 		} catch (IOException e) {
