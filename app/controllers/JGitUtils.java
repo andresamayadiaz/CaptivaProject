@@ -38,7 +38,7 @@ import models.RefModel;
 import controllers.PathModel.PathChangeModel;
 
 public class JGitUtils {
-
+	
 	public static boolean hasCommits(Repository repository) {
 		if (repository != null && repository.getDirectory().exists()) {
 			return (new File(repository.getDirectory(), "objects").list().length > 2)

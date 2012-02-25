@@ -63,7 +63,7 @@
       		<h3>Last 20 Commits</h3>
       		<dl>
       			#{list items:commits, as:'commit'}
-      				<dt>${commit.name()}</dt>
+      				<dt><a href="@{Repositories.showCommit(entity.id, commit.name())}">${commit.name()}</a></dt>
       				<dd>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></dd>
       			#{/list}
       		</ul>
