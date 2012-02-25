@@ -88,15 +88,15 @@ public class Project extends Model {
     	mails.projectCreated(this);
     }
     
-    public static Double getTotalHoursTasksTime(java.lang.Long id) {
+    public static Double getTotalHoursTasksTime(java.lang.Long id, Calendar startDate, Calendar dueDate) {
     	Project entity = Project.findById(id);
-    	List<Milestone> milestones = Milestone.find("Project = ?", entity).fetch();
+    	List<Milestone> milestones = Milestone.find("Project = ? AND (created >= ? AND created <= ?) ORDER BY isOpen DESC", entity, startDate.getTime(), dueDate.getTime()).fetch();
     	double deltaTime = 0.0;
     	
     	for (Milestone milestone : milestones) {
-    		List<Task> tasks = Task.find("Milestone = ?", milestone).fetch();
+    		List<Task> tasks = Task.find("Milestone = ? AND (created >= ? AND created <= ?) ORDER BY isOpen DESC", milestone, startDate.getTime(), dueDate.getTime()).fetch();
     		for (Task task : tasks) {
-    			List<Time> times = Time.find("Task = ?", task).fetch();
+    			List<Time> times = Time.find("Task = ? AND (created >= ? AND created <= ?) ORDER BY created DESC", task, startDate.getTime(), dueDate.getTime()).fetch();
     			for (Time time : times) {
     				deltaTime += time.time;
     			}
@@ -106,15 +106,15 @@ public class Project extends Model {
 		return (double) Math.round((deltaTime/60)*100)/100;
     }
     
-    public static Double getTotalHoursIssuesTime(java.lang.Long id) {
+    public static Double getTotalHoursIssuesTime(java.lang.Long id, Calendar startDate, Calendar dueDate) {
     	Project entity = Project.findById(id);
-    	List<Milestone> milestones = Milestone.find("Project = ?", entity).fetch();
+    	List<Milestone> milestones = Milestone.find("Project = ? AND (created >= ? AND created <= ?) ORDER BY isOpen DESC", entity, startDate.getTime(), dueDate.getTime()).fetch();
     	double deltaTime = 0.0;
     	
     	for (Milestone milestone : milestones) {
-    		List<Issue> issues = Issue.find("Milestone = ?", milestone).fetch();
+    		List<Issue> issues = Issue.find("Milestone = ? AND (created >= ? AND created <= ?) ORDER BY isOpen DESC", milestone, startDate.getTime(), dueDate.getTime()).fetch();
     		for (Issue issue : issues) {
-    			List<Time> times = Time.find("Issue = ?", issue).fetch();
+    			List<Time> times = Time.find("Issue = ? AND (created >= ? AND created <= ?) ORDER BY created DESC", issue, startDate.getTime(), dueDate.getTime()).fetch();
     			for (Time time : times) {
     				deltaTime += time.time;
     			}

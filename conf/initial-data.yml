@@ -29,7 +29,7 @@ Task(task1):
     Name: Tarea de Prueba
     Description: Tarea inicial de prueba para el desarrollo
     DueDate: 2012-02-29
-    estimated: 2.5
+    estimated: 12
     Owner: admin
     Milestone: milestone1
     isOpen: true
@@ -49,13 +49,43 @@ Comment(comment1):
     Task: task1
     
 Time(time1):
-    time: 45
+    time: 120
     comment: Initial Time
-    createdBy: andres
+    createdBy: admin
     Task: task1
     
 Time(time2):
-    time: 20
+    time: 180
     comment: Second Time
-    createdBy: andres
+    createdBy: admin
+    Task: task1
+    
+Time(time3):
+    time: 300
+    comment: Third Time
+    createdBy: admin
+    Task: task1
+    
+Time(time4):
+    time: 60
+    comment: Four Time
+    createdBy: admin
+    Task: task1
+    
+Time(time5):
+    time: 60
+    comment: Five Time
+    createdBy: admin
+    Task: task1
+    
+Time(time6):
+    time: 120
+    comment: Six Time
+    createdBy: admin
+    Task: task1
+    
+Time(time7):
+    time: 120
+    comment: ... Time
+    createdBy: admin
     Task: task1

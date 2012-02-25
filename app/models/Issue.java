@@ -74,11 +74,12 @@ public class Issue extends Model {
 		this.actual = (double) Math.round((act/60)*100)/100; // round to two decimals
 	}
 	
-	public static Double getTotalHoursTime(java.lang.Long id) {
+	public static Double getTotalHoursTime(java.lang.Long id, Calendar startDate, Calendar dueDate) {
 		Issue entity = Issue.findById(id);
+		List<Time> times = Time.find("Issue = ? AND (created >= ? AND created <= ?) ORDER BY created DESC", entity, startDate.getTime(), dueDate.getTime()).fetch();
 		
 		double deltaTime = 0.0;
-		for (Time time : entity.Times) {
+		for (Time time : times) {
 			deltaTime += time.time;
 		}
 		

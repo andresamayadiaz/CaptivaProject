@@ -158,7 +158,7 @@ ${entity?.Name}
 							</thead>
 							<tbody>
 								%{
-									tasksTimeList = models.Time.find("Task = ?", task).fetch();
+									tasksTimeList = models.Time.find("Task = ? AND (created >= ? and created <= ?)", task, startDate.getTime(), dueDate.getTime()).fetch();
 								}%
 								#{list items:tasksTimeList, as:'time'}
 									<tr>
@@ -170,7 +170,7 @@ ${entity?.Name}
 								#{/list}
 								<tr>
 									<td colspan="3"></td>
-									<td><strong style="border-bottom:0.005em solid gray;">${models.Task.getTotalHoursTime(task.id)}</strong></td>
+									<td><strong style="border-bottom:0.005em solid gray;">${models.Task.getTotalHoursTime(task.id, startDate, dueDate)}</strong></td>
 								</tr>
 							</tbody>
 						</table>
@@ -198,7 +198,7 @@ ${entity?.Name}
 					<tbody>
 						<tr>
 							<td colspan="3" style="background: #E6E6E6;"></td>
-							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursTasksTime(entity.id)}</strong></td>
+							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursTasksTime(entity.id, startDate, dueDate)}</strong></td>
 						</tr>
 					</tbody>
 					</table>
@@ -262,7 +262,7 @@ ${entity?.Name}
 								#{/list}
 								<tr>
 									<td colspan="3"></td>
-									<td><strong style="border-bottom:0.005em solid gray;">${models.Issue.getTotalHoursTime(issue.id)}</strong></td>
+									<td><strong style="border-bottom:0.005em solid gray;">${models.Issue.getTotalHoursTime(issue.id, startDate, dueDate)}</strong></td>
 								</tr>
 							</tbody>
 						</table>
@@ -290,7 +290,7 @@ ${entity?.Name}
 					<tbody>
 						<tr>
 							<td colspan="3" style="background: #E6E6E6;"></td>
-							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursIssuesTime(entity.id)}</strong></td>
+							<td><strong style="font-size: 12px; border-bottom:0.005em solid gray;">${models.Project.getTotalHoursIssuesTime(entity.id, startDate, dueDate)}</strong></td>
 						</tr>
 					</tbody>
 					</table>

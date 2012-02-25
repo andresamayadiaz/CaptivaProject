@@ -6,6 +6,8 @@ import play.db.jpa.*;
 
 import javax.persistence.*;
 
+import com.google.gson.Gson;
+
 import notifiers.Mails;
 
 import java.text.SimpleDateFormat;
@@ -95,11 +97,21 @@ public class Task extends Model {
 		this.actual = (double) Math.round((act/60)*100)/100; // round to two decimals
 	}
 	
-	public static Double getTotalHoursTime(java.lang.Long id) {
+	public static Double getActual(java.lang.Long id){
 		Task entity = Task.findById(id);
+		Double act = 0.0;
+		for(Time time : entity.Times){
+			act += time.time;
+		}
+		return (double) Math.round((act/60)*100)/100; // round to two decimals
+	}
+	
+	public static Double getTotalHoursTime(java.lang.Long id, Calendar startDate, Calendar dueDate) {
+		Task entity = Task.findById(id);
+		List<Time> times = Time.find("Task = ? AND (created >= ? AND created <= ?) ORDER BY created DESC", entity, startDate.getTime(), dueDate.getTime()).fetch();
 		
 		double deltaTime = 0.0;
-		for (Time time : entity.Times) {
+		for (Time time : times) {
 			deltaTime += time.time;
 		}
 		
@@ -123,7 +135,7 @@ public class Task extends Model {
     	this.ClosedDate = new Date();
     	this.save();
     }
-	
+    
 	public String toString(){
 		return Name;
 	}

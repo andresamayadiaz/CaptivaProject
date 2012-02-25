@@ -26,21 +26,21 @@ public class Issues extends BaseController {
     	// check if filter apply
 		if(params.get("statusFilter") != null) {			
 			if(params.get("statusFilter").equals("true")){ // open
-				List<Issue> entities = Issue.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Issue> entities = Issue.find("Owner = ? and isOpen = true ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "true");
 		        render(entities);
 			} else if(params.get("statusFilter").equals("false")){ // closed
-				List<Issue> entities = Issue.find("Owner = ? and isOpen = false ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Issue> entities = Issue.find("Owner = ? and isOpen = false ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "false");
 		        render(entities);
 			} else { // all
-				List<Issue> entities = Issue.find("Owner = ? ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Issue> entities = Issue.find("Owner = ? ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "all");
 		        render(entities);
 			}			
 		}
     	
-        List<Issue> entities = Issue.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
+        List<Issue> entities = Issue.find("Owner = ? and isOpen = true ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
         render(entities);
     }
     
