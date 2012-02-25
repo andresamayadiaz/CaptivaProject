@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -71,9 +72,16 @@ public class Repositories extends BaseController {
 				for(RevCommit com : commits){
 					Logger.info("COMMIT: %s", com.getName() + " MSG: " +com.getFullMessage());
 					
+					/*
 					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
-						Logger.info("File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+						Logger.info("Commit File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
 					}
+					*/
+					
+					for(PathModel file : JGitUtils.getFilesInPath(repo, null, com)){
+						Logger.info("-File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+					}
+					
 				}
 				
 			}
@@ -88,6 +96,32 @@ public class Repositories extends BaseController {
 		String repoUrl = Play.configuration.getProperty("git.user", "git") + "@" + Play.configuration.getProperty("git.url", "project.captivatecnologia.info") + ":" + entity.name + ".git";
 		
 		render(entity, commits, repoUrl);
+	}
+	
+	@Check("any")
+	public static void showCommit(java.lang.Long repoId, String commit){
+		Repository entity = Repository.findById(repoId);
+		notFoundIfNull(entity);
+		FileRepositoryBuilder builder = new FileRepositoryBuilder();
+		List<PathModel> path = new ArrayList<PathModel>();
+		File repoDir = new File(Repository.BASE_DIR + "/", entity.name + ".git");
+		try {
+			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();			
+			RevCommit com = JGitUtils.getCommit(repo, commit);
+			
+			if( com != null ) {
+				
+				path = JGitUtils.getFilesInPath(repo, null, com);
+				
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		render(path);
+		
 	}
 	
 	@Check("admin")

@@ -317,7 +317,7 @@ public class JGitUtils {
 			if (!(path == null)) {
 				TreeFilter filter = AndTreeFilter.create(
 						PathFilterGroup.createFromStrings(Collections.singleton(path)),
-						TreeFilter.ANY_DIFF);
+						TreeFilter.ALL); // TreeFilter.ANY_DIFF
 				rw.setTreeFilter(filter);
 			}
 			Iterable<RevCommit> revlog = rw;
