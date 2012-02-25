@@ -25,10 +25,13 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.CommitTimeRevFilter;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.AndTreeFilter;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.eclipse.jgit.treewalk.filter.PathFilterGroup;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+
+import play.Logger;
 
 import models.RefModel;
 
@@ -87,6 +90,7 @@ public class JGitUtils {
 			}
 		} catch (Throwable t) {
 			//todo
+			Logger.error(t, t.getMessage());
 		} finally {
 			rw.dispose();
 		}
@@ -171,7 +175,7 @@ public class JGitUtils {
 				Ref ref = entry.getValue();
 				RevObject object = rw.parseAny(ref.getObjectId());
 				String name = entry.getKey();
-				if (fullName && !(new String(refs).isEmpty())) {
+				if (fullName && !(refs == null)) {
 					name = refs + name;
 				}
 				list.add(new RefModel(name, ref, object));
@@ -184,6 +188,7 @@ public class JGitUtils {
 			}
 		} catch (IOException e) {
 			//todo
+			Logger.error(e, e.getMessage());
 		}
 		return list;
 	}
@@ -217,6 +222,7 @@ public class JGitUtils {
 			}
 		} catch (Throwable t) {
 			//todo
+			Logger.error(t, t.getMessage());
 		}
 		return branch;
 	}
@@ -255,7 +261,7 @@ public class JGitUtils {
 		try {
 			// resolve object id
 			ObjectId branchObject;
-			if (new String(objectId).isEmpty()) {
+			if (objectId == null) {
 				branchObject = getDefaultBranch(repository);
 			} else {
 				branchObject = repository.resolve(objectId);
@@ -266,6 +272,7 @@ public class JGitUtils {
 			walk.dispose();
 		} catch (Throwable t) {
 			//todo
+			Logger.error(t, t.getMessage());
 		}
 		return commit;
 	}
@@ -299,7 +306,7 @@ public class JGitUtils {
 		try {
 			// resolve branch
 			ObjectId branchObject;
-			if (new String(objectId).isEmpty()) {
+			if (objectId == null) {
 				branchObject = getDefaultBranch(repository);
 			} else {
 				branchObject = repository.resolve(objectId);
@@ -307,7 +314,7 @@ public class JGitUtils {
 
 			RevWalk rw = new RevWalk(repository);
 			rw.markStart(rw.parseCommit(branchObject));
-			if (!new String(path).isEmpty()) {
+			if (!(path == null)) {
 				TreeFilter filter = AndTreeFilter.create(
 						PathFilterGroup.createFromStrings(Collections.singleton(path)),
 						TreeFilter.ANY_DIFF);
@@ -336,6 +343,7 @@ public class JGitUtils {
 			rw.dispose();
 		} catch (Throwable t) {
 			//todo
+			Logger.error(t, t.getMessage());
 		}
 		return list;
 	}
@@ -389,7 +397,7 @@ public class JGitUtils {
 		try {
 			// resolve branch
 			ObjectId branchObject;
-			if ( new String(objectId).isEmpty() ) {
+			if ( objectId == null ) {
 				branchObject = getDefaultBranch(repository);
 			} else {
 				branchObject = repository.resolve(objectId);
@@ -405,10 +413,95 @@ public class JGitUtils {
 			rw.dispose();
 		} catch (Throwable t) {
 			//todo
+			Logger.error(t, t.getMessage());
 		}
 		return list;
 	}
 	
+	/**
+	 * Returns a path model of the current file in the treewalk.
+	 * 
+	 * @param tw
+	 * @param basePath
+	 * @param commit
+	 * @return a path model of the current file in the treewalk
+	 */
+	private static PathModel getPathModel(TreeWalk tw, String basePath, RevCommit commit) {
+		String name;
+		long size = 0;
+		if (basePath == null) {
+			name = tw.getPathString();
+		} else {
+			name = tw.getPathString().substring(basePath.length() + 1);
+		}
+		try {
+			if (!tw.isSubtree()) {
+				size = tw.getObjectReader().getObjectSize(tw.getObjectId(0), Constants.OBJ_BLOB);
+			}
+		} catch (Throwable t) {
+			//error(t, null, "failed to retrieve blob size for " + tw.getPathString());
+			Logger.error(t, t.getMessage());
+		}
+		return new PathModel(name, tw.getPathString(), size, tw.getFileMode(0).getBits(),
+				commit.getName());
+	}
+	
+	/**
+	 * Returns the list of files in the specified folder at the specified
+	 * commit. If the repository does not exist or is empty, an empty list is
+	 * returned.
+	 * 
+	 * @param repository
+	 * @param path
+	 *            if unspecified, root folder is assumed.
+	 * @param commit
+	 *            if null, HEAD is assumed.
+	 * @return list of files in specified path
+	 */
+	public static List<PathModel> getFilesInPath(Repository repository, String path,
+			RevCommit commit) {
+		List<PathModel> list = new ArrayList<PathModel>();
+		if (!hasCommits(repository)) {
+			return list;
+		}
+		if (commit == null) {
+			commit = getCommit(repository, null);
+		}
+		final TreeWalk tw = new TreeWalk(repository);
+		try {
+			tw.addTree(commit.getTree());
+			if (!(path == null)) {
+				PathFilter f = PathFilter.create(path);
+				tw.setFilter(f);
+				tw.setRecursive(false);
+				boolean foundFolder = false;
+				while (tw.next()) {
+					if (!foundFolder && tw.isSubtree()) {
+						tw.enterSubtree();
+					}
+					if (tw.getPathString().equals(path)) {
+						foundFolder = true;
+						continue;
+					}
+					if (foundFolder) {
+						list.add(getPathModel(tw, path, commit));
+					}
+				}
+			} else {
+				tw.setRecursive(false);
+				while (tw.next()) {
+					list.add(getPathModel(tw, null, commit));
+				}
+			}
+		} catch (IOException e) {
+			//error(e, repository, "{0} failed to get files for commit {1}", commit.getName());
+			Logger.error(e, e.getMessage());
+		} finally {
+			tw.release();
+		}
+		Collections.sort(list);
+		return list;
+	}
 	
 	
 }

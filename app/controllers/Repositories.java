@@ -66,23 +66,15 @@ public class Repositories extends BaseController {
 					Logger.info("Remote Branch: %s", ref.displayName);
 				}
 				
-				for(RevCommit com : JGitUtils.getRevLog(repo, 10)){
+				commits = JGitUtils.getRevLog(repo, 20);
+				
+				for(RevCommit com : commits){
 					Logger.info("COMMIT: %s", com.getName() + " MSG: " +com.getFullMessage());
 					
 					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
 						Logger.info("File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
 					}
 				}
-				
-				// END TESTEANDO
-				
-				CommitListFilter filter = new CommitListFilter();
-				CommitFinder service = new CommitFinder(repo);
-				service.setFilter(filter);
-				service.find();
-				// Limit to 20 Max Commits
-				int size = (filter.getCommits().size() > 20) ? 20 : filter.getCommits().size();
-				commits = filter.getCommits().subList(0, size);
 				
 			}
 			
