@@ -1,0 +1,66 @@
+#{extends 'main.html' /}
+#{set title:'Show Commit' /}
+
+<div class="container-fluid">
+ <div class="sidebar">
+   <div class="well">
+     <h5>Options</h5>
+     <ul>
+       <li><a href="#">My Projects</a></li>
+       <li><a href="#">My Open Tasks</a></li>
+       <li><a href="#">Milestones</a></li>
+       <li><a href="#">Reports</a></li>
+     </ul>
+   </div>
+ </div>
+ <div class="content">
+   <!-- Example row of columns -->
+    <div class="row">
+      <div class="span16">
+        <h2>Repository: <a href="@{Repositories.show(entity.id)}">${entity.name}</a></h2>
+        <h3>Commit: ${com?.getName()}</h3>
+        <p>
+            ${com?.getCommitterIdent().getName()}
+        </p>
+        <p>
+            ${com?.getFullMessage()}
+        </p>
+        <ul class="breadcrumb">
+            <li><a href="@{Repositories.showCommit(entity.id, com?.name())}">${com.name()}</a><span class="divider">/</span></li>
+            %{
+                String last = "";
+            }%
+            #{if pathStr != null}
+	            #{list items:pathStr.split("/"), as:'folder'}
+	               <li><a href="@{Repositories.showCommit(entity.id, com?.name(), last+folder)}">${folder}</a><span class="divider">/</span></li>
+	               %{
+                       last = last + folder + "/";
+                   }%
+	            #{/list}
+            #{/if}
+        </ul>
+        <table class="bordered-table zebra-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Path</th>
+              </tr>
+            </thead>
+            <tbody>
+                #{list items:path, as:'file'}
+                    <tr>
+                        #{if file.isTree()}
+                            <td><a href="@{Repositories.showCommit(entity.id, com.name(), file.path)}">${file.name}/</a></td>
+                        #{/if}
+                        #{else}
+                            <td>${file.name}</td>
+                        #{/else}
+                        <td>${file.path}</td>
+                    </tr>
+                #{/list}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
