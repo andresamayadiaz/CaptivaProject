@@ -87,13 +87,13 @@
         	<!-- TIMES -->
         	<div class="active" id="times">
         		<h3>Time Registry</h3>
-	           	<p class="pull-right"><a class="btn" href="#" data-controls-modal="new-time-modal" data-backdrop="static">Add Time</a></p>
+	           	<p class="pull-right"><a class="btn info" href="#" data-controls-modal="new-time-modal" data-backdrop="static">Add Time</a></p>
 	           	<div id="new-time-modal" class="modal hide fade in" >
 					<div class="modal-header">
-	                	<a href="#" class="close">×</a>
+	                	<a href="#" class="close">X</a>
 	                    <h3>Add Time</h3>
 	                </div>
-	                #{form @Times.save(), id:'createTaskForm'}
+	                #{form @Times.save(), id:'createIssueTimeForm'}
 	                <div class="modal-body">
 	                    <p>
 	                        #{include 'Times/_formModal.html' /}
@@ -107,6 +107,34 @@
 							    $("#createTaskForm").validate({
 							    	submitHandler: function(form) {
 							    		$('#loading').css("display", "block");
+									   	$("#submitBtn").attr("disabled", true);
+									   	$(form).submit();
+									 }
+							    });
+							  });
+	                    </script>
+	                </div>
+	                #{/form}
+				</div>
+				<p class="pull-right">&nbsp;</p>
+				<p class="pull-right"><a class="btn" href="#" data-controls-modal="new-time-manually-modal" data-backdrop="static">Add Manually Time</a></p>
+				<div id="new-time-manually-modal" class="modal hide fade in" >
+					<div class="modal-header">
+	                	<a href="#" class="close">X</a>
+	                    <h3>Add Manually Time</h3>
+	                </div>
+	                #{form @Times.save(), id:'createIssueTimeManuallyForm'}
+	                <div class="modal-body">
+	                    <p>
+	                        #{include 'Times/_formModalManually.html' /}
+	                    </p>
+	                </div>
+	                <div class="modal-footer">
+	                    <input id="submitBtn" type="submit" class="btn primary" value="Save Time">
+	                    <script type="text/javascript">
+	                    	$(document).ready(function(){
+							    $("#createTaskForm").validate({
+							    	submitHandler: function(form) {
 									   	$("#submitBtn").attr("disabled", true);
 									   	$(form).submit();
 									 }
