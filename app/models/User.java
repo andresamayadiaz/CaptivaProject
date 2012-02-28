@@ -62,8 +62,8 @@ public class User extends Model {
 	
 	@PostPersist
 	public void UserCreated() {
-		Mails mails = new Mails();
-		mails.welcome(this);
+		//Mails mails = new Mails();
+		//mails.welcome(this);
 	}
 	
     @Override

@@ -103,6 +103,9 @@ public class Users extends BaseController {
             render("@create", entity);
         }
         
+        Mails mails = new Mails();
+		mails.welcome(entity);
+		
         entity.password = Codec.hexSHA1(entity.password);
         entity.save();
         flash.success(Messages.get("scaffold.created", "User"));
