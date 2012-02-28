@@ -287,10 +287,9 @@
         </div>
         
         <!-- TASK GRAPH -->
-	    <div class="nada">
-	        <h3 id="datess">Chart</h3>
-	        <div id="test" style="height: 300px; width: 600px; position: relative;"></div>
-	    </div>
+        <style type="text/css">#graph table.jqplot-table-legend { width: auto; }</style>
+        <h3>Chart</h3>
+        <div id="graph" style="height: 300px; width: 600px; position: relative;"></div>
 	    <!-- END TASK GRAPH -->
     </div>    
 </div>
@@ -321,12 +320,10 @@
 		}
 	});
 	
-    var s1 = [ 100, 200, 300, 400, 500, 600, 700, 800 ];
-    var s2 = [ 100, 150, 200, 300, 400, 500, 600, 700 ];
     // Can specify a custom tick Array.
     // Ticks should match up one for each y value (category) in the series.
      
-    var plot1 = $.jqplot('test', [remainingData, realData], {
+    var plot1 = $.jqplot('graph', [remainingData, realData], {
         // The "seriesDefaults" option is an options object that will
         // be applied to all series in the chart.
         seriesDefaults:{
@@ -346,6 +343,7 @@
         // the legend to overflow the container.
         legend: {
             show: true,
+            position: 'e',
             placement: 'outside'            
         },
         axes: {
@@ -358,8 +356,7 @@
             // Pad the y axis just a little so bars can get close to, but
             // not touch, the grid boundaries.  1.2 is the default padding.
             yaxis: {
-                pad: 1.05,
-                tickOptions: {formatString: '%d'}
+                pad: 1.05
             }
         }
     });
