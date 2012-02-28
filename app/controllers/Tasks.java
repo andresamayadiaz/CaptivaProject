@@ -199,7 +199,17 @@ public class Tasks extends BaseController {
     	Logger.info("------------ %s ------------", new Date());
     	
     	// Days
-    	Double deltaDays = Math.ceil((double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) );
+    	Time lastTime = Time.find("Task = ? ORDER BY created DESC", entity).first();
+    	Double deltaDays = 0.0;
+    	
+    	if (entity.DueDate.getTime() > lastTime.created.getTime()) {
+    		deltaDays = Math.ceil((double)(entity.DueDate.getTime() - entity.created.getTime()) / (24 * 60 * 60 * 1000));
+    	} else {
+    		deltaDays = Math.ceil((double)(lastTime.created.getTime() - entity.created.getTime()) / (24 * 60 * 60 * 1000));
+    	}
+    	
+    	Logger.info("Delta days: %s", deltaDays);
+    	
     	Calendar date = Calendar.getInstance();
     	date.setTime(entity.created);
     	//date.set(Calendar.DATE, 23);
@@ -222,7 +232,6 @@ public class Tasks extends BaseController {
     			created.setTime(time.created);
     			created.set(created.get(Calendar.YEAR), created.get(Calendar.MONTH), created.get(Calendar.DATE), 0, 0, 0);
     			
-    			Logger.info("%s == %s", created.getTime(), date.getTime());
 				if(created.compareTo(date) == 0) {
 					actualTime += time.time / 60;
 				}
@@ -233,25 +242,20 @@ public class Tasks extends BaseController {
     		date.add(Calendar.DATE, 1);
     	}
     	
-    	for(int i = 0; i <= deltaDays; i++) {
-    		for(Double time : actualTimeList) {
-    			//estimatedTime -= time;
-    			break;
-    		}
-    		
-    		//estimatedTime = 0.0;
-    		//estimatedTimeList.add(estimatedTime);
-    	}
-    	
+    	int flag = 0;
+    	double actualTimeAcumulated = 0.0;
     	for(Double time : actualTimeList) {
     		estimatedTime -= time;
+    		actualTimeAcumulated += time;
 			estimatedTimeList.add(estimatedTime);
+			actualTimeList.set(flag, actualTimeAcumulated);
+			flag++;
 		}
     	
     	taskGraph.add(actualTimeList);
     	taskGraph.add(estimatedTimeList);
     	
-    	Logger.info("JSON: %s", new Gson().toJson(actualTimeList));
+    	Logger.info("JSON taskGraph: %s", new Gson().toJson(taskGraph));
     	
     	renderJSON(taskGraph);
     }
@@ -262,13 +266,23 @@ public class Tasks extends BaseController {
     	List<String> ticks = new ArrayList<String>();
     	
     	Time lastTime = Time.find("Task = ? ORDER BY created DESC", entity).first();
-    	Double deltaDays = Math.ceil( (double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000) );
+    	Double deltaDays = 0.0;
+    	
+    	if (entity.DueDate.getTime() > lastTime.created.getTime()) {
+    		deltaDays = Math.ceil((double)(entity.DueDate.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000));
+    	} else {
+    		deltaDays = Math.ceil((double)(lastTime.created.getTime() - entity.created.getTime() ) / (24 * 60 * 60 * 1000));
+    	}
+    	
     	Date actual = new Date(entity.created.getTime());
     	
     	for(int i = 0; i <= deltaDays; i++) {
     		ticks.add(new SimpleDateFormat("yyyy-MM-dd").format(actual));
 			actual.setTime(actual.getTime() + 1 * 24 * 60 * 60 * 1000);
 		}
+    	
+    	Logger.info("Delta Days getTicks(): %s", deltaDays);
+    	Logger.info("JSON ticks: %s", new Gson().toJson(ticks));
     	
     	renderJSON(ticks);
     }
