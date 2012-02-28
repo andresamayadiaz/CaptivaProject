@@ -2,6 +2,8 @@ package controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,11 +71,16 @@ public class Repositories extends BaseController {
 				commits = JGitUtils.getRevLog(repo, 20);
 				
 				for(RevCommit com : commits){
-					Logger.info("COMMIT: %s", com.getName() + " MSG: " +com.getFullMessage());
+					Date time = new Date();
+					time.setTime(com.getCommitTime());
+					Logger.info("COMMIT ID: %s", com.getId() + " NAME: " + com.getName() + " MSG: " +com.getFullMessage() + " TIME: " + time.toString());
 					
+					/*
 					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
-						Logger.info("File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+						Logger.info("Commit File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
 					}
+					*/
+					
 				}
 				
 			}
@@ -88,6 +95,39 @@ public class Repositories extends BaseController {
 		String repoUrl = Play.configuration.getProperty("git.user", "git") + "@" + Play.configuration.getProperty("git.url", "project.captivatecnologia.info") + ":" + entity.name + ".git";
 		
 		render(entity, commits, repoUrl);
+	}
+	
+	@Check("any")
+	public static void showCommit(java.lang.Long repoId, String commit, String pathStr){
+		Repository entity = Repository.findById(repoId);
+		notFoundIfNull(entity);
+		FileRepositoryBuilder builder = new FileRepositoryBuilder();
+		List<PathModel> path = new ArrayList<PathModel>();
+		RevCommit com = null;
+		File repoDir = new File(Repository.BASE_DIR + "/", entity.name + ".git");
+		try {
+			org.eclipse.jgit.lib.Repository repo = builder.setGitDir(repoDir).readEnvironment().findGitDir().build();			
+			com = JGitUtils.getCommit(repo, commit);
+			
+			if( com != null ) {
+				
+				path = JGitUtils.getFilesInPath(repo, pathStr, com);
+				for(PathModel file : path){
+					if(file.isTree()){
+						Logger.info("Tree: %s", "PATH: " + file.path + " isParentPath: " + file.isParentPath);
+					}
+					
+				}
+				
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		render(entity, com, path, pathStr);
+		
 	}
 	
 	@Check("admin")
