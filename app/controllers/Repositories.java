@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.list.TreeList;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
@@ -50,6 +51,7 @@ public class Repositories extends BaseController {
 		notFoundIfNull(entity);
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		List<RevCommit> commits = null;
+		String branch = null;
 		
 		// EXPERIMENTAL aad Feb 2012
 		File repoDir = new File(Repository.BASE_DIR + "/", entity.name + ".git");
@@ -58,30 +60,37 @@ public class Repositories extends BaseController {
 			
 			if(JGitUtils.hasCommits(repo)) {
 				
-				// TESTEANDO
-				
-				for(RefModel ref : JGitUtils.getLocalBranches(repo, true, 10)){
-					Logger.info("Branch: %s", ref.displayName);
+				renderArgs.put("branches", JGitUtils.getLocalBranches(repo, true, 10));
+				if(params.get("branchId") != null){
+					branch = params.get("branchId");
+				}else {
+					try {
+						branch = JGitUtils.getDefaultBranch(repo).name();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				
-				for(RefModel ref : JGitUtils.getRemoteBranches(repo, true, 10)){
+				/*for(RefModel ref : JGitUtils.getLocalBranches(repo, true, 10)){
+					Logger.info("Branch: %s", ref.displayName + " ref.getReferencedObjectId(): " + ref.getReferencedObjectId().getName());
+				}*/
+				
+				/*for(RefModel ref : JGitUtils.getRemoteBranches(repo, true, 10)){
 					Logger.info("Remote Branch: %s", ref.displayName);
-				}
+				}*/
 				
-				commits = JGitUtils.getRevLog(repo, 20);
+				commits = JGitUtils.getRevLog(repo, branch, 0, 20);
 				
-				for(RevCommit com : commits){
+				/*for(RevCommit com : commits){
 					Date time = new Date();
 					time.setTime(com.getCommitTime());
 					Logger.info("COMMIT ID: %s", com.getId() + " NAME: " + com.getName() + " MSG: " +com.getFullMessage() + " TIME: " + time.toString());
 					
-					/*
-					for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
-						Logger.info("Commit File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
-					}
-					*/
+					//for(PathChangeModel file : JGitUtils.getFilesInCommit(repo, com)){
+					//	Logger.info("Commit File Name: "+ file.name + " PATH: " + file.path + " isTree: " + file.isTree());
+					//}
 					
-				}
+				}*/
 				
 			}
 			
@@ -94,7 +103,7 @@ public class Repositories extends BaseController {
 		// Repo URL Access
 		String repoUrl = Play.configuration.getProperty("git.user", "git") + "@" + Play.configuration.getProperty("git.url", "project.captivatecnologia.info") + ":" + entity.name + ".git";
 		
-		render(entity, commits, repoUrl);
+		render(entity, commits, repoUrl, branch);
 	}
 	
 	@Check("any")
@@ -114,7 +123,7 @@ public class Repositories extends BaseController {
 				path = JGitUtils.getFilesInPath(repo, pathStr, com);
 				for(PathModel file : path){
 					if(file.isTree()){
-						Logger.info("Tree: %s", "PATH: " + file.path + " isParentPath: " + file.isParentPath);
+						//Logger.info("Tree: %s", "PATH: " + file.path + " isParentPath: " + file.isParentPath);
 					}
 					
 				}
