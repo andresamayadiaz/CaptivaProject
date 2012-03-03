@@ -46,7 +46,7 @@
             <li><a href="@{Projects.index}">Projects</a></li>
             <li><a href="@{Tasks.index}">Tasks (${models.Task.countByUser(userId)})</a></li>
             <li><a href="@{Issues.index}">Issues (${models.Issue.countByUser(userId)})</a></li>
-            <li><a href="@{Milestones.index}">Milestones</a></li>
+            <li><a href="@{Milestones.index}">Milestones (${models.Milestone.countByUser(userId)})</a></li>
 	          #{secure.check 'admin'}
 	          	<li><a href="@{Reports.index}">Reports</a></li>
 	            <li class="dropdown" data-dropdown="dropdown" >
