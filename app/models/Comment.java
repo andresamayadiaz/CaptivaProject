@@ -16,6 +16,7 @@ import java.util.*;
 public class Comment extends Model {
     
 	@Required
+	@Lob
 	public String comment;
 	
 	@Required
