@@ -59,7 +59,15 @@
       
       <div class="row">
       	<div class="span16">
-      	
+      		<h3>Select a Branch</h3>
+      		#{form @Repositories.show(entity?.id)}
+	      		#{select 'branchId', value:branch}
+	      			#{list items:branches, as:'branch'}
+	      				#{option branch.getReferencedObjectId().getName()}${branch.displayName}#{/option}
+	      			#{/list}
+	      		#{/select}
+	      		<input type="submit" class="btn" value="Change">
+      		#{/form}
       		<h3>Last 20 Commits</h3>
       		<dl>
       			#{list items:commits, as:'commit'}

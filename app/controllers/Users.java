@@ -158,6 +158,8 @@ public class Users extends BaseController {
             	render("@profile", entity);
     		}
     		
+    		entity.password = Codec.hexSHA1(entity.password);
+    		
     	}
         
         validation.valid(entity);

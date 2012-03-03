@@ -25,7 +25,7 @@
 		 			<div class="clearfix">
 		 				<label>Project</label>
 		 				<div class="input">
-		 					#{select 'userFilter', items:models.Project.findAll(), valueProperty:'id', labelProperty:'Name', value:'${id}' /}
+		 					#{select 'id', items:models.Project.findAll(), valueProperty:'id', labelProperty:'Name', value:'${id}' /}
 		 					<span class="help-inline error">#{error 'id' /}</span>
 		 					<input type="hidden" value="${id}">
 		 				</div>
