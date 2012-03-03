@@ -52,6 +52,11 @@ public class Milestone extends Model {
 	
 	public Date ClosedDate;
 	
+	public static int countByUser(java.lang.Long userId){
+		int count = Milestone.find("Owner = ? AND isOpen = true", User.findById(userId)).fetch().size();
+		return count;
+	}
+	
 	public static Double totalPlannedTime(java.lang.Long id){
 		
 		Milestone entity = Milestone.findById(id);

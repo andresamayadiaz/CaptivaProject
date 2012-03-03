@@ -28,9 +28,19 @@
                   	<option value="false" #{if statusFilter == "false"}SELECTED#{/if}>Closed</option>
                   	<option value="all" #{if statusFilter == "all"}SELECTED#{/if}>All</option>
                   </select>
-                  <input type="submit" class="btn" value="Search" />
                 </div>
             </div>
+            #{secure.check 'admin'}
+	            <div class="clearfix">
+	                <label for="userFilter">User Filter:</label>
+	                <div class="input">
+	                  #{select 'userFilter', items:models.User.findAll(), valueProperty:'id', labelProperty:'fullName', value:userFilter, class:'input-medium'}
+						#{option value='none'}Ninguno#{/option}
+					  #{/select}
+					  <input type="submit" class="btn" value="Search" />
+	                </div>		                
+	            </div>
+            #{/secure.check}
             #{/form}
         </div>
         <table class="bordered-table zebra-striped">

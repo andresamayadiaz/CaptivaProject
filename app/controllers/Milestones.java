@@ -23,25 +23,35 @@ import play.data.validation.Valid;
 public class Milestones extends BaseController {
 	
     public static void index() {
+    	User user = null;
+    	
+    	if (params.get("userFilter") != null) {
+    		if (!params.get("userFilter").equals("none")) {
+    			user = User.findById(Long.parseLong(params.get("userFilter")));
+    		}
+    	}
     	
     	// check if filter apply
 		if(params.get("statusFilter") != null) {			
 			if(params.get("statusFilter").equals("true")){ // open
-				List<Milestone> entities = Milestone.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Milestone> entities = Milestone.find("(?1 is null or Owner = ?1) and isOpen = true ORDER BY Name", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "true");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			} else if(params.get("statusFilter").equals("false")){ // closed
-				List<Milestone> entities = Milestone.find("Owner = ? and isOpen = false ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Milestone> entities = Milestone.find("(?1 is null or Owner = ?1) and isOpen = false ORDER BY Name", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "false");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			} else { // all
-				List<Milestone> entities = Milestone.find("Owner = ? ORDER BY Name", Security.getConnectedUser()).fetch();
+				List<Milestone> entities = Milestone.find("(?1 is null or Owner = ?1) ORDER BY Name", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "all");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			}			
 		}
     	
-        List<Milestone> entities = Milestone.find("Owner = ? and isOpen = true ORDER BY Name", Security.getConnectedUser()).fetch();
+        List<Milestone> entities = Milestone.find("(?1 is null or Owner = ?1) and isOpen = true ORDER BY Name", user != null ? user : Security.getConnectedUser()).fetch();
         render(entities);
     }
     

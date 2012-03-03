@@ -25,23 +25,34 @@ public class Tasks extends BaseController {
 	
     public static void index() {
     	// check if filter apply
+    	User user = null;
+    	
+    	if (params.get("userFilter") != null) {
+    		if (!params.get("userFilter").equals("none")) {
+    			user = User.findById(Long.parseLong(params.get("userFilter")));
+    		}
+    	}
+    	
 		if(params.get("statusFilter") != null) {			
-			if(params.get("statusFilter").equals("true")){ // open
-				List<Task> entities = Task.find("Owner = ? and isOpen = true ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
+			if(params.get("statusFilter").equals("true")) { // open
+				List<Task> entities = Task.find("(?1 is null or Owner = ?1) and isOpen = true ORDER BY DueDate DESC", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "true");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			} else if(params.get("statusFilter").equals("false")){ // closed
-				List<Task> entities = Task.find("Owner = ? and isOpen = false ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
+				List<Task> entities = Task.find("(?1 is null or Owner = ?1) and isOpen = false ORDER BY DueDate DESC", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "false");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			} else { // all
-				List<Task> entities = Task.find("Owner = ? ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
+				List<Task> entities = Task.find("(?1 is null or Owner = ?1) ORDER BY DueDate DESC", user != null ? user : Security.getConnectedUser()).fetch();
 				renderArgs.put("statusFilter", "all");
+				renderArgs.put("userFilter", user != null ? user.id : "none");
 		        render(entities);
 			}			
 		}
     	
-        List<Task> entities = Task.find("Owner = ? and isOpen = true ORDER BY DueDate DESC", Security.getConnectedUser()).fetch();
+        List<Task> entities = Task.find("(?1 is null or Owner = ?1) and isOpen = true ORDER BY DueDate DESC", user != null ? user : Security.getConnectedUser()).fetch();
         render(entities);
     }
     
