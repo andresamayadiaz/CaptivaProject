@@ -90,7 +90,7 @@
 							    $("#createForm").validate({
 							    	submitHandler: function(form) {
 									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
+									   form.submit();
 									 }
 							    });
 							  });

@@ -120,7 +120,7 @@
 							    	submitHandler: function(form) {
 							    		$('#loading').css("display", "block");
 									   	$("#submitBtn").attr("disabled", true);
-									   	$(form).submit();
+									   	form.submit();
 									 }
 							    });
 							  });
@@ -148,7 +148,7 @@
 							    $("#createTaskForm").validate({
 							    	submitHandler: function(form) {
 									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
+									   form.submit();
 									 }
 							    });
 							  });
@@ -208,7 +208,7 @@
 							    $("#createCommentForm").validate({
 							    	submitHandler: function(form) {
 									   $("#submitBtn").attr("disabled", true);
-									   $(form).submit();
+									   form.submit();
 									 }
 							    });
 							  });
