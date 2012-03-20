@@ -69,12 +69,25 @@
 	      		<input type="submit" class="btn" value="Change">
       		#{/form}
       		<h3>Last 20 Commits</h3>
-      		<dl>
-      			#{list items:commits, as:'commit'}
-      				<dt><a href="@{Repositories.showCommit(entity.id, commit.name())}">${commit.name()}</a></dt>
-      				<dd>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></dd>
-      			#{/list}
-      		</ul>
+      		
+      		<table class="bordered-table zebra-striped">
+	            <thead>
+	              <tr>
+	                <th>Name</th>
+	                <th>Author</th>
+	                <th>Date</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	                #{list items:commits, as:'commit'}
+	                    <tr>
+	                        <td><a href="@{Repositories.showCommit(entity.id, commit.name())}">${commit.name()}</a></td>
+	                        <td>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></td>
+	                        <td>${new Date().setTime(commit.getCommitTime()).toString()}</td>
+	                    </tr>
+	                #{/list}
+	            </tbody>
+	        </table>
       	
       	</div>
       </div>
