@@ -83,7 +83,7 @@
 	                    <tr>
 	                        <td><a href="@{Repositories.showCommit(entity.id, commit.name())}">${commit.name()}</a></td>
 	                        <td>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></td>
-	                        <td>${commit.getCommitTime().asdate('yyyy-MM-dd hh:mm:ss')}</td>
+	                        <td>${new Date(commit.getCommitTime()).format('dd MMMM yyyy hh:mm:ss')}</td>
 	                    </tr>
 	                #{/list}
 	            </tbody>
