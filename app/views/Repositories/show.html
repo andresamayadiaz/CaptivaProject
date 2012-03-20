@@ -74,7 +74,7 @@
 	            <thead>
 	              <tr>
 	                <th>Name</th>
-	                <th>Author</th>
+	                <th>Message / Author</th>
 	                <th>Date</th>
 	              </tr>
 	            </thead>
@@ -83,7 +83,7 @@
 	                    <tr>
 	                        <td><a href="@{Repositories.showCommit(entity.id, commit.name())}">${commit.name()}</a></td>
 	                        <td>${commit.getFullMessage()}<small>[ ${commit.getAuthorIdent().getName()}, ${commit.getAuthorIdent().getEmailAddress()} ]</small></td>
-	                        <td>${new Date().setTime(commit.getCommitTime()).toString()}</td>
+	                        <td>${commit.getCommitTime()}</td>
 	                    </tr>
 	                #{/list}
 	            </tbody>
