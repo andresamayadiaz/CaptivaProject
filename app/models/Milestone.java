@@ -19,6 +19,7 @@ public class Milestone extends Model {
 	public String Name;
 	
 	@Required(message = "Description is required")
+	@Lob
 	public String Description;
 	
 	public Date DueDate;

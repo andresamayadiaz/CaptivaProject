@@ -17,6 +17,7 @@ public class Issue extends Model {
 	public String Name;
 	
 	@Required
+	@Lob
 	public String Description;
 	
 	@Required
